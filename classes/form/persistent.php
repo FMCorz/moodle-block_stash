@@ -15,15 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details
+ * Persistent form abstract.
  *
- * @package    block_stash
- * @copyright  2016 Adrian Greeve <adrian@moodle.com>
+ * @package    tool_lp
+ * @copyright  2016 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_stash\form;
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2016052303;        // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2016051900;        // Requires this Moodle version
-$plugin->component = 'block_stash';      // Full name of the plugin (used for diagnostics)
+/**
+ * Persistent form abstract class.
+ *
+ * @package    block_stash
+ * @copyright  2016 Frédéric Massart - FMCorz.net
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+abstract class persistent extends \tool_lp\form\persistent {
+}

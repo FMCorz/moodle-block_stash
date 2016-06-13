@@ -15,15 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details
+ * Persistent.
  *
  * @package    block_stash
- * @copyright  2016 Adrian Greeve <adrian@moodle.com>
+ * @copyright  2016 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_stash;
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2016052303;        // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2016051900;        // Requires this Moodle version
-$plugin->component = 'block_stash';      // Full name of the plugin (used for diagnostics)
+/**
+ * Persistent class.
+ *
+ * @package    block_stash
+ * @copyright  2016 Frédéric Massart - FMCorz.net
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+abstract class persistent extends \core_competency\persistent {
+}
