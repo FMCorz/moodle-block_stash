@@ -48,9 +48,29 @@ class user_item extends persistent {
             ],
             'quantity' => [
                 'type' => PARAM_INT,
-                'default' => 0
+                'default' => null,
+                'null' => NULL_ALLOWED
             ]
         ];
+    }
+
+    /**
+     * Does the user have stock?
+     *
+     * @return bool
+     */
+    public function has_stock() {
+        $quantity = $this->get('quantity');
+        return $quantity !== null && $quantity > 0;
+    }
+
+    /**
+     * An item is hidden until it's been acquired at least once.
+     *
+     * @return bool
+     */
+    public function is_visible() {
+        return $this->get('quantity') !== null;
     }
 
     /**

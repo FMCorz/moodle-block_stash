@@ -45,6 +45,9 @@ class manager {
     /** @var int Course ID. */
     protected $courseid = null;
 
+    /** @var stash The stash object. */
+    protected $stash;
+
     /**
      * Constructor.
      *
@@ -55,6 +58,13 @@ class manager {
         $courseid = intval($courseid);
         $this->context = context_course::instance($courseid);
         $this->courseid = $courseid;
+
+        $stash = stash::get_record(['courseid' => $courseid]);
+        if (!$stash) {
+            $stash = new stash(null, ['courseid' => $courseid]);
+            $stash->create();
+        }
+        $this->stash = $stash;
     }
 
     /**
@@ -72,6 +82,53 @@ class manager {
             self::$instances[$courseid] = new static($courseid);
         }
         return self::$instances[$courseid];
+    }
+
+    /**
+     * Get the context.
+     *
+     * @return context
+     */
+    public function get_context() {
+        return $this->context;
+    }
+
+    /**
+     * Get an item.
+     *
+     * @param int $itemid The item ID.
+     * @return item
+     */
+    public function get_item($itemid) {
+        return new item($itemid);
+    }
+
+    /**
+     * Get the items defined in this course.
+     *
+     * @return item[]
+     */
+    public function get_items() {
+        return item::get_records(['stashid' => $this->stash->get_id()]);
+    }
+
+    /**
+     * Get the item of a user.
+     *
+     * @param int $userid The user ID.
+     * @param int $itemid The item ID.
+     * @return user_item
+     */
+    public function get_user_item($userid, $itemid) {
+        $params = ['userid' => $userid, 'itemid' => $itemid];
+
+        $ui = user_item::get_record($params);
+        if (!$ui) {
+            $ui = new user_item(null, (object) $params);
+            $ui->create();
+        }
+
+        return $ui;
     }
 
     /**
