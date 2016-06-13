@@ -102,6 +102,23 @@ class manager {
     }
 
     /**
+     * Create or update an item drop based on the data passed.
+     *
+     * @param stdClass $data Data to use to create or update.
+     * @return item_drop
+     */
+    public function create_or_update_item_drop($data) {
+        // TODO Capability checks.
+        $drop = new item_drop(null, $data);
+        if (!$drop->get_id()) {
+            $drop->create();
+        } else {
+            $drop->update();
+        }
+        return $drop;
+    }
+
+    /**
      * Get an instance of the manager.
      *
      * @param int $courseid The course ID.
@@ -177,6 +194,20 @@ class manager {
         if (!$item->get_stashid() !== $this->get_stash()->get_id()) {
             throw new coding_exception('Unexpected item ID.');
         }
+    }
+
+    /**
+     * Get an item drop.
+     *
+     * @param int $drop The drop ID.
+     * @return item
+     */
+    public function get_item_drop($dropid) {
+        $drop = new \block_stash\item_drop($dropid);
+        if (!item::is_item_in_stash($drop->get_itemid(), $this->get_stash()->get_id())) {
+            throw new coding_exception('Unexpected drop ID.');
+        }
+        return $drop;
     }
 
     /**

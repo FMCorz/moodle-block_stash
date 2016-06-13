@@ -30,11 +30,13 @@
     {{#items}}
         <div class="block_stash_item">
             <h3>{{name}}</h3>
-            <img src="{{imageurl}}" alt="" style="width: 100px;">
+            <a href="{{dropmanageurl}}">
+                <img src="{{imageurl}}" alt="" style="width: 100px;">
+            </a>
             <a href={{editurl}} class="block_stash_edit">{{#str}}edit, block_stash{{/str}}</a>
         </div>
     {{/items}}
 
-Inventory - Hooray!
-<a href={{inventoryediturl}}>{{#str}}addtoinventory, block_stash{{/str}}</a>
+    Inventory - Hooray!
+    <a href={{inventoryediturl}}>{{#str}}addtoinventory, block_stash{{/str}}</a>
 </div>

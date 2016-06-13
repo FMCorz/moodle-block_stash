@@ -47,6 +47,9 @@ class item_exporter extends persistent_exporter {
 
     protected static function define_other_properties() {
         return [
+            'dropmanageurl' => [
+                'type' => PARAM_URL
+            ],
             'imageurl' => [
                 'type' => PARAM_URL
             ],
@@ -57,12 +60,15 @@ class item_exporter extends persistent_exporter {
     }
 
     protected function get_other_values(renderer_base $output) {
-        // print_object($this->persistent);
-        $imageurl = moodle_url::make_pluginfile_url($this->related['context']->id, 'block_stash', 'item',
-            $this->persistent->get_id(), '/', 'image');
-        $editurl = new moodle_url('/blocks/stash/inventory_edit.php', array('id' => $this->persistent->get_id(), 'courseid' => '2'));
+        $itemid = $this->persistent->get_id();
+
+        $dropmanageurl = new moodle_url('/blocks/stash/drop.php', ['itemid' => $itemid]);
+        $imageurl = moodle_url::make_pluginfile_url($this->related['context']->id, 'block_stash', 'item', $itemid, '/', 'image');
+        // TODO Remove the need for the courseid, or get it from somewhere.
+        $editurl = new moodle_url('/blocks/stash/inventory_edit.php', array('id' => $itemid, 'courseid' => 2));
 
         return [
+            'dropmanageurl' => $dropmanageurl->out(false),
             'imageurl' => $imageurl->out(false),
             'editurl' => $editurl->out(false)
         ];
