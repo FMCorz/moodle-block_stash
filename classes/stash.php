@@ -77,4 +77,24 @@ class stash extends persistent {
         return true;
     }
 
+    /**
+     * Return a stash by item ID.
+     *
+     * @param  int $itemid The item ID.
+     * @return stash
+     */
+    public static function get_by_itemid($itemid) {
+        global $DB;
+
+        $sql = "SELECT s.*
+                  FROM {" . item::TABLE . "} i
+                  JOIN {" . self::TABLE . "} s
+                    ON s.id = i.stashid
+                 WHERE i.id = ?";
+        $record = $DB->get_record_sql($sql, [$itemid]);
+        $stash = new static(null, $record);
+
+        return $stash;
+    }
+
 }

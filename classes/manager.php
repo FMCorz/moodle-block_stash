@@ -46,7 +46,7 @@ class manager {
     /** @var int Course ID. */
     protected $courseid = null;
 
-    /** @var stash The stash object. */
+    /** @var stash The stash object, do not refer to directly as it's lazy loaded. */
     protected $stash;
 
     /**
@@ -59,13 +59,6 @@ class manager {
         $courseid = intval($courseid);
         $this->context = context_course::instance($courseid);
         $this->courseid = $courseid;
-
-        $stash = stash::get_record(['courseid' => $courseid]);
-        if (!$stash) {
-            $stash = new stash(null, (object) ['courseid' => $courseid]);
-            $stash->create();
-        }
-        $this->stash = $stash;
     }
 
     /**
@@ -78,6 +71,7 @@ class manager {
     public function create_or_update_item($data, $draftitemid) {
         globaL $USER;
 
+        // TODO Capability checks.
         $item = new item(null, $data);
         if (!$item->get_id()) {
             $item->create();
@@ -118,6 +112,28 @@ class manager {
     }
 
     /**
+     * Get the manager by item ID.
+     *
+     * @param int $itemid The item ID.
+     * @return manager
+     */
+    public static function get_by_itemid($itemid) {
+        $stash = stash::get_by_itemid($itemid);
+        $manager = self::get($stash->get_courseid());
+        $manager->stash = $stash;
+        return $manager;
+    }
+
+    /**
+     * Get the course ID.
+     *
+     * @return int
+     */
+    public function get_courseid() {
+        return $this->courseid;
+    }
+
+    /**
      * Get the context.
      *
      * @return context
@@ -132,6 +148,14 @@ class manager {
      * @return stash
      */
     public function get_stash() {
+        if (!$this->stash) {
+            $stash = stash::get_record(['courseid' => $this->courseid]);
+            if (!$stash) {
+                $stash = new stash(null, (object) ['courseid' => $this->courseid]);
+                $stash->create();
+            }
+            $this->stash = $stash;
+        }
         return $this->stash;
     }
 
@@ -143,6 +167,9 @@ class manager {
      */
     public function get_item($itemid) {
         return new item($itemid);
+        if (!$item->get_stashid() !== $this->get_stash()->get_id()) {
+            throw new coding_exception('Unexpected item ID.');
+        }
     }
 
     /**
@@ -151,7 +178,7 @@ class manager {
      * @return item[]
      */
     public function get_items() {
-        return item::get_records(['stashid' => $this->stash->get_id()]);
+        return item::get_records(['stashid' => $this->get_stash()->get_id()]);
     }
 
     /**
@@ -181,6 +208,15 @@ class manager {
     public function is_enabled() {
         // TODO Add logic.
         return true;
+    }
+
+    /**
+     * Throws an exception when the user cannot manage the stash.
+     *
+     * @return void
+     */
+    public function require_manage() {
+        // TODO Implement logic.
     }
 
 }

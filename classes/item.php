@@ -50,6 +50,22 @@ class item extends persistent {
     }
 
     /**
+     * Is an item in a specific stash?
+     *
+     * @param int $itemid The item ID.
+     * @param int $stashid The stash ID.
+     * @return boolean
+     */
+    public static function is_item_in_stash($itemid, $stashid) {
+        global $DB;
+        $sql = "SELECT i.id
+                  FROM {" . self::TABLE . "} i
+                 WHERE i.id = ?
+                   AND i.stashid = ?";
+        return $DB->record_exists_sql($sql, [$itemid, $stashid]);
+    }
+
+    /**
      * Validate the stash ID.
      *
      * @param string $value The stash ID.
