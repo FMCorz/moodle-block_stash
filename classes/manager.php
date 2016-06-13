@@ -94,6 +94,15 @@ class manager {
     }
 
     /**
+     * Get the stash.
+     *
+     * @return stash
+     */
+    public function get_stash() {
+        return $this->stash;
+    }
+
+    /**
      * Get an item.
      *
      * @param int $itemid The item ID.

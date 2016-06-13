@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * My inventory.
+ * Item edit page.
  *
  * @package    block_stash
  * @copyright  2016 Adrian Greeve <adriangreeve.com>
@@ -24,27 +24,47 @@
 
 require_once(__DIR__ . '/../../config.php');
 
-$courseid = required_param('id', PARAM_INT);
+$courseid = required_param('courseid', PARAM_INT);
+$id = optional_param('id', '0', PARAM_INT);
 
-$context = context_course::instance($courseid);
+$manager = \block_stash\manager::get($courseid);
+
+$context = $manager->get_context();
 
 require_login($courseid);
-$url = new moodle_url('/blocks/stash/inventory.php', array('id' => $courseid));
+$url = new moodle_url('/blocks/stash/inventory_edit.php', array('courseid' => $courseid, 'id' => $id));
 
 $PAGE->set_context($context);
 $PAGE->set_pagelayout('course');
-$PAGE->set_title('Inventory');
-$PAGE->set_heading('Inventory');
+$PAGE->set_title('Item');
+$PAGE->set_heading('Item');
 $PAGE->set_url($url);
 
+$item = $id ? $manager->get_item($id) : null;
+
+$form = new \block_stash\form\item($url->out(false), ['persistent' => $item, 'stash' => $manager->get_stash()]);
+if ($data = $form->get_data()) {
+    $item = new \block_stash\item(null, $data);
+    if (!$item->get_id()) {
+        $item->create();
+    } else {
+        $item->update();
+    }
+    // redirect()
+}
+
 echo $OUTPUT->header();
-echo $OUTPUT->heading('Inventory');
+echo $OUTPUT->heading('Item');
+
+echo $form->render();
+
+
 
 
 $renderer = $PAGE->get_renderer('block_stash');
-$page = new \block_stash\output\inventory_page($courseid);
+// $page = new \block_stash\output\inventory_page($courseid);
 // Show inventory for teachers (Maybe students as well).
-echo $renderer->render_inventory_page($page);
+// echo $renderer->render_inventory_page($page);
 
 
 

@@ -35,14 +35,14 @@ class inventory_page implements renderable, templatable {
 
     protected $courseid;
 
-    public function __construct() {
-        // $this->courseid = $courseid;
+    public function __construct($courseid) {
+        $this->courseid = $courseid;
     }
 
     public function export_for_template(renderer_base $output) {
         $data = array();
         // $data['settingsurl'] = new moodle_url('/blocks/stash/settings.php');
-        // $data['inventoryurl'] = new moodle_url('/blocks/stash/inventory.php', array('id' => $this->courseid));
+        $data['inventoryediturl'] = new moodle_url('/blocks/stash/inventory_edit.php', array('courseid' => $this->courseid));
         return $data;
     }
 
