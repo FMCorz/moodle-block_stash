@@ -52,7 +52,7 @@ class block_stash extends block_base {
         $this->content = new stdClass();
 
         $renderer = $this->page->get_renderer('block_stash');
-        $page = new \block_stash\output\render_helper();
+        $page = new \block_stash\output\block_content($this->page->course->id);
         $this->content->text = $renderer->render($page);
         $this->content->footer = '';
 

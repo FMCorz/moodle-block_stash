@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Block stash renderable.
+ * Block stash inventory page.
  *
  * @package    block_stash
  * @copyright  2016 Adrian Greeve <adriangreeve.com>
@@ -29,15 +29,20 @@ defined('MOODLE_INTERNAL') || die();
 use renderable;
 use renderer_base;
 use templatable;
+use moodle_url;
 
-class render_helper implements renderable, templatable {
+class settings_page implements renderable, templatable {
+
+    protected $courseid;
 
     public function __construct() {
-        // Not much yet.
+        // $this->courseid = $courseid;
     }
 
     public function export_for_template(renderer_base $output) {
-        $data = '';
+        $data = array();
+        // $data['settingsurl'] = new moodle_url('/blocks/stash/settings.php');
+        // $data['inventoryurl'] = new moodle_url('/blocks/stash/inventory.php', array('id' => $this->courseid));
         return $data;
     }
 

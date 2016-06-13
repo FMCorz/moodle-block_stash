@@ -33,11 +33,22 @@ use renderable;
  * @copyright  2016 Adrian Greeve
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_stash_renderer extends plugin_renderer_base {
+class renderer extends plugin_renderer_base {
 
-    public function main_content(renderable $page) {
+    public function render_block_content(renderable $page) {
         $data = $page->export_for_template($this);
         return parent::render_from_template('block_stash/main_content', $data);
     }
+
+    public function render_inventory_page(renderable $page) {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('block_stash/inventory', $data);    
+    }
+
+    public function render_settings_page(renderable $page) {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('block_stash/settings', $data);    
+    }
+
 
 }
