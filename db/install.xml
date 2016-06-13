@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="blocks/stash/db" VERSION="20160613" COMMENT="XMLDB file for Moodle blocks/stash"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="block_stash" COMMENT="Main information about each stash">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="12" NOTNULL="true" SEQUENCE="false" COMMENT="Course id"/>
+        <FIELD NAME="name" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Stash name"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="block_stash_items" COMMENT="Items for the stash">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="stashid" TYPE="int" LENGTH="12" NOTNULL="true" SEQUENCE="false" COMMENT="Stash ID"/>
+        <FIELD NAME="name" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Name of the item"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="block_stash_user_items" COMMENT="Items for each user">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="itemid" TYPE="int" LENGTH="12" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="12" NOTNULL="true" SEQUENCE="false" COMMENT="User ID"/>
+        <FIELD NAME="quantity" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Item quantity"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>

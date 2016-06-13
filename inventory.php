@@ -45,4 +45,6 @@ $renderer = $PAGE->get_renderer('block_stash');
 $page = new \block_stash\output\inventory_page();
 echo $renderer->render_inventory_page($page);
 
+
+
 echo $OUTPUT->footer();
