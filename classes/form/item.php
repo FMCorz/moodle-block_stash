@@ -24,6 +24,8 @@ class item extends persistent {
 
     protected static $persistentclass = 'block_stash\\item';
 
+    protected static $foreignfields = array('image');
+
     /**
      * Define the form - called by parent constructor
      */
@@ -46,6 +48,10 @@ class item extends persistent {
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
+
+        // Image.
+        $mform->addElement('filepicker', 'image', 'Image', array(), $this->_customdata['fileareaoptions']);
+        $mform->addRule('image', null, 'required', null, 'client');
 
         $this->add_action_buttons(true, get_string('savechanges', 'tool_lp'));
     }

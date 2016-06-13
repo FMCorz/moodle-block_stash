@@ -26,6 +26,7 @@ namespace block_stash;
 defined('MOODLE_INTERNAL') || die();
 
 use context_course;
+use context_user;
 
 /**
  * Stash manager.
@@ -65,6 +66,38 @@ class manager {
             $stash->create();
         }
         $this->stash = $stash;
+    }
+
+    /**
+     * Create or update an item based on the data passed.
+     *
+     * @param stdClass $data Data to use to create or update.
+     * @param int $draftitemid Draft item ID of the current user to get the image from.
+     * @return item
+     */
+    public function create_or_update_item($data, $draftitemid) {
+        globaL $USER;
+
+        $item = new item(null, $data);
+        if (!$item->get_id()) {
+            $item->create();
+        } else {
+            $item->update();
+        }
+
+        // Rename the image to 'image.ext', in case we want to add a second one later.
+        $fs = get_file_storage();
+        $files = $fs->get_area_files(context_user::instance($USER->id)->id, 'user', 'draft', $draftitemid, '', false);
+        $image = array_pop($files);
+        if ($image) {
+            $ext = strtolower(pathinfo($image->get_filename(), PATHINFO_EXTENSION));
+            $image->rename('/', 'image' . ($ext ? '.' . $ext : ''));
+        }
+
+        $fileareaoptions = [];
+        file_save_draft_area_files($draftitemid, $this->context->id, 'block_stash', 'item', $item->get_id(), $fileareaoptions);
+
+        return $item;
     }
 
     /**

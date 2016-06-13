@@ -30,19 +30,28 @@ use renderable;
 use renderer_base;
 use templatable;
 use moodle_url;
+use block_stash\external\item_exporter;
 
 class inventory_page implements renderable, templatable {
 
     protected $courseid;
+    protected $manager;
 
     public function __construct($courseid) {
         $this->courseid = $courseid;
+        $this->manager = \block_stash\manager::get($courseid);
     }
 
     public function export_for_template(renderer_base $output) {
+
         $data = array();
         // $data['settingsurl'] = new moodle_url('/blocks/stash/settings.php');
         $data['inventoryediturl'] = new moodle_url('/blocks/stash/inventory_edit.php', array('courseid' => $this->courseid));
+        $data['items'] = array_map(function($item) use ($output) {
+            $exporter = new item_exporter($item, ['context' => $this->manager->get_context()]);
+            return $exporter->export($output);
+        }, $this->manager->get_items());
+
         return $data;
     }
 

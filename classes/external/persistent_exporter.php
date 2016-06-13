@@ -15,37 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * My inventory.
+ * Persistent exporter.
  *
  * @package    block_stash
- * @copyright  2016 Adrian Greeve <adriangreeve.com>
+ * @copyright  2016 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(__DIR__ . '/../../config.php');
+namespace block_stash\external;
+defined('MOODLE_INTERNAL') || die();
 
-$courseid = required_param('courseid', PARAM_INT);
-
-$context = context_course::instance($courseid);
-
-require_login($courseid);
-$url = new moodle_url('/blocks/stash/inventory.php', array('courseid' => $courseid));
-
-$PAGE->set_context($context);
-$PAGE->set_pagelayout('course');
-$PAGE->set_title('Inventory');
-$PAGE->set_heading('Inventory');
-$PAGE->set_url($url);
-
-echo $OUTPUT->header();
-echo $OUTPUT->heading('Inventory');
-
-
-$renderer = $PAGE->get_renderer('block_stash');
-$page = new \block_stash\output\inventory_page($courseid);
-// Show inventory for teachers (Maybe students as well).
-echo $renderer->render_inventory_page($page);
-
-
-
-echo $OUTPUT->footer();
+/**
+ * Persistent exporter class.
+ *
+ * @package    block_stash
+ * @copyright  2016 Frédéric Massart - FMCorz.net
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class persistent_exporter extends \core_competency\external\persistent_exporter {
+}

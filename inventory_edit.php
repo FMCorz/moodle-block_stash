@@ -33,6 +33,7 @@ $context = $manager->get_context();
 
 require_login($courseid);
 $url = new moodle_url('/blocks/stash/inventory_edit.php', array('courseid' => $courseid, 'id' => $id));
+$listurl = new moodle_url('/blocks/stash/inventory.php', ['courseid' => $courseid]);
 
 $PAGE->set_context($context);
 $PAGE->set_pagelayout('course');
@@ -42,15 +43,24 @@ $PAGE->set_url($url);
 
 $item = $id ? $manager->get_item($id) : null;
 
-$form = new \block_stash\form\item($url->out(false), ['persistent' => $item, 'stash' => $manager->get_stash()]);
+$fileareaoptions = [];
+$customdata = [
+    'fileareaoptions' => $fileareaoptions,
+    'persistent' => $item,
+    'stash' => $manager->get_stash(),
+];
+
+$form = new \block_stash\form\item($url->out(false), $customdata);
 if ($data = $form->get_data()) {
-    $item = new \block_stash\item(null, $data);
-    if (!$item->get_id()) {
-        $item->create();
-    } else {
-        $item->update();
-    }
-    // redirect()
+
+    $draftitemid = $data->image;
+    unset($data->image);
+
+    $manager->create_or_update_item($data, $draftitemid);
+    redirect($listurl);
+
+} else if ($form->is_cancelled()) {
+    redirect($listurl);
 }
 
 echo $OUTPUT->header();

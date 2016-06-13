@@ -24,7 +24,7 @@
 
 require_once(__DIR__ . '/../../config.php');
 
-$courseid = required_param('id', PARAM_INT);
+$courseid = required_param('courseid', PARAM_INT);
 
 $context = context_course::instance($courseid);
 

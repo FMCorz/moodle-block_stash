@@ -13,42 +13,53 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
- * Block Stash renderer.
+ * Persistent exporter.
  *
  * @package    block_stash
- * @copyright  2016 Adrian Greeve <adrian@moodle.com>
+ * @copyright  2016 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_stash\output;
+namespace block_stash\external;
 defined('MOODLE_INTERNAL') || die();
 
-use plugin_renderer_base;
-use renderable;
+use moodle_url;
+use renderer_base;
+
 /**
- * Block Stash renderer class.
+ * Persistent exporter class.
  *
  * @package    block_stash
- * @copyright  2016 Adrian Greeve
+ * @copyright  2016 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class renderer extends plugin_renderer_base {
+class item_exporter extends persistent_exporter {
 
-    public function render_block_content(renderable $page) {
-        $data = $page->export_for_template($this);
-        return parent::render_from_template('block_stash/main_content', $data);
+    protected static function define_class() {
+        return 'block_stash\\item';
     }
 
-    public function render_inventory_page(renderable $page) {
-        $data = $page->export_for_template($this);
-        return parent::render_from_template('block_stash/inventory', $data);
+    protected static function define_related() {
+        return array('context' => 'context');
     }
 
-    public function render_settings_page(renderable $page) {
-        $data = $page->export_for_template($this);
-        return parent::render_from_template('block_stash/settings', $data);
+    protected static function define_other_properties() {
+        return [
+            'imageurl' => [
+                'type' => PARAM_URL
+            ]
+        ];
     }
 
+    protected function get_other_values(renderer_base $output) {
+        $imageurl = moodle_url::make_pluginfile_url($this->related['context']->id, 'block_stash', 'item',
+            $this->persistent->get_id(), '/', 'image');
+
+        return [
+            'imageurl' => $imageurl->out(false)
+        ];
+    }
 
 }
