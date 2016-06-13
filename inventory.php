@@ -43,7 +43,17 @@ echo $OUTPUT->heading('Inventory');
 
 $renderer = $PAGE->get_renderer('block_stash');
 $page = new \block_stash\output\inventory_page();
-echo $renderer->render_inventory_page($page);
+
+$inventoryform = new \block_stash\output\inventory_edit_form(null, array('id' => $courseid));
+echo $inventoryform->render();
+
+if ($formdata = $inventoryform->get_data()) {
+    // Save the data.
+    print_object($formdata);
+
+}
+
+// echo $renderer->render_inventory_page($page);
 
 
 
