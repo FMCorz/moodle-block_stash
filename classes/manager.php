@@ -62,7 +62,7 @@ class manager {
 
         $stash = stash::get_record(['courseid' => $courseid]);
         if (!$stash) {
-            $stash = new stash(null, ['courseid' => $courseid]);
+            $stash = new stash(null, (object) ['courseid' => $courseid]);
             $stash->create();
         }
         $this->stash = $stash;
