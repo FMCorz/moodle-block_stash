@@ -102,6 +102,21 @@ function xmldb_block_stash_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2016052303, 'stash');
     }
 
+    if ($oldversion < 2016052304) {
+
+        // Define field maxnumber to be added to block_stash_items.
+        $table = new xmldb_table('block_stash_items');
+        $field = new xmldb_field('maxnumber', XMLDB_TYPE_INTEGER, '10', null, null, null, '1', 'name');
+
+        // Conditionally launch add field maxnumber.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Stash savepoint reached.
+        upgrade_block_savepoint(true, 2016052304, 'stash');
+    }
+
     return true;
 
 }

@@ -44,6 +44,9 @@ class item extends persistent {
                 'type' => PARAM_INT,
             ],
             'name' => [
+                'type' => PARAM_TEXT,
+            ],
+            'maxnumber' => [
                 'type' => PARAM_TEXT
             ]
         ];
