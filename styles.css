@@ -19,3 +19,41 @@
     width: 50px;
     padding-left: 5px;
 }
+
+.block-stash-item {
+    display: inline-block;
+}
+
+.block-stash-item .item-image {
+    background-position: center center;
+    background-size: cover;
+    width: 100px;
+    height: 100px;
+    position: relative;
+    margin: 0 auto;
+}
+
+.block-stash-item .item-image .item-label {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 11px;
+    text-align: right;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 0 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.block-stash-item .item-action {
+    margin: 5px 0 0;
+    text-align: center;
+}
+
+.block-stash-item .item-action button {
+    margin: 0;
+}

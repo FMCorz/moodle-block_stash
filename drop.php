@@ -43,6 +43,10 @@ $PAGE->set_url($url);
 $item = $manager->get_item($itemid);
 $drop = $dropid ? $manager->get_drop($dropid) : null;
 
+if ($drop && $drop->get_id() != $itemid) {
+    throw new coding_exception('IDs mismatch!');
+}
+
 $form = new \block_stash\form\drop($url->out(false), ['persistent' => $drop, 'item' => $item]);
 if ($data = $form->get_data()) {
 
@@ -61,7 +65,7 @@ $form->display();
 
 if ($item) {
     // TODO Replace.
-    echo $renderer->drop();
+    echo $renderer->drop($drop, $item, $context);
 }
 
 echo $OUTPUT->footer();

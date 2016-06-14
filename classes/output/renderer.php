@@ -35,9 +35,19 @@ use renderable;
  */
 class renderer extends plugin_renderer_base {
 
-    public function drop() {
+    public function drop($drop, $item, $context) {
         // TODO Remove.
-        return parent::render_from_template('block_stash/drop_snippet', (object) []);
+        if (!$drop) {
+            return '';
+        }
+
+        $data = [];
+        $exporter = new \block_stash\external\drop_exporter($drop, ['context' => $context]);
+        $data['drop'] = json_encode($exporter->export($this));
+        $exporter = new \block_stash\external\item_exporter($item, ['context' => $context]);
+        $data['item'] = json_encode($exporter->export($this));
+
+        return parent::render_from_template('block_stash/drop_snippet', (object) $data);
     }
 
     public function render_block_content(renderable $page) {

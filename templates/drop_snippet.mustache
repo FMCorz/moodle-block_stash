@@ -17,24 +17,62 @@
 {{!
     Item drop snippet builder.
 }}
-<div>
-    <div>
-        <label for="">
-            Display:
-            <select name="delay" id="">
-                <option value="0">Immediately</option>
-                <option value="10">After 10 seconds</option>
-                <option value="20">After 20 seconds</option>
-                <option value="30">After 30 seconds</option>
-                <option value="60">After 1 minute</option>
-            </select>
-        </label>
-        <label for="">
-            Auto-discover:
-            <select name="delay" id="">
-                <option value="0">No</option>
-                <option value="1">Yes</option>
-            </select>
-        </label>
+<div id="block-stash-snippet-ui-{{uniqid}}" class="block-stash-snippet-ui">
+
+    <div class="span3">
+        <h4>Settings</h4>
+
+        <div>
+            <label for="label-displaytype-{{uniqid}}">Appearance</label>
+            <div>
+                <select name="displaytype" id="label-displaytype-{{uniqid}}">
+                    <option value="text">Text</option>
+                    <option value="image" selected>Image</option>
+                    <option value="imageandbutton">Image and button</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="snippet-label">
+            <label for="label-label-{{uniqid}}">Text</label>
+            <div>
+                <input type="text" name="label" id="label-label-{{uniqid}}">
+            </div>
+        </div>
+
+        <div class="snippet-actiontext">
+            <label for="label-actiontext-{{uniqid}}">Button text</label>
+            <div>
+                <input type="text" name="actiontext" id="label-actiontext-{{uniqid}}">
+            </div>
+        </div>
+
     </div>
+
+    <div class="span3">
+        <div>
+            <h4>Preview</h4>
+            <div class="preview"></div>
+        </div>
+
+        <div>
+            <h4>Snippet</h4>
+            <textarea name="snippet" onclick="this.select();"></textarea>
+            <p><small>Copy/paste this where it belongs.</small></p>
+        </div>
+    </div>
+
 </div>
+{{#js}}
+require([
+    'block_stash/item',
+    'block_stash/drop',
+    'block_stash/drop-snippet-maker',
+    'block_stash/drop-snippet-ui'
+], function(Item, Drop, DropSnippetMaker, DropSnippetUI) {
+    var item = new Item({{{item}}});
+    var drop = new Drop({{{drop}}}, item);
+    var dsm = new DropSnippetMaker(drop);
+    var ui = new DropSnippetUI(dsm, '#block-stash-snippet-ui-{{uniqid}}');
+});
+{{/js}}

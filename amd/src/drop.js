@@ -27,55 +27,44 @@ define([
     'core/ajax',
 ], function($, Notification, Ajax) {
 
-    function Drop(dropdata) {
-        this._id = dropdata.id;
-        this._hashcode = dropdata.hashcode;
+    function Drop(dropdata, item) {
+        this._data = dropdata || {};
+        this._item = item;
     }
-    Drop.prototype._id = 1;
-    Drop.prototype._hascode = 1;
-    Drop.prototype._displayIfVisible = null;
-    Drop.prototype._isVisible = null;
+    Drop.prototype._data;
 
     /**
-     * Set something to be displayed when the drop is visible.
+     * Return a property of the drop.
      *
-     * Must be called prior to {@link self.run}.
-     *
-     * @param {String|Node} selector The node to display.
-     * @return {Void}
+     * @param {String} property The name of the property.
+     * @return {Mixed}
      */
-    Drop.prototype.displayIfVisible = function(selector) {
-        this._displayIfVisible = $(selector);
+    Drop.prototype.get = function(property) {
+        return this._data[property];
     };
 
     /**
-     * Report the drop has having been found.
+     * Return the item of this drop.
+     *
+     * @return {Item}
+     */
+    Drop.prototype.getItem = function() {
+        return this._item;
+    };
+
+    /**
+     * Report the drop has having been picked up.
      *
      * @return {Promise} Resolved when found without errors.
      */
-    Drop.prototype.find = function() {
+    Drop.prototype.pickup = function() {
         return Ajax.call([{
             methodname: 'block_stash_pickup_drop',
             args: {
-                dropid: this._id,
-                hashcode: this._hashcode
+                dropid: this.get('id'),
+                hashcode: this.get('hashcode')
             }
         }])[0];
-    };
-
-    /**
-     * Run, initialise the drop in the page.
-     *
-     * @return {Void}
-     */
-    Drop.prototype.run = function() {
-
-        if (this._displayIfVisible && this._displayIfVisible.length > 0) {
-            this.isVisible().then(function(visible) {
-                this._displayIfVisible.show();
-            }.bind(this));
-        }
-
     };
 
     /**
@@ -84,25 +73,18 @@ define([
      * @return {Promise} Rejected when not visible.
      */
     Drop.prototype.isVisible = function() {
-        var cb = function(visible) {
-            this._isVisible = visible;
-            if (!visible) {
-                return $.Deferred().reject()
-            }
-            return visible;
-        }.bind(this);
-
-        if (this._isVisible !== null) {
-            return $.when($this._isVisible).then(cb);
-        }
-
         return Ajax.call([{
             methodname: 'block_stash_is_drop_visible',
             args: {
-                dropid: this._id,
-                hashcode: this._hashcode
+                dropid: this.get('id'),
+                hashcode: this.get('hashcode')
             }
-        }])[0].then(cb);
+        }])[0].then(function(visible) {
+            if (!visible) {
+                return $.Deferred().reject();
+            }
+            return true;
+        });
     }
 
     return /** @alias module:block_stash/drop */ Drop;

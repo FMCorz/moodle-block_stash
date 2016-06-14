@@ -68,10 +68,10 @@ class drop extends persistent {
         $mform->addRule('maxpickup', null, 'required', null, 'client');
         $mform->addRule('maxpickup', get_string('maximumchars', '', 10), 'maxlength', 10, 'client');
 
-        // pickup interval.
-        $mform->addElement('duration', 'pickupinterval', 'pickup interval');
+        // Pickup interval.
+        $mform->addElement('duration', 'pickupinterval', 'Pickup interval');
         $mform->setType('pickupinterval', PARAM_INT);
-        $mform->addRule('pickupinterval', null, 'required', null, 'client');
+        $mform->disabledIf('pickupinterval', 'maxpickup', 'eq', 1);
 
         $this->add_action_buttons(true, get_string('savechanges', 'tool_lp'));
     }
