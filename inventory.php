@@ -40,15 +40,15 @@ $PAGE->set_url($url);
 echo $OUTPUT->header();
 echo $OUTPUT->heading('Inventory');
 
-
 $renderer = $PAGE->get_renderer('block_stash');
-$page = new \block_stash\output\inventory_page($courseid);
-// Show inventory for teachers (Maybe students as well).
-echo $renderer->render_inventory_page($page);
-
-$manager = \block_stash\manager::get($courseid);
-$items = $manager->get_all_user_items_in_stash($USER->id);
-$page = new \block_stash\output\user_inventory_page($courseid, $USER->id);
-echo $renderer->render_user_inventory($page);
+// Might need a better check for this.
+if (has_capability('block/stash:addinstance', $context)) {
+    $page = new \block_stash\output\inventory_page($courseid);
+    // Show inventory for teachers (Maybe students as well).
+    echo $renderer->render_inventory_page($page);
+} else {
+    $page = new \block_stash\output\user_inventory_page($courseid, $USER->id);
+    echo $renderer->render_user_inventory($page);
+}
 
 echo $OUTPUT->footer();
