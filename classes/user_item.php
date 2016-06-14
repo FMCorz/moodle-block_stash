@@ -55,6 +55,43 @@ class user_item extends persistent {
     }
 
     /**
+     * Get all items in the stash of a user.
+     *
+     * @param int $userid The user ID.
+     * @param int $stashid The stash ID.
+     * @param bool $onlyvisible When true, only return visible items.
+     * @return array An array of objects containing items and user items.
+     */
+    public static function get_all_in_stash($userid, $stashid, $onlyvisible = true) {
+        global $DB;
+        $result = [];
+
+        $itemfields = item::get_sql_fields('i', 'item');
+        $uifields = self::get_sql_fields('ui', 'useritem');
+        $sql = "SELECT $itemfields, $uifields
+                  FROM {" . self::TABLE . "} ui
+                  JOIN {" . item::TABLE . "} i
+                    ON i.id = ui.itemid
+                 WHERE ui.userid = ?
+                   AND i.stashid = ?";
+
+        if ($onlyvisible) {
+            $sql .= " AND ui.quantity IS NOT NULL";
+        }
+
+        $records = $DB->get_recordset_sql($sql, [$userid, $stashid]);
+        foreach ($records as $record) {
+            $result[] = (object) [
+                'item' => new item(null, item::extract_record($record, 'item')),
+                'useritem' => new self(null, self::extract_record($record, 'useritem'))
+            ];
+        }
+        $records->close();
+
+        return $result;
+    }
+
+    /**
      * Does the user have stock?
      *
      * @return bool

@@ -30,6 +30,7 @@ use renderable;
 use renderer_base;
 use templatable;
 use moodle_url;
+use block_stash\external\item_exporter;
 
 
 class user_inventory_page implements renderable, templatable {
@@ -50,11 +51,12 @@ class user_inventory_page implements renderable, templatable {
 
         $data = array();
         foreach ($items as $key => $item) {
-            $data['items'][$key]['name'] = $item->item->get_name();
-            $imageurl = moodle_url::make_pluginfile_url($this->manager->get_context()->id, 'block_stash', 'item',
-                    $item->item->get_id(), '/', 'image');
-            $data['items'][$key]['imageurl'] = $imageurl->out(false);
-            $data['items'][$key]['quantity'] = $item->useritem->get_quantity();
+            $exporter = new item_exporter($item->item, ['context' => $this->manager->get_context()]);
+
+            $exported = $exporter->export($output);
+            $exported->quantity = $item->useritem->get_quantity();
+
+            $data['items'][] = $exported;
         }
 
         return $data;
