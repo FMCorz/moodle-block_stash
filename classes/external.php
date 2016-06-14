@@ -53,6 +53,47 @@ class external extends external_api {
      * External function parameter structure.
      * @return external_function_paramters
      */
+    public static function is_drop_visible_parameters() {
+        return new external_function_parameters([
+            'dropid' => new external_value(PARAM_INT),
+            'hashcode' => new external_value(PARAM_ALPHANUM),
+        ]);
+    }
+
+    /**
+     * A drop has been found, hurray!
+     *
+     * @param int $dropid The drop ID.
+     * @param int $hashcode The hash code of the drop.
+     * @return bool
+     */
+    public static function is_drop_visible($dropid, $hashcode) {
+        $params = self::validate_parameters(self::is_drop_visible_parameters(), compact('dropid', 'hashcode'));
+        extract($params);
+
+        $manager = manager::get_by_dropid($dropid);
+        self::validate_context($manager->get_context());
+
+        $drop = $manager->get_drop($dropid);
+        if ($drop->get_hashcode() != $hashcode) {
+            throw new coding_exception('Unexpected hash code.');
+        }
+
+        return $manager->is_drop_visible($drop);
+    }
+
+    /**
+     * External function return structure.
+     * @return external_value
+     */
+    public static function is_drop_visible_returns() {
+        return new external_value(PARAM_BOOL);
+    }
+
+    /**
+     * External function parameter structure.
+     * @return external_function_paramters
+     */
     public static function pickup_drop_parameters() {
         return new external_function_parameters([
             'dropid' => new external_value(PARAM_INT),
@@ -73,17 +114,13 @@ class external extends external_api {
 
         $manager = manager::get_by_dropid($dropid);
         self::validate_context($manager->get_context());
-        $manager->require_pickup();
 
         $drop = $manager->get_drop($dropid);
         if ($drop->get_hashcode() != $hashcode) {
             throw new coding_exception('Unexpected hash code.');
         }
 
-        // Check that the drop is available. (not already dropped, etc...).
-
-        // TODO Implement quantity from the drop configuration.
-        $manager->pickup_item($drop->get_itemid(), 1);
+        $manager->pickup_drop($drop);
 
         return true;
     }

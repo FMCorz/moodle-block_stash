@@ -148,6 +148,33 @@ function xmldb_block_stash_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2016052305, 'stash');
     }
 
+    if ($oldversion < 2016052306) {
+
+        // Define table block_stash_drop_pickups to be created.
+        $table = new xmldb_table('block_stash_drop_pickups');
+
+        // Adding fields to table block_stash_drop_pickups.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('dropid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('pickupcount', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('lastpickup', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+
+        // Adding keys to table block_stash_drop_pickups.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+
+        // Adding indexes to table block_stash_drop_pickups.
+        $table->add_index('userdrop', XMLDB_INDEX_UNIQUE, array('dropid', 'userid'));
+
+        // Conditionally launch create table for block_stash_drop_pickups.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Stash savepoint reached.
+        upgrade_block_savepoint(true, 2016052306, 'stash');
+    }
+
     return true;
 
 }

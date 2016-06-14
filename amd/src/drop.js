@@ -31,18 +31,79 @@ define([
         this._id = dropdata.id;
         this._hashcode = dropdata.hashcode;
     }
-
     Drop.prototype._id = 1;
-    Drop.prototype._quantity = 1;
+    Drop.prototype._hascode = 1;
+    Drop.prototype._displayIfVisible = null;
+    Drop.prototype._isVisible = null;
+
+    /**
+     * Set something to be displayed when the drop is visible.
+     *
+     * Must be called prior to {@link self.run}.
+     *
+     * @param {String|Node} selector The node to display.
+     * @return {Void}
+     */
+    Drop.prototype.displayIfVisible = function(selector) {
+        this._displayIfVisible = $(selector);
+    };
+
+    /**
+     * Report the drop has having been found.
+     *
+     * @return {Promise} Resolved when found without errors.
+     */
     Drop.prototype.find = function() {
         return Ajax.call([{
-            methodname: 'block_stash_find_drop',
+            methodname: 'block_stash_pickup_drop',
             args: {
                 dropid: this._id,
                 hashcode: this._hashcode
             }
         }])[0];
     };
+
+    /**
+     * Run, initialise the drop in the page.
+     *
+     * @return {Void}
+     */
+    Drop.prototype.run = function() {
+
+        if (this._displayIfVisible && this._displayIfVisible.length > 0) {
+            this.isVisible().then(function(visible) {
+                this._displayIfVisible.show();
+            }.bind(this));
+        }
+
+    };
+
+    /**
+     * Is the drop visible to the current user?
+     *
+     * @return {Promise} Rejected when not visible.
+     */
+    Drop.prototype.isVisible = function() {
+        var cb = function(visible) {
+            this._isVisible = visible;
+            if (!visible) {
+                return $.Deferred().reject()
+            }
+            return visible;
+        }.bind(this);
+
+        if (this._isVisible !== null) {
+            return $.when($this._isVisible).then(cb);
+        }
+
+        return Ajax.call([{
+            methodname: 'block_stash_is_drop_visible',
+            args: {
+                dropid: this._id,
+                hashcode: this._hashcode
+            }
+        }])[0].then(cb);
+    }
 
     return /** @alias module:block_stash/drop */ Drop;
 

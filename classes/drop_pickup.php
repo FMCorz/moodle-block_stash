@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Item drop model.
+ * Item drop pickup model.
  *
  * @package    block_stash
  * @copyright  2016 Frédéric Massart - FMCorz.net
@@ -28,75 +28,52 @@ defined('MOODLE_INTERNAL') || die();
 use lang_string;
 
 /**
- * Item drop model class.
+ * Item drop pickup model class.
  *
  * @package    block_stash
  * @copyright  2016 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class drop extends persistent {
+class drop_pickup extends persistent {
 
-    const TABLE = 'block_stash_drops';
+    const TABLE = 'block_stash_drop_pickups';
 
     protected static function define_properties() {
         return [
-            'itemid' => [
+            'dropid' => [
                 'type' => PARAM_INT
             ],
-            'name' => [
-                'type' => PARAM_NOTAGS
+            'userid' => [
+                'type' => PARAM_INT
             ],
-            'maxpickup' => [
+            'pickupcount' => [
                 'type' => PARAM_INT,
-                'default' => 1
+                'default' => 0
             ],
-            'pickupinterval' => [
+            'lastpickup' => [
                 'type' => PARAM_INT,
-                'default' => HOURSECS
-            ],
-            'hashcode' => [
-                'type' => PARAM_ALPHANUM,
-                'default' => function() {
-                    return random_string(40);
-                }
+                'default' => null,
+                'null' => NULL_ALLOWED
             ]
         ];
     }
 
     /**
-     * Whether the drop can be picked up.
+     * Get a drop pickup for a drop and user.
      *
-     * This does not account for any capability checks, it only checks if
-     * the user does not exceed the rules established by the drop itself.
+     * This creates the row if it does not exist.
      *
-     * @param drop_pickup $dp Get from {@link drop_pickup::get_relation()}.
-     * @return bool
+     * @param int $dropid The drop ID.
+     * @param int $userid The user ID.
+     * @return drop_pickup
      */
-    public function can_pickup(drop_pickup $dp) {
-        $maxpickup = $this->get_maxpickup();
-        $interval = $this->get_pickupinterval();
-
-        if ($maxpickup > 0 && $dp->get_pickupcount() >= $maxpickup) {
-            return false;
-
-        } else if ($interval > 0 && $dp->get_lastpickup() + $interval > time()) {
-            return false;
+    public static function get_relation($dropid, $userid) {
+        $params = ['dropid' => $dropid, 'userid' => $userid];
+        $dp = self::get_record($params);
+        if (!$dp) {
+            $dp = new self(null, (object) $params);
         }
-
-        return true;
-    }
-
-    /**
-     * Validate the hash code.
-     *
-     * @param string $value The hash code.
-     * @return true|lang_string
-     */
-    protected function validate_hashcode($value) {
-        if (strlen($value) != 40) {
-            return new lang_string('invaliddata', 'error');
-        }
-        return true;
+        return $dp;
     }
 
     /**
@@ -105,20 +82,20 @@ class drop extends persistent {
      * @param string $value The item ID.
      * @return true|lang_string
      */
-    protected function validate_itemid($value) {
-        if (!item::record_exists($value)) {
+    protected function validate_dropid($value) {
+        if (!drop::record_exists($value)) {
             return new lang_string('invaliddata', 'error');
         }
         return true;
     }
 
     /**
-     * Validate the max pickup.
+     * Validate the pickup count.
      *
-     * @param string $value The max pickup.
+     * @param string $value The pickup count.
      * @return true|lang_string
      */
-    protected function validate_maxpickup($value) {
+    protected function validate_pickupcount($value) {
         if ($value < 0) {
             return new lang_string('invaliddata', 'error');
         }
@@ -126,13 +103,14 @@ class drop extends persistent {
     }
 
     /**
-     * Validate the pickup interval.
+     * Validate the user ID.
      *
-     * @param string $value The pickup interval.
+     * @param string $value The user ID.
      * @return true|lang_string
      */
-    protected function validate_pickupinterval($value) {
-        if ($value < 0) {
+    protected function validate_userid($value) {
+        global $DB;
+        if (!$DB->record_exists('user', ['id' => $value])) {
             return new lang_string('invaliddata', 'error');
         }
         return true;

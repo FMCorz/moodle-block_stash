@@ -55,5 +55,20 @@
         <INDEX NAME="itemid" UNIQUE="false" FIELDS="itemid"/>
       </INDEXES>
     </TABLE>
+    <TABLE NAME="block_stash_drop_pickups" COMMENT="The history of the pickups made on drops.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="dropid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="pickupcount" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="lastpickup" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="userdrop" UNIQUE="true" FIELDS="dropid, userid"/>
+      </INDEXES>
+    </TABLE>
   </TABLES>
 </XMLDB>

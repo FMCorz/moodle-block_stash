@@ -120,16 +120,6 @@ class manager {
     }
 
     /**
-     * Call when a user finds a drop.
-     *
-     * @param drop|int $droporid The drop found, or its ID.
-     * @return void
-     */
-    public function increment_quantity($droporid, $userid = null) {
-
-    }
-
-    /**
      * Get an instance of the manager.
      *
      * @param int $courseid The course ID.
@@ -228,7 +218,7 @@ class manager {
      */
     public function get_drop($dropid) {
         $drop = new \block_stash\drop($dropid);
-        if (!item::is_item_in_stash($drop->get_itemid(), $this->get_stash()->get_id())) {
+        if (!$this->is_item_in_stash($drop->get_itemid())) {
             throw new coding_exception('Unexpected drop ID.');
         }
         return $drop;
@@ -251,8 +241,11 @@ class manager {
      * @return user_item
      */
     public function get_user_item($userid, $itemid) {
-        $params = ['userid' => $userid, 'itemid' => $itemid];
+        if (!$this->is_item_in_stash($itemid)) {
+            throw new coding_exception('Unexpected item ID.');
+        }
 
+        $params = ['userid' => $userid, 'itemid' => $itemid];
         $ui = user_item::get_record($params);
         if (!$ui) {
             $ui = new user_item(null, (object) $params);
@@ -287,6 +280,87 @@ class manager {
     }
 
     /**
+     * Is a drop visible?
+     *
+     * Often a drop stops being visible when it has been picked up recently,
+     * or picked up up to its capacity.
+     *
+     * @param int $droporid The drop, or ids ID.
+     * @param int $userid The user who we're checking the visibility of.
+     * @return bool
+     */
+    public function is_drop_visible($droporid, $userid = null) {
+        global $USER;
+        $userid = !empty($userid) ? $userid : $USER->id;
+        if ($userid != $USER->id) {
+            $this->require_manage();
+        } else {
+            $this->require_pickup();
+        }
+
+        $drop = $droporid;
+        if (!is_object($drop)) {
+            $drop = $this->get_item($droporid);
+        }
+        $dp = drop_pickup::get_relation($drop->get_id(), $userid);
+
+        return $drop->can_pickup($dp);
+    }
+
+    /**
+     * Whether the item is part of this stash.
+     *
+     * @param int $itemid The item ID.
+     * @return bool
+     */
+    public function is_item_in_stash($itemid) {
+        return item::is_item_in_stash($itemid, $this->get_stash()->get_id());
+    }
+
+    /**
+     * Pickup a drop.
+     *
+     * @param drop|int $droporid The drop, or its ID.
+     * @param int $userid The user pickuping the drop.
+     * @return void
+     */
+    public function pickup_drop($droporid, $userid = null) {
+        global $USER;
+        $userid = !empty($userid) ? $userid : $USER->id;
+        if ($userid != $USER->id) {
+            $this->require_manage();
+        } else {
+            $this->require_pickup();
+        }
+
+        // Find the drop.
+        $drop = $droporid;
+        if (!is_object($drop)) {
+            $drop = $this->get_drop($droporid);
+        }
+
+        // Check that the drop is allowed: not already dropped, etc...
+        $dp = drop_pickup::get_relation($drop->get_id(), $userid);
+        if (!$drop->can_pickup($dp)) {
+            throw new coding_exception('The drop cannot be picked up.');
+        }
+
+        // TODO Implement quantity from the drop configuration.
+        $quantity = 1;
+        $this->pickup_item($drop->get_itemid(), $quantity);
+
+        // Update the drop pickup values.
+        $dp->set_pickupcount($dp->get_pickupcount() + 1);
+        $dp->set_lastpickup(time());
+        error_log(json_encode($dp->get_errors()));
+        if (!$dp->get_id()) {
+            $dp->create();
+        } else {
+            $dp->update();
+        }
+    }
+
+    /**
      * pickup an item.
      *
      * @param int|item $itemorid The item, or its ID.
@@ -296,12 +370,17 @@ class manager {
      */
     public function pickup_item($itemorid, $quantity = 1, $userid = null) {
         global $USER;
+        $userid = !empty($userid) ? $userid : $USER->id;
+        if ($userid != $USER->id) {
+            $this->require_manage();
+        } else {
+            $this->require_pickup();
+        }
 
         if ($quantity < 1) {
             throw new coding_exception('Invalid quantity.');
         }
 
-        $userid = !empty($userid) ? $userid : $USER->id;
         $item = $itemorid;
         if (!is_object($item)) {
             $item = $this->get_item($itemorid);
@@ -319,18 +398,20 @@ class manager {
     /**
      * Throws an exception when the user cannot pickup items.
      *
+     * @param int $userid The user ID.
      * @return void
      */
-    public function require_pickup() {
+    public function require_pickup($userid = null) {
         // TODO Implement logic.
     }
 
     /**
      * Throws an exception when the user cannot manage the stash.
      *
+     * @param int $userid The user ID.
      * @return void
      */
-    public function require_manage() {
+    public function require_manage($userid = null) {
         // TODO Implement logic.
     }
 

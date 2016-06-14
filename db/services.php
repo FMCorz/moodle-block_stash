@@ -25,6 +25,15 @@
 defined('MOODLE_INTERNAL') || die();
 
 $functions = [
+    'block_stash_is_drop_visible' => [
+        'classname'     => 'block_stash\\external',
+        'methodname'    => 'is_drop_visible',
+        'description'   => 'Check if a drop is visible to the user.',
+        'type'          => 'read',
+        // TODO Add capability name here.
+        'capabilities'  => '',
+        'ajax'          => true
+    ],
     'block_stash_pickup_drop' => [
         'classname'     => 'block_stash\\external',
         'methodname'    => 'pickup_drop',
