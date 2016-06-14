@@ -46,6 +46,9 @@ $page = new \block_stash\output\inventory_page($courseid);
 // Show inventory for teachers (Maybe students as well).
 echo $renderer->render_inventory_page($page);
 
-
+$manager = \block_stash\manager::get($courseid);
+$items = $manager->get_all_user_items_in_stash($USER->id);
+$page = new \block_stash\output\user_inventory_page($courseid, $USER->id);
+echo $renderer->render_user_inventory($page);
 
 echo $OUTPUT->footer();

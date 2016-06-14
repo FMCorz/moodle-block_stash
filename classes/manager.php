@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 use context_course;
 use context_user;
+use stdClass;
 
 /**
  * Stash manager.
@@ -204,6 +205,20 @@ class manager {
         }
 
         return $ui;
+    }
+
+    public function get_all_user_items_in_stash($userid) {
+        $itemarray = array();
+        $items = user_item::get_records(['userid' => $userid]);
+        foreach ($items as $key => $useritem) {
+            // Get the item that matches this one.
+            if ($useritem->is_visible()) {
+                $itemarray[$key] = new stdClass();
+                $itemarray[$key]->item = $this->get_item($useritem->get_itemid());
+                $itemarray[$key]->useritem = $useritem;
+            }
+        }
+        return $itemarray;
     }
 
     /**

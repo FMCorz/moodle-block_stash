@@ -57,7 +57,7 @@ class item_exporter extends persistent_exporter {
     }
 
     protected function get_other_values(renderer_base $output) {
-        // print_object($this->related);
+        // print_object($this->persistent);
         $imageurl = moodle_url::make_pluginfile_url($this->related['context']->id, 'block_stash', 'item',
             $this->persistent->get_id(), '/', 'image');
         $editurl = new moodle_url('/blocks/stash/inventory_edit.php', array('id' => $this->persistent->get_id(), 'courseid' => '2'));
