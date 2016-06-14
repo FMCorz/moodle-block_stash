@@ -1,0 +1,12 @@
+.block_stash_item {
+    border: 1px solid black;
+    float: left;
+    height: 200px;
+    border-radius: 4px;
+    padding: 5px;
+    margin: 5px;
+}
+
+.block_stash_edit {
+
+}

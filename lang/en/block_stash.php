@@ -23,6 +23,8 @@
  */
 
 $string['additem'] = 'Add an item';
+$string['addtoinventory'] = 'Add an item to the inventory.';
+$string['edit'] = 'Edit'; // Should be replaced with the pix icon.
 $string['itemname'] = 'Name of the item';
 $string['maxnumber'] = 'Maximum number of items per stash.';
 $string['pluginname'] = 'Stash';
