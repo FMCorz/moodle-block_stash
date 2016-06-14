@@ -41,12 +41,12 @@ $PAGE->set_heading('Item drop');
 $PAGE->set_url($url);
 
 $item = $manager->get_item($itemid);
-$drop = $dropid ? $manager->get_item_drop($dropid) : null;
+$drop = $dropid ? $manager->get_drop($dropid) : null;
 
-$form = new \block_stash\form\item_drop($url->out(false), ['persistent' => $drop, 'item' => $item]);
+$form = new \block_stash\form\drop($url->out(false), ['persistent' => $drop, 'item' => $item]);
 if ($data = $form->get_data()) {
 
-    $manager->create_or_update_item_drop($data);
+    $manager->create_or_update_drop($data);
     redirect($url);
 
 } else if ($form->is_cancelled()) {
@@ -59,10 +59,9 @@ echo $OUTPUT->heading(format_string($item->get_name(), true, ['context' => $cont
 
 $form->display();
 
-// $page = new \block_stash\output\inventory_page($courseid);
-// Show inventory for teachers (Maybe students as well).
-// echo $renderer->render_inventory_page($page);
-
-
+if ($item) {
+    // TODO Replace.
+    echo $renderer->drop();
+}
 
 echo $OUTPUT->footer();

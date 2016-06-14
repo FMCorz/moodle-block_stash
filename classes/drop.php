@@ -34,9 +34,9 @@ use lang_string;
  * @copyright  2016 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class item_drop extends persistent {
+class drop extends persistent {
 
-    const TABLE = 'block_stash_item_drops';
+    const TABLE = 'block_stash_drops';
 
     protected static function define_properties() {
         return [
@@ -46,11 +46,11 @@ class item_drop extends persistent {
             'name' => [
                 'type' => PARAM_NOTAGS
             ],
-            'maxloot' => [
+            'maxpickup' => [
                 'type' => PARAM_INT,
                 'default' => 1
             ],
-            'lootinterval' => [
+            'pickupinterval' => [
                 'type' => PARAM_INT,
                 'default' => HOURSECS
             ],
@@ -90,12 +90,12 @@ class item_drop extends persistent {
     }
 
     /**
-     * Validate the loot interval.
+     * Validate the max pickup.
      *
-     * @param string $value The loot interval.
+     * @param string $value The max pickup.
      * @return true|lang_string
      */
-    protected function validate_lootinterval($value) {
+    protected function validate_maxpickup($value) {
         if ($value < 0) {
             return new lang_string('invaliddata', 'error');
         }
@@ -103,12 +103,12 @@ class item_drop extends persistent {
     }
 
     /**
-     * Validate the max loot.
+     * Validate the pickup interval.
      *
-     * @param string $value The max loot.
+     * @param string $value The pickup interval.
      * @return true|lang_string
      */
-    protected function validate_maxloot($value) {
+    protected function validate_pickupinterval($value) {
         if ($value < 0) {
             return new lang_string('invaliddata', 'error');
         }

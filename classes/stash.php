@@ -78,6 +78,28 @@ class stash extends persistent {
     }
 
     /**
+     * Return a stash by drop ID.
+     *
+     * @param  int $dropid The drop ID.
+     * @return stash
+     */
+    public static function get_by_dropid($dropid) {
+        global $DB;
+
+        $sql = "SELECT s.*
+                  FROM {" . drop::TABLE . "} d
+                  JOIN {" . item::TABLE . "} i
+                    ON i.id = d.itemid
+                  JOIN {" . self::TABLE . "} s
+                    ON s.id = i.stashid
+                 WHERE d.id = ?";
+        $record = $DB->get_record_sql($sql, [$dropid], MUST_EXIST);
+        $stash = new static(null, $record);
+
+        return $stash;
+    }
+
+    /**
      * Return a stash by item ID.
      *
      * @param  int $itemid The item ID.
@@ -91,7 +113,7 @@ class stash extends persistent {
                   JOIN {" . self::TABLE . "} s
                     ON s.id = i.stashid
                  WHERE i.id = ?";
-        $record = $DB->get_record_sql($sql, [$itemid]);
+        $record = $DB->get_record_sql($sql, [$itemid], MUST_EXIST);
         $stash = new static(null, $record);
 
         return $stash;

@@ -25,6 +25,7 @@
 namespace block_stash;
 defined('MOODLE_INTERNAL') || die();
 
+use coding_exception;
 use context_course;
 use context_user;
 use stdClass;
@@ -105,17 +106,27 @@ class manager {
      * Create or update an item drop based on the data passed.
      *
      * @param stdClass $data Data to use to create or update.
-     * @return item_drop
+     * @return drop
      */
-    public function create_or_update_item_drop($data) {
+    public function create_or_update_drop($data) {
         // TODO Capability checks.
-        $drop = new item_drop(null, $data);
+        $drop = new drop(null, $data);
         if (!$drop->get_id()) {
             $drop->create();
         } else {
             $drop->update();
         }
         return $drop;
+    }
+
+    /**
+     * Call when a user finds a drop.
+     *
+     * @param drop|int $droporid The drop found, or its ID.
+     * @return void
+     */
+    public function increment_quantity($droporid, $userid = null) {
+
     }
 
     /**
@@ -133,6 +144,19 @@ class manager {
             self::$instances[$courseid] = new static($courseid);
         }
         return self::$instances[$courseid];
+    }
+
+    /**
+     * Get the manager by drop ID.
+     *
+     * @param int $dropid The drop ID.
+     * @return manager
+     */
+    public static function get_by_dropid($dropid) {
+        $stash = stash::get_by_dropid($dropid);
+        $manager = self::get($stash->get_courseid());
+        $manager->stash = $stash;
+        return $manager;
     }
 
     /**
@@ -202,8 +226,8 @@ class manager {
      * @param int $drop The drop ID.
      * @return item
      */
-    public function get_item_drop($dropid) {
-        $drop = new \block_stash\item_drop($dropid);
+    public function get_drop($dropid) {
+        $drop = new \block_stash\drop($dropid);
         if (!item::is_item_in_stash($drop->get_itemid(), $this->get_stash()->get_id())) {
             throw new coding_exception('Unexpected drop ID.');
         }
@@ -260,6 +284,45 @@ class manager {
     public function is_enabled() {
         // TODO Add logic.
         return true;
+    }
+
+    /**
+     * pickup an item.
+     *
+     * @param int|item $itemorid The item, or its ID.
+     * @param int $quantity The quantity of item being pickuped.
+     * @param int $userid The user pickuping the item.
+     * @return void
+     */
+    public function pickup_item($itemorid, $quantity = 1, $userid = null) {
+        global $USER;
+
+        if ($quantity < 1) {
+            throw new coding_exception('Invalid quantity.');
+        }
+
+        $userid = !empty($userid) ? $userid : $USER->id;
+        $item = $itemorid;
+        if (!is_object($item)) {
+            $item = $this->get_item($itemorid);
+        }
+
+        $ui = $this->get_user_item($userid, $item->get_id());
+        $currentquantity = intval($ui->get_quantity());
+
+        // TODO Check if can have more than $quantity items.
+        // TODO Create a method that automatically pushed to the database to prevent race conditions.
+        $ui->set_quantity($currentquantity + $quantity);
+        $ui->update();
+    }
+
+    /**
+     * Throws an exception when the user cannot pickup items.
+     *
+     * @return void
+     */
+    public function require_pickup() {
+        // TODO Implement logic.
     }
 
     /**

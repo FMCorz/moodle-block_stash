@@ -104,27 +104,27 @@ function xmldb_block_stash_upgrade($oldversion) {
 
     if ($oldversion < 2016052304) {
 
-        // Define table block_stash_item_drops to be created.
-        $table = new xmldb_table('block_stash_item_drops');
+        // Define table block_stash_drops to be created.
+        $table = new xmldb_table('block_stash_drops');
 
-        // Adding fields to table block_stash_item_drops.
+        // Adding fields to table block_stash_drops.
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('itemid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
         $table->add_field('name', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('maxloot', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '1');
-        $table->add_field('lootinterval', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '3600');
+        $table->add_field('maxpickup', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '1');
+        $table->add_field('pickupinterval', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '3600');
         $table->add_field('hashcode', XMLDB_TYPE_CHAR, '40', null, XMLDB_NOTNULL, null, null);
         $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
         $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
         $table->add_field('usermodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
-        // Adding keys to table block_stash_item_drops.
+        // Adding keys to table block_stash_drops.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
 
-        // Adding indexes to table block_stash_item_drops.
+        // Adding indexes to table block_stash_drops.
         $table->add_index('itemid', XMLDB_INDEX_NOTUNIQUE, array('itemid'));
 
-        // Conditionally launch create table for block_stash_item_drops.
+        // Conditionally launch create table for block_stash_drops.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }

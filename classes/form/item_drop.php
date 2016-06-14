@@ -33,9 +33,9 @@ use stdClass;
  * @copyright  2016 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class item_drop extends persistent {
+class drop extends persistent {
 
-    protected static $persistentclass = 'block_stash\\item_drop';
+    protected static $persistentclass = 'block_stash\\drop';
 
     public function definition() {
         global $PAGE, $OUTPUT;
@@ -62,16 +62,16 @@ class item_drop extends persistent {
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 100), 'maxlength', 100, 'client');
 
-        // Max loot.
-        $mform->addElement('text', 'maxloot', 'Maximum loot', 'maxlength="10" size="5"');
-        $mform->setType('maxloot', PARAM_INT);
-        $mform->addRule('maxloot', null, 'required', null, 'client');
-        $mform->addRule('maxloot', get_string('maximumchars', '', 10), 'maxlength', 10, 'client');
+        // Max pickup.
+        $mform->addElement('text', 'maxpickup', 'Maximum pickup', 'maxlength="10" size="5"');
+        $mform->setType('maxpickup', PARAM_INT);
+        $mform->addRule('maxpickup', null, 'required', null, 'client');
+        $mform->addRule('maxpickup', get_string('maximumchars', '', 10), 'maxlength', 10, 'client');
 
-        // Loot interval.
-        $mform->addElement('duration', 'lootinterval', 'Loot interval');
-        $mform->setType('lootinterval', PARAM_INT);
-        $mform->addRule('lootinterval', null, 'required', null, 'client');
+        // pickup interval.
+        $mform->addElement('duration', 'pickupinterval', 'pickup interval');
+        $mform->setType('pickupinterval', PARAM_INT);
+        $mform->addRule('pickupinterval', null, 'required', null, 'client');
 
         $this->add_action_buttons(true, get_string('savechanges', 'tool_lp'));
     }
