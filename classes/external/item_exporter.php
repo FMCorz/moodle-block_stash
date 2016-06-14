@@ -49,16 +49,22 @@ class item_exporter extends persistent_exporter {
         return [
             'imageurl' => [
                 'type' => PARAM_URL
+            ],
+            'editurl' => [
+                'type' => PARAM_URL
             ]
         ];
     }
 
     protected function get_other_values(renderer_base $output) {
+        // print_object($this->related);
         $imageurl = moodle_url::make_pluginfile_url($this->related['context']->id, 'block_stash', 'item',
             $this->persistent->get_id(), '/', 'image');
+        $editurl = new moodle_url('/blocks/stash/inventory_edit.php', array('id' => $this->persistent->get_id(), 'courseid' => '2'));
 
         return [
-            'imageurl' => $imageurl->out(false)
+            'imageurl' => $imageurl->out(false),
+            'editurl' => $editurl->out(false)
         ];
     }
 

@@ -102,7 +102,7 @@ function xmldb_block_stash_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2016052303, 'stash');
     }
 
-    if ($oldversion < 2016052304) {
+    if ($oldversion < 2016052305) {
 
         // Define field maxnumber to be added to block_stash_items.
         $table = new xmldb_table('block_stash_items');
@@ -114,7 +114,7 @@ function xmldb_block_stash_upgrade($oldversion) {
         }
 
         // Stash savepoint reached.
-        upgrade_block_savepoint(true, 2016052304, 'stash');
+        upgrade_block_savepoint(true, 2016052305, 'stash');
     }
 
     return true;

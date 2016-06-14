@@ -43,7 +43,7 @@ $PAGE->set_url($url);
 
 $item = $id ? $manager->get_item($id) : null;
 
-$fileareaoptions = [];
+$fileareaoptions = ['maxfiles' => 1];
 $customdata = [
     'fileareaoptions' => $fileareaoptions,
     'persistent' => $item,
@@ -51,12 +51,17 @@ $customdata = [
 ];
 
 $form = new \block_stash\form\item($url->out(false), $customdata);
+
+$draftitemid = file_get_submitted_draft_itemid('item');
+file_prepare_draft_area($draftitemid, $context->id, 'block_stash', 'item', $id, $fileareaoptions);
+$form->set_data((object) array('image' => $draftitemid));
+
 if ($data = $form->get_data()) {
 
     $draftitemid = $data->image;
     unset($data->image);
 
-    $manager->create_or_update_item($data, $draftitemid);
+    $thing = $manager->create_or_update_item($data, $draftitemid);
     redirect($listurl);
 
 } else if ($form->is_cancelled()) {

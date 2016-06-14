@@ -49,8 +49,13 @@ class item extends persistent {
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
 
+        // Max number of items.
+        $mform->addElement('text', 'maxnumber', get_string('maxnumber', 'block_stash'));
+        $mform->setType('maxnumber', PARAM_INT);
+        $mform->setDefault('maxnumber', '1');
+
         // Image.
-        $mform->addElement('filepicker', 'image', 'Image', array(), $this->_customdata['fileareaoptions']);
+        $mform->addElement('filemanager', 'image', 'Image', array(), $this->_customdata['fileareaoptions']);
         $mform->addRule('image', null, 'required', null, 'client');
 
         $this->add_action_buttons(true, get_string('savechanges', 'tool_lp'));

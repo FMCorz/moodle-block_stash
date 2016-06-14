@@ -24,5 +24,6 @@
 
 $string['additem'] = 'Add an item';
 $string['itemname'] = 'Name of the item';
+$string['maxnumber'] = 'Maximum number of items per stash.';
 $string['pluginname'] = 'Stash';
 $string['quantity'] = 'Quantity';

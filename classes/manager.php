@@ -81,14 +81,20 @@ class manager {
 
         // Rename the image to 'image.ext', in case we want to add a second one later.
         $fs = get_file_storage();
-        $files = $fs->get_area_files(context_user::instance($USER->id)->id, 'user', 'draft', $draftitemid, '', false);
+        $usercontextid = context_user::instance($USER->id)->id;
+        $files = $fs->get_area_files($usercontextid, 'user', 'draft', $draftitemid, '', false);
         $image = array_pop($files);
         if ($image) {
+
             $ext = strtolower(pathinfo($image->get_filename(), PATHINFO_EXTENSION));
-            $image->rename('/', 'image' . ($ext ? '.' . $ext : ''));
+            $filename = 'image' . ($ext ? '.' . $ext : '');
+            // Check that we don't already have this image saved before renaming it.
+            if (!$fs->file_exists($usercontextid, 'user', 'draft', $draftitemid, '/', $filename)) {
+                $image->rename('/', $filename);
+            }
         }
 
-        $fileareaoptions = [];
+        $fileareaoptions = ['maxfiles' => 1];
         file_save_draft_area_files($draftitemid, $this->context->id, 'block_stash', 'item', $item->get_id(), $fileareaoptions);
 
         return $item;
