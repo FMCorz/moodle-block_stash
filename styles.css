@@ -26,6 +26,7 @@
     top: 200px;
 }
 
+/** Stash item. */
 .block-stash-item {
     display: inline-block;
 }
@@ -39,25 +40,15 @@
     margin: 0 auto;
 }
 
-.block-stash-item .item-image-small {
-    background-position: center center;
-    background-size: cover;
-    width: 50px;
-    height: 50px;
-    position: relative;
-    margin: 0 auto;
-    background: #FFF;
-    /*border: 1px solid black;*/
-}
-
-.block-stash-item .item-image .item-label {
+.block-stash-item .item-image .item-label,
+.block-stash-item .item-image .item-quantity {
     position: absolute;
     bottom: 0;
     right: 0;
     font-size: 11px;
     text-align: right;
     color: #fff;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6);
     padding: 0 3px;
     white-space: nowrap;
     overflow: hidden;
@@ -66,6 +57,15 @@
     box-sizing: border-box;
 }
 
+.block-stash-item .item-image .item-quantity {
+    top: 0;
+    left: 0;
+    bottom: auto;
+    right: auto;
+    text-align: left;
+}
+
+/** Actions (used in drops). */
 .block-stash-item .item-action {
     margin: 5px 0 0;
     text-align: center;
@@ -73,4 +73,42 @@
 
 .block-stash-item .item-action button {
     margin: 0;
+}
+
+/** Small item. */
+.block-stash-item.item-small .item-image {
+    width: 50px;
+    height: 50px;
+}
+
+.block-stash-item.item-small .item-image .item-label {
+    display: none;
+}
+
+.block-stash-item.item-small .item-image .item-quantity {
+    top: auto;
+    left: auto;
+    right: 0;
+    bottom: 0;
+}
+
+.block-stash-item.item-small:hover .item-label {
+    display: block;
+    bottom: -22px;
+    background-color: black;
+    width: 90px;
+    max-width: none;
+    text-align: center;
+    border-radius: 5px;
+    padding: 0 5px;
+    right: auto;
+    left: 0;
+    left: -webkit-calc(50% - 90px / 2);
+    left:    -moz-calc(50% - 90px / 2);
+    left:         calc(50% - 90px / 2);
+}
+
+/** Quantity rules. */
+.block-stash-item.item-quantity-1 .item-quantity {
+    display: none;
 }

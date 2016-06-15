@@ -15,23 +15,13 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    Main content for the block Stash
+    Small item.
 
-    Classes required for JS:
-    * -
-
-    Data attributes required for JS:
-    * -
-
-    Context variables required for this template:
-    * -
+    This should be kept in sync with other item partials.
 }}
-<div>
-    {{#items}}
-        {{>block_stash/item_small}}
-    {{/items}}
-</div>
-<div>
-<a href="{{inventoryurl}}">Inventory</a>
-<a href="{{settingsurl}}">Settings</a>
+<div class="block-stash-item item-small item-quantity-{{quantity}}" title="{{name}}">
+    <div class="item-image" style="background-image: url({{imageurl}});">
+        <div class="item-quantity">{{quantity}}</div>
+        <div class="item-label">{{name}}</div>
+    </div>
 </div>
