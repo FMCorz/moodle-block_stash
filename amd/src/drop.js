@@ -23,15 +23,21 @@
 
 define([
     'jquery',
-    'core/notification',
     'core/ajax',
-], function($, Notification, Ajax) {
+    'core/log',
+], function($, Ajax, Log) {
 
+    /**
+     * Drop class.
+     *
+     * @param {Object} dropdata The data of this drop.
+     * @param {Item} item The item related to this drop.
+     */
     function Drop(dropdata, item) {
         this._data = dropdata || {};
         this._item = item;
     }
-    Drop.prototype._data;
+    Drop.prototype._data = null;
 
     /**
      * Return a property of the drop.
@@ -53,21 +59,6 @@ define([
     };
 
     /**
-     * Report the drop has having been picked up.
-     *
-     * @return {Promise} Resolved when found without errors.
-     */
-    Drop.prototype.pickup = function() {
-        return Ajax.call([{
-            methodname: 'block_stash_pickup_drop',
-            args: {
-                dropid: this.get('id'),
-                hashcode: this.get('hashcode')
-            }
-        }])[0];
-    };
-
-    /**
      * Is the drop visible to the current user?
      *
      * @return {Promise} Rejected when not visible.
@@ -85,7 +76,24 @@ define([
             }
             return true;
         });
-    }
+    };
+
+    /**
+     * Report the drop has having been picked up.
+     *
+     * @return {Promise} Resolved when picked up without errors.
+     */
+    Drop.prototype.pickup = function() {
+        return Ajax.call([{
+            methodname: 'block_stash_pickup_drop',
+            args: {
+                dropid: this.get('id'),
+                hashcode: this.get('hashcode')
+            }
+        }])[0].fail(function() {
+            Log.debug('The item could not be picked up.');
+        });
+    };
 
     return /** @alias module:block_stash/drop */ Drop;
 

@@ -22,15 +22,17 @@
  */
 
 define([
-    'jquery',
-    'core/notification',
-    'core/ajax',
-], function($, Notification, Ajax) {
+], function() {
 
+    /**
+     * Item class.
+     *
+     * @param {Object} itemdata Data of the item.
+     */
     function Item(itemdata) {
         this._data = itemdata || {};
     }
-    Item.prototype._data;
+    Item.prototype._data = null;
 
     /**
      * Return a property of the item.

@@ -23,26 +23,36 @@
 
 define([
     'jquery',
-    'core/notification',
-    'core/ajax',
-], function($, Notification, Ajax) {
+], function($) {
 
-    function UI(snippet, container) {
+    /**
+     * Snippet UI class.
+     *
+     * @param {DropSnippetMaker} maker The snippet maker.
+     * @param {Node} container The container of the UI.
+     */
+    function UI(maker, container) {
         this._container = $(container);
-        this._snippet = snippet;
+        this._maker = maker;
         this._init();
     }
 
-    UI.prototype._container;
-    UI.prototype._appearanceNode;
-    UI.prototype._labelNode;
-    UI.prototype._actionTextNode;
-    UI.prototype._previewNode;
-    UI.prototype._actionTextNode;
+    UI.prototype._container = null;
+    UI.prototype._appearanceNode = null;
+    UI.prototype._labelNode = null;
+    UI.prototype._actionTextNode = null;
+    UI.prototype._previewNode = null;
+    UI.prototype._actionTextNode = null;
+    UI.prototype._snippetNode = null;
 
-    UI.prototype._actionTextZoneNode;
-    UI.prototype._labelZoneNode;
+    UI.prototype._actionTextZoneNode = null;
+    UI.prototype._labelZoneNode = null;
 
+    /**
+     * Initialise the things.
+     *
+     * @return {Void}
+     */
     UI.prototype._init = function() {
         this._appearanceNode = this.find('[name=displaytype]');
         this._labelNode = this.find('[name=label]');
@@ -54,60 +64,81 @@ define([
         this._actionTextZoneNode = this.find('.snippet-actiontext');
 
         // Set placeholders.
-        this._labelNode.attr('placeholder', this._snippet.getDefaultLabel());
-        this._actionTextNode.attr('placeholder', this._snippet.getDefaultActionText());
+        this._labelNode.attr('placeholder', this._maker.getDefaultLabel());
+        this._actionTextNode.attr('placeholder', this._maker.getDefaultActionText());
 
         // Set form values.
-        this._snippet.setLabel(this._labelNode.val());
-        this._snippet.setDisplayType(this._appearanceNode.val());
-        this._snippet.setActionText(this._actionTextNode.val());
+        this._maker.setLabel(this._labelNode.val());
+        this._maker.setDisplayType(this._appearanceNode.val());
+        this._maker.setActionText(this._actionTextNode.val());
 
         this._updateForm();
         this._setListeners();
         this.update();
-    }
+    };
 
+    /**
+     * Find a node in this UI.
+     *
+     * @param {String} selector The selector.
+     * @return {Node}
+     */
     UI.prototype.find = function(selector) {
         return this._container.find(selector);
     };
 
+    /**
+     * Set the event listeners.
+     *
+     * @return {Void}
+     */
     UI.prototype._setListeners = function() {
         this._appearanceNode.change(function(e) {
-            this._snippet.setDisplayType($(e.currentTarget).val());
+            this._maker.setDisplayType($(e.currentTarget).val());
             this._updateForm();
             this.update();
         }.bind(this));
 
         this._labelNode.on('keyup', function(e) {
-            this._snippet.setLabel($(e.currentTarget).val());
+            this._maker.setLabel($(e.currentTarget).val());
             this._updateForm();
             this.update();
         }.bind(this));
 
         this._actionTextNode.on('keyup', function(e) {
-            this._snippet.setActionText($(e.currentTarget).val());
+            this._maker.setActionText($(e.currentTarget).val());
             this._updateForm();
             this.update();
         }.bind(this));
     };
 
+    /**
+     * Update the snippet and preview.
+     *
+     * @return {Void}
+     */
     UI.prototype.update = function() {
-        var display = this._snippet.getDisplay();
+        var display = this._maker.getDisplay();
 
         display.find('a, input').click(function(e) { e.preventDefault(); return; });
 
-        this._snippetNode.val(this._snippet.getSnippet());
+        this._snippetNode.val(this._maker.getSnippet());
         this._previewNode.html(display);
-    }
+    };
 
+    /**
+     * Update the form.
+     *
+     * @return {Void}
+     */
     UI.prototype._updateForm = function() {
         var appearance = this._appearanceNode.val();
 
-        if (appearance == this._snippet.IMAGEANDBUTTON) {
+        if (appearance == this._maker.IMAGEANDBUTTON) {
             this._labelZoneNode.hide();
             this._actionTextZoneNode.show();
 
-        } else if (appearance == this._snippet.TEXT) {
+        } else if (appearance == this._maker.TEXT) {
             this._labelZoneNode.show();
             this._actionTextZoneNode.hide();
 
@@ -115,7 +146,7 @@ define([
             this._labelZoneNode.hide();
             this._actionTextZoneNode.hide();
         }
-    }
+    };
 
     return /** @alias module:block_stash/drop-snippet-ui */ UI;
 

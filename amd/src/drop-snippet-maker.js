@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Drop snippet module.
+ * Drop snippet maker module.
  *
  * @package    block_stash
  * @copyright  2016 Frédéric Massart - FMCorz.net
@@ -23,13 +23,15 @@
 
 define([
     'jquery',
-    'core/notification',
-    'core/ajax',
-], function($, Notification, Ajax) {
+], function($) {
 
+    /**
+     * Drop snippet maker class.
+     *
+     * @param {Drop} drop The drop.
+     */
     function Maker(drop) {
         this._drop = drop;
-        this._init();
     }
 
     Maker.prototype.IMAGE = 'image';
@@ -37,17 +39,14 @@ define([
     Maker.prototype.TEXT = 'text';
 
     Maker.prototype._actionText = null;
-    Maker.prototype._checkIfVisible = true;
     Maker.prototype._displayType = Maker.prototype.IMAGEANDBUTTON;
     Maker.prototype._label = null;
 
-    Maker.prototype._init = function() {
-    };
-
-    Maker.prototype.setCheckIfVisible = function(v) {
-        this._checkIfVisible = v;
-    };
-
+    /**
+     * Get the action text.
+     *
+     * @return {String}
+     */
     Maker.prototype._getActionText = function() {
         if (this._actionText === null || this._actionText.trim() === '') {
             return this.getDefaultActionText();
@@ -55,18 +54,38 @@ define([
         return this._actionText;
     };
 
+    /**
+     * Get the anchor.
+     *
+     * @return {Node}
+     */
     Maker.prototype._getAnchor = function() {
         return $('<a href="#"></a>');
     };
 
+    /**
+     * Get the default action text.
+     *
+     * @return {String}
+     */
     Maker.prototype.getDefaultActionText = function() {
         return 'Pick up!';
     };
 
+    /**
+     * Get the default label.
+     *
+     * @return {String}
+     */
     Maker.prototype.getDefaultLabel = function() {
         return "Pick up '" + this.getItem().get('name') + "'";
     };
 
+    /**
+     * Get the button.
+     *
+     * @return {Node}
+     */
     Maker.prototype._getDisplayButton = function() {
         var wrap = $('<div class="item-action"></div>'),
             btn = $('<button></button>');
@@ -77,27 +96,49 @@ define([
         return wrap;
     };
 
+    /**
+     * Get the image.
+     *
+     * @return {Node}
+     */
+
     Maker.prototype._getDisplayImage = function() {
         var img = $('<div class="item-image"></div>'),
             label = $('<div class="item-label"></div>');
 
         img.addClass('item-image');
-        img.css('backgroundImage', 'url(' + this.getItem().get('imageurl') + ')');;
+        img.css('backgroundImage', 'url(' + this.getItem().get('imageurl') + ')');
         label.text(this.getItem().get('name'));
         label.attr('title', this.getItem().get('name'));
         img.append(label);
 
         return img;
-    }
+    };
 
+    /**
+     * Get the drop.
+     *
+     * @return {Drop}
+     */
     Maker.prototype.getDrop = function() {
         return this._drop;
-    }
+    };
 
+    /**
+     * Get the whole display.
+     *
+     * @return {Node}
+     */
     Maker.prototype.getDisplay = function() {
         return this._getDisplayType(this._displayType);
-    }
+    };
 
+    /**
+     * Get the display by type.
+     *
+     * @param {String} displaytype The display type.
+     * @return {Drop}
+     */
     Maker.prototype._getDisplayType = function(displaytype) {
         var display,
             anchor;
@@ -123,10 +164,20 @@ define([
         return display;
     };
 
+    /**
+     * Get the drop item.
+     *
+     * @return {Item}
+     */
     Maker.prototype.getItem = function() {
         return this._drop.getItem();
-    }
+    };
 
+    /**
+     * Get the label.
+     *
+     * @return {String}
+     */
     Maker.prototype._getLabel = function() {
         if (this._label === null || this._label.trim() === '') {
             return this.getDefaultLabel();
@@ -134,51 +185,87 @@ define([
         return this._label;
     };
 
+    /**
+     * Get the snippet.
+     *
+     * @return {String}
+     */
     Maker.prototype.getSnippet = function() {
-        var snippet = '' +
-            this.getDisplay().html() + '\n' +
-            '<script>' + '\n' +
-            '    Y.on("domready", () => {' + '\n' +
-            '        require(["jquery", "block_stash/drop"], function($, Drop) {' + '\n' +
-            '            var d = new Drop({' + '\n' +
-            '                id: 1,' + '\n' +
-            '                hashcode: ""' + '\n' +
-            '            });' + '\n';
+        var node = $('<div>'),
+            uuid = this.uuid(),
+            wrapper = $('<span id="' + uuid + '">'),
+            script = $('<script type="text/javascript">'),
+            id = this.getDrop().get('id'),
+            hashcode = this.getDrop().get('hashcode'),
+            display = this.getDisplay(),
+            snippet = '';
 
-        if (this._checkIfVisible) {
-            snippet += 'd.displayIfVisible("#find-the-hammer");' + '\n';
-        }
+        // No need to scope this in an anonymous function, it already is because of require.
+        snippet = '' +
+            'require(["jquery", "block_stash/drop"], function($, D) {' +
+            ' var d = new D({id: ' + id + ', hashcode: "' + hashcode + '"}), n = $("#' + uuid + '");' +
+            ' if (!n.length) return; n.removeClass(); d.isVisible().then(function() { n.show(); });' +
+            ' n.find("a, button").click(function(e) { e.preventDefault(); d.pickup(); n.remove(); });' +
+            '})';
+        snippet = this._wrapForOnReady(snippet);
 
-        snippet += '' +
-            '            d.run();' + '\n' +
-            '            $("#find-the-hammer").click((e) => {' + '\n' +
-            '                e.preventDefault();' + '\n' +
-            '                d.find().then(() => {' + '\n' +
-            '                    e.currentTarget.remove();' + '\n' +
-            '                });' + '\n' +
-            '            });' + '\n' +
-            '        });' + '\n' +
-            '    });' + '\n' +
-            '</script>';
+        node.append(wrapper);
+        wrapper.css('display', 'none');
+        wrapper.append(display);
+        wrapper.append(script);
+        script.html(snippet);
 
-        return snippet;
+        return node.html();
     };
 
+    /**
+     * Set the display type.
+     *
+     * @param {String} v The display type.
+     * @return {Void}
+     */
     Maker.prototype.setDisplayType = function(v) {
         this._displayType = v;
-    }
+    };
 
+    /**
+     * Set the action text.
+     *
+     * @param {String} v The action text.
+     * @return {Void}
+     */
     Maker.prototype.setActionText = function(v) {
         this._actionText = v;
-    }
+    };
 
+    /**
+     * Set the label.
+     *
+     * @param {String} v The label.
+     * @return {Void}
+     */
     Maker.prototype.setLabel = function(v) {
         this._label = v;
-    }
+    };
 
+    /**
+     * Get a unique ID.
+     *
+     * @return {String}
+     */
+    Maker.prototype.uuid = function() {
+        return (Math.random().toString(36).substring(2, 7)) + (((new Date()).getTime()).toString(36));
+    };
+
+    /**
+     * Wrap some script in a function waiting for the document to be ready.
+     *
+     * @param {String} v The script.
+     * @return {String} The new script.
+     */
     Maker.prototype._wrapForOnReady = function(code) {
-        return 'document.addEventListener("DOMContentLoaded", function(event) {' + code + '});';
-    }
+        return 'document.addEventListener("DOMContentLoaded", function(e) {' + code + '});';
+    };
 
     return /** @alias module:block_stash/drop-snippet-maker */ Maker;
 
