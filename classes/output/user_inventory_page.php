@@ -50,7 +50,7 @@ class user_inventory_page implements renderable, templatable {
         $items = $this->manager->get_all_user_items_in_stash($this->userid);
 
         $data = array();
-        foreach ($items as $key => $item) {
+        foreach ($items as $item) {
             $exporter = new item_exporter($item->item, ['context' => $this->manager->get_context()]);
 
             $exported = $exporter->export($output);

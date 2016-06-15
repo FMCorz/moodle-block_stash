@@ -27,6 +27,15 @@
     * -
 }}
 <div>
-    <a href="{{inventoryurl}}">Inventory</a>
-    <a href="{{settingsurl}}">Settings</a>
+    {{#items}}
+        <div class="block-stash-item">
+            <div class="item-image-small">
+            <img src="{{imageurl}}" alt="" class="item-image-small">
+            </div>
+        </div>
+    {{/items}}
+</div>
+<div>
+<a href="{{inventoryurl}}">Inventory</a>
+<a href="{{settingsurl}}">Settings</a>
 </div>
