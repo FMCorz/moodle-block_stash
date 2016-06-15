@@ -60,6 +60,11 @@ class renderer extends plugin_renderer_base {
         return parent::render_from_template('block_stash/inventory', $data);
     }
 
+    public function render_item_xsmall(renderable $renderable) {
+        $data = $renderable->export_for_template($this);
+        return parent::render_from_template('block_stash/item_xsmall', $data);
+    }
+
     public function render_settings_page(renderable $page) {
         $data = $page->export_for_template($this);
         return parent::render_from_template('block_stash/settings', $data);
@@ -69,6 +74,5 @@ class renderer extends plugin_renderer_base {
         $data = $page->export_for_template($this);
         return parent::render_from_template('block_stash/user_inventory', $data);
     }
-
 
 }

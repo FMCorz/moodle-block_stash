@@ -108,7 +108,27 @@
     left:         calc(50% - 90px / 2);
 }
 
+/** Extra small item. */
+.block-stash-item.item-xsmall .item-image {
+    width: 25px;
+    height: 25px;
+}
+
+.block-stash-item.item-xsmall .item-label,
+.block-stash-item.item-xsmall .item-quantity {
+    display: none;
+}
+
 /** Quantity rules. */
 .block-stash-item.item-quantity-1 .item-quantity {
     display: none;
+}
+
+/** Drops page. */
+.path-blocks-stash .dropstable .block-stash-item {
+    float: left;
+    margin-right: 5px;
+}
+.path-blocks-stash .dropstable td {
+    line-height: 25px;
 }
