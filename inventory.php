@@ -38,15 +38,25 @@ $PAGE->set_heading('Inventory');
 $PAGE->set_url($url);
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading('Inventory');
 
 $renderer = $PAGE->get_renderer('block_stash');
 // Might need a better check for this.
 if (has_capability('block/stash:addinstance', $context)) {
-    $page = new \block_stash\output\inventory_page($courseid);
-    // Show inventory for teachers (Maybe students as well).
-    echo $renderer->render_inventory_page($page);
+
+    $strlist = get_string('itemlist', 'block_stash');
+    $addurl = new moodle_url('/blocks/stash/inventory_edit.php', ['courseid' => $courseid]);
+    $addbtn = $OUTPUT->single_button($addurl, get_string('addnewdrop', 'block_stash'), 'get');
+    $heading = $strlist . $addbtn;
+    echo $OUTPUT->heading($heading);
+
+    $manager = \block_stash\manager::get($courseid);
+
+    $table = new \block_stash\output\items_table('itemstable', $manager, $renderer);
+    $table->define_baseurl($url);
+    echo $table->out(50, false);
+
 } else {
+    echo $OUTPUT->heading('Inventory');
     $page = new \block_stash\output\user_inventory_page($courseid, $USER->id);
     echo $renderer->render_user_inventory($page);
 }
