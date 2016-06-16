@@ -39,6 +39,13 @@ use stdClass;
  */
 class manager {
 
+    /** Capability name to acquire items. */
+    const CAN_ACQUIRE_ITEMS = 'block/stash:acquireitems';
+    /** Capability name to manage stash. */
+    const CAN_MANAGE = 'block/stash:addinstance';
+    /** Capability name to view the stash. */
+    const CAN_VIEW = 'block/stash:view';
+
     /** @var array Array of singletons. */
     protected static $instances;
 
@@ -64,6 +71,40 @@ class manager {
     }
 
     /**
+     * Whether the user can acquire items.
+     *
+     * Note that admins do not automatically get this permission, because
+     * managers of the stash should not automatically be granted the right
+     * to acquire the items.
+     *
+     * @param int $userid The user ID.
+     * @return void
+     */
+    public function can_acquire_items($userid = null) {
+        return has_capability(self::CAN_ACQUIRE_ITEMS, $this->context, $userid, false);
+    }
+
+    /**
+     * Whether the user can manage the plugin.
+     *
+     * @param int $userid The user ID.
+     * @return void
+     */
+    public function can_manage($userid = null) {
+        return has_capability(self::CAN_MANAGE, $this->context, $userid);
+    }
+
+    /**
+     * Whether the user can manage the plugin.
+     *
+     * @param int $userid The user ID.
+     * @return void
+     */
+    public function can_view($userid = null) {
+        return has_capability(self::CAN_VIEW, $this->context, $userid) || $this->can_manage();
+    }
+
+    /**
      * Create or update an item based on the data passed.
      *
      * @param stdClass $data Data to use to create or update.
@@ -71,9 +112,10 @@ class manager {
      * @return item
      */
     public function create_or_update_item($data, $draftitemid) {
-        globaL $USER;
+        global $USER;
+        $this->require_enabled();
+        $this->require_manage();
 
-        // TODO Capability checks.
         $item = new item(null, $data);
         if (!$item->get_id()) {
             $item->create();
@@ -109,6 +151,7 @@ class manager {
      * @return drop
      */
     public function create_or_update_drop($data) {
+        $this->require_enabled();
         $this->require_manage();
 
         if (!$data->id) {
@@ -134,6 +177,7 @@ class manager {
      */
     public function delete_drop($droporid) {
         global $DB;
+        $this->require_enabled();
         $this->require_manage();
 
         $drop = $droporid;
@@ -218,6 +262,9 @@ class manager {
      * @return stash
      */
     public function get_stash() {
+        $this->require_enabled();
+        $this->require_view();
+
         if (!$this->stash) {
             $stash = stash::get_record(['courseid' => $this->courseid]);
             if (!$stash) {
@@ -236,10 +283,14 @@ class manager {
      * @return item
      */
     public function get_item($itemid) {
-        return new item($itemid);
-        if (!$item->get_stashid() !== $this->get_stash()->get_id()) {
+        $this->require_enabled();
+        $this->require_view();
+
+        $item = new item($itemid);
+        if ($item->get_stashid() != $this->get_stash()->get_id()) {
             throw new coding_exception('Unexpected item ID.');
         }
+        return $item;
     }
 
     /**
@@ -249,6 +300,9 @@ class manager {
      * @return item
      */
     public function get_drop($dropid) {
+        $this->require_enabled();
+        $this->require_view();
+
         $drop = new \block_stash\drop($dropid);
         if (!$this->is_item_in_stash($drop->get_itemid())) {
             throw new coding_exception('Unexpected drop ID.');
@@ -262,6 +316,9 @@ class manager {
      * @return item[]
      */
     public function get_items() {
+        $this->require_enabled();
+        $this->require_view();
+
         return item::get_records(['stashid' => $this->get_stash()->get_id()], 'name');
     }
 
@@ -273,6 +330,15 @@ class manager {
      * @return user_item
      */
     public function get_user_item($userid, $itemid) {
+        global $USER;
+        $this->require_enabled();
+
+        if ($userid == $USER->id) {
+            $this->require_view();
+        } else {
+            $this->require_manage();
+        }
+
         if (!$this->is_item_in_stash($itemid)) {
             throw new coding_exception('Unexpected item ID.');
         }
@@ -287,19 +353,33 @@ class manager {
         return $ui;
     }
 
+    /**
+     * Get all the items in a user's stash.
+     *
+     * @param int $userid The user ID.
+     * @return An array of objects containing the keys 'item', and 'user_item'.
+     */
     public function get_all_user_items_in_stash($userid) {
-        // TODO PHP Docs.
-        // TODO Capability checks.
+        global $USER;
+        $this->require_enabled();
+
+        if ($userid == $USER->id) {
+            $this->require_view();
+        } else {
+            $this->require_manage();
+        }
+
         return user_item::get_all_in_stash($userid, $this->get_stash()->get_id());
     }
 
     /**
      * Is the stash enabled in the course?
      *
+     * Not yet used, but in place in case we need it later.
+     *
      * @return boolean True if enabled.
      */
     public function is_enabled() {
-        // TODO Add logic.
         return true;
     }
 
@@ -315,11 +395,15 @@ class manager {
      */
     public function is_drop_visible($droporid, $userid = null) {
         global $USER;
+
+        $this->require_enabled();
+        $this->require_view();
+
         $userid = !empty($userid) ? $userid : $USER->id;
-        if ($userid != $USER->id) {
-            $this->require_manage();
+        if ($userid == $USER->id) {
+            $this->require_view();
         } else {
-            $this->require_pickup();
+            $this->require_manage();
         }
 
         $drop = $droporid;
@@ -338,6 +422,9 @@ class manager {
      * @return bool
      */
     public function is_item_in_stash($itemid) {
+        $this->require_enabled();
+        $this->require_view();
+
         return item::is_item_in_stash($itemid, $this->get_stash()->get_id());
     }
 
@@ -350,11 +437,16 @@ class manager {
      */
     public function pickup_drop($droporid, $userid = null) {
         global $USER;
+        $this->require_enabled();
+
         $userid = !empty($userid) ? $userid : $USER->id;
-        if ($userid != $USER->id) {
-            $this->require_manage();
+        if ($userid == $USER->id) {
+            $this->require_acquire_items();
         } else {
-            $this->require_pickup();
+            // The current user needs to be able to manage, and the target user
+            // must have the permission to acquire items.
+            $this->require_manage();
+            $this->require_acquire_items($userid);
         }
 
         // Find the drop.
@@ -371,12 +463,11 @@ class manager {
 
         // TODO Implement quantity from the drop configuration.
         $quantity = 1;
-        $this->pickup_item($drop->get_itemid(), $quantity);
+        $this->pickup_item($drop->get_itemid(), $quantity, $userid);
 
         // Update the drop pickup values.
         $dp->set_pickupcount($dp->get_pickupcount() + 1);
         $dp->set_lastpickup(time());
-        error_log(json_encode($dp->get_errors()));
         if (!$dp->get_id()) {
             $dp->create();
         } else {
@@ -394,11 +485,15 @@ class manager {
      */
     public function pickup_item($itemorid, $quantity = 1, $userid = null) {
         global $USER;
-        $userid = !empty($userid) ? $userid : $USER->id;
-        if ($userid != $USER->id) {
-            $this->require_manage();
+        $this->require_enabled();
+
+        if ($userid == $USER->id) {
+            $this->require_acquire_items();
         } else {
-            $this->require_pickup();
+            // The current user needs to be able to manage, and the target user
+            // must have the permission to acquire items.
+            $this->require_manage();
+            $this->require_acquire_items($userid);
         }
 
         if ($quantity < 1) {
@@ -414,7 +509,7 @@ class manager {
         $currentquantity = intval($ui->get_quantity());
 
         // TODO Check if can have more than $quantity items.
-        // TODO Create a method that automatically pushed to the database to prevent race conditions.
+        // TODO Create a method that automatically pushes to the database to prevent race conditions.
         $ui->set_quantity($currentquantity + $quantity);
         $ui->update();
         $event = \block_stash\event\item_acquired::create(array(
@@ -430,13 +525,28 @@ class manager {
     }
 
     /**
-     * Throws an exception when the user cannot pickup items.
+     * Throws an exception when the user cannot acquire items.
+     *
+     * Note that admins do not automatically get this permission, because
+     * managers of the stash should not automatically be granted the right
+     * to acquire the items.
      *
      * @param int $userid The user ID.
      * @return void
      */
-    public function require_pickup($userid = null) {
-        // TODO Implement logic.
+    public function require_acquire_items($userid = null) {
+        require_capability(self::CAN_ACQUIRE_ITEMS, $this->context, $userid, false);
+    }
+
+    /**
+     * Throws an exception when the stash is not enabled in the course.
+     *
+     * @return void
+     */
+    public function require_enabled() {
+        if (!$this->is_enabled()) {
+            throw new coding_exception('The stash is not enabled.');
+        }
     }
 
     /**
@@ -446,7 +556,19 @@ class manager {
      * @return void
      */
     public function require_manage($userid = null) {
-        // TODO Implement logic.
+        require_capability(self::CAN_MANAGE, $this->context, $userid);
+    }
+
+    /**
+     * Throws an exception when the user cannot manage the stash.
+     *
+     * @param int $userid The user ID.
+     * @return void
+     */
+    public function require_view($userid = null) {
+        if (!$this->can_view($userid)) {
+            throw new required_capability_exception($this->get_context(), self::CAN_VIEW, 'nopermissions');
+        }
     }
 
 }

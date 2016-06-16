@@ -56,7 +56,6 @@ class block_content implements renderable, templatable {
             $data['items'][] = $exported;
         }
 
-        $data['settingsurl'] = new moodle_url('/blocks/stash/settings.php', array('courseid' => $this->courseid));
         $data['inventoryurl'] = new moodle_url('/blocks/stash/inventory.php', array('courseid' => $this->courseid));
         return $data;
     }

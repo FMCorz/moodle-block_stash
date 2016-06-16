@@ -31,6 +31,7 @@ $action = optional_param('action', null, PARAM_ALPHA);
 require_login($courseid);
 
 $manager = \block_stash\manager::get($courseid);
+$manager->require_enabled();
 $manager->require_manage();
 
 $context = $manager->get_context();

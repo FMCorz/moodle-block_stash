@@ -26,9 +26,13 @@ require_once(__DIR__ . '/../../config.php');
 
 $courseid = required_param('courseid', PARAM_INT);
 
-$context = context_course::instance($courseid);
-
 require_login($courseid);
+
+$manager = \block_stash\manager::get($courseid);
+$manager->require_enabled();
+$manager->require_view();
+
+$context = context_course::instance($courseid);
 $url = new moodle_url('/blocks/stash/inventory.php', array('courseid' => $courseid));
 
 $PAGE->set_context($context);
@@ -41,7 +45,7 @@ echo $OUTPUT->header();
 
 $renderer = $PAGE->get_renderer('block_stash');
 // Might need a better check for this.
-if (has_capability('block/stash:addinstance', $context)) {
+if ($manager->can_manage()) {
 
     $strlist = get_string('itemlist', 'block_stash');
     $addurl = new moodle_url('/blocks/stash/item_edit.php', ['courseid' => $courseid]);

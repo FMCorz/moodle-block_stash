@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'block_stash', language 'en', branch 'MOODLE_31_STABLE'
+ * Strings.
  *
  * @package   block_stash
  * @copyright 2016 Adrian Greeve <adrian@moodle.com>
@@ -51,3 +51,6 @@ $string['settings'] = 'Settings';
 $string['thedrophasbeendeleted'] = 'The drop \'{$a}\' has been deleted';
 $string['theitemhasbeendeleted'] = 'The item \'{$a}\' has been deleted';
 $string['unlimited'] = 'Unlimited';
+$string['stash:acquireitems'] = 'User is able to acquire items';
+$string['stash:addinstance'] = 'Add a the block to a page';
+$string['stash:view'] = 'View the stash and its content';

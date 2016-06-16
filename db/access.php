@@ -26,16 +26,33 @@ defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
 
+    // Whether the user can add an instance of this block.
     'block/stash:addinstance' => array(
-        'riskbitmask' => RISK_SPAM | RISK_XSS,
-
         'captype' => 'write',
         'contextlevel' => CONTEXT_BLOCK,
         'archetypes' => array(
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW
         ),
-
         'clonepermissionsfrom' => 'moodle/site:manageblocks'
     ),
+
+    // Whether or not a user can acquire objects.
+    'block/stash:acquireitems' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => array(
+            'student' => CAP_ALLOW
+        ),
+    ),
+
+    // Whether or not a user can view the stash.
+    'block/stash:view' => array(
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => array(
+            'student' => CAP_ALLOW
+        ),
+    ),
+
 );

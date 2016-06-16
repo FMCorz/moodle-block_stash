@@ -27,11 +27,13 @@ require_once(__DIR__ . '/../../config.php');
 $courseid = required_param('courseid', PARAM_INT);
 $id = optional_param('id', '0', PARAM_INT);
 
-$manager = \block_stash\manager::get($courseid);
-
-$context = $manager->get_context();
-
 require_login($courseid);
+
+$manager = \block_stash\manager::get($courseid);
+$manager->require_enabled();
+$manager->require_manage();
+
+$context = context_course::instance($courseid);
 $url = new moodle_url('/blocks/stash/item_edit.php', array('courseid' => $courseid, 'id' => $id));
 $listurl = new moodle_url('/blocks/stash/inventory.php', ['courseid' => $courseid]);
 

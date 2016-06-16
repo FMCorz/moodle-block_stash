@@ -27,10 +27,12 @@ require_once(__DIR__ . '/../../config.php');
 $courseid = required_param('courseid', PARAM_INT);
 $dropid = optional_param('dropid', 0, PARAM_INT);
 $itemid = optional_param('itemid', 0, PARAM_INT);
-$manager = \block_stash\manager::get($courseid);
 
+require_login($courseid);
+
+$manager = \block_stash\manager::get($courseid);
+$manager->require_enabled();
 $manager->require_manage();
-require_login($manager->get_courseid());
 
 $context = $manager->get_context();
 $url = new moodle_url('/blocks/stash/drop.php', ['courseid' => $manager->get_courseid(), 'dropid' => $dropid]);

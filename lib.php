@@ -40,9 +40,8 @@ function block_stash_pluginfile($course, $cm, $context, $filearea, $args, $force
     global $CFG;
 
     $manager = block_stash\manager::get($course->id);
-    if (!$manager->is_enabled()) {
-        return false;
-    }
+    $manager->require_enabled();
+    $manager->require_view();
 
     $fs = get_file_storage();
     $file = null;
@@ -52,7 +51,6 @@ function block_stash_pluginfile($course, $cm, $context, $filearea, $args, $force
     $filepath = $args ? '/' .implode('/', $args) . '/' : '/';
 
     if ($filearea == 'item' && $context->contextlevel == CONTEXT_COURSE) {
-        // TODO Security checks?
         $files = $fs->get_area_files($context->id, 'block_stash', 'item', $itemid, '', false);
         $file = array_pop($files);
     }
