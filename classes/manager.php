@@ -385,6 +385,16 @@ class manager {
         // TODO Create a method that automatically pushed to the database to prevent race conditions.
         $ui->set_quantity($currentquantity + $quantity);
         $ui->update();
+        $event = \block_stash\event\item_acquired::create(array(
+                'context' => $this->context,
+                'userid' => $USER->id,
+                'courseid' => $this->courseid,
+                'objectid' => $item->get_id(),
+                'relateduserid' => $userid,
+                'other' => array('quantity' => $quantity)
+            )
+        );
+        $event->trigger();
     }
 
     /**

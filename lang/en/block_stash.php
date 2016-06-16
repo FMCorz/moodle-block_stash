@@ -29,6 +29,7 @@ $string['dropname'] = 'Drop name';
 $string['drops'] = 'Drops';
 $string['edit'] = 'Edit'; // Should be replaced with the pix icon.
 $string['itemname'] = 'Item name';
+$string['eventitemacquired'] = 'An item was acquired.';
 $string['maxnumber'] = 'Maximum number of items per stash.';
 $string['maxpickup'] = 'Maximum pickup';
 $string['none'] = 'None';
