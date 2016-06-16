@@ -106,9 +106,15 @@ class items_table extends table_sql {
             get_string('edititem', 'block_stash', $row->name)));
         $actions[] = $actionlink;
 
+        $url = new moodle_url('/blocks/stash/drop.php');
+        $url->params(['itemid' => $row->id, 'courseid' => $this->manager->get_courseid()]);
+        $actionlink = $OUTPUT->action_link($url, '', null, null, new pix_icon('t/add',
+            get_string('addnewdrop', 'block_stash', $row->name)));
+        $actions[] = $actionlink;
+
         $action = new confirm_action(get_string('reallydeleteitem', 'block_stash'));
         $url = new moodle_url($this->baseurl);
-        $url->params(['itemid' => $row->id, 'sesskey' => sesskey()]);
+        $url->params(['itemid' => $row->id, 'action' => 'delete', 'sesskey' => sesskey()]);
         $actionlink = $OUTPUT->action_link($url, '', $action, null, new pix_icon('t/delete',
             get_string('deleteitem', 'block_stash', $row->name)));
         $actions[] = $actionlink;
@@ -133,7 +139,7 @@ class items_table extends table_sql {
 
     protected function col_maxnumber($row) {
         $str = $row->maxnumber;
-        if ($row->maxnumber === 0) {
+        if ($row->maxnumber == 0) {
             $str = get_string('unlimited', 'block_stash');
         }
         return $str;

@@ -139,3 +139,19 @@
 .block-stash-drops-page .singlebutton input {
     margin: 0;
 }
+
+/** Item pages. */
+.itemstable .block-stash-item {
+    float: left;
+    margin-right: 5px;
+}
+.itemstable td {
+    line-height: 25px;
+}
+.singlebutton {
+    float: right;
+}
+.singlebutton div,
+.singlebutton input {
+    margin: 0;
+}

@@ -294,6 +294,32 @@ class manager {
     }
 
     /**
+     * Delete an item from everywhere.
+     *
+     * @param object $item
+     */
+    public function delete_item($item) {
+        global $DB;
+        $this->require_enabled();
+        $this->require_manage();
+
+        // Delete drops.
+        $drops = $this->get_drops($item->get_id());
+        $transaction = $DB->start_delegated_transaction();
+
+        foreach ($drops as $drop) {
+            $this->delete_drop($drop);
+        }
+
+        // Delete items from users stashes.
+        $DB->delete_records(\block_stash\user_item::TABLE, ['itemid' => $item->get_id()]);
+        // Delete the item.
+        $DB->delete_records(\block_stash\item::TABLE, ['id' => $item->get_id()]);
+        $transaction->allow_commit();
+
+    }
+
+    /**
      * Get an item drop.
      *
      * @param int $drop The drop ID.
@@ -308,6 +334,13 @@ class manager {
             throw new coding_exception('Unexpected drop ID.');
         }
         return $drop;
+    }
+
+    public function get_drops($itemid) {
+        $this->require_enabled();
+        $this->require_view();
+
+        return \block_stash\drop::get_records(['itemid' => $itemid], 'name');
     }
 
     /**

@@ -25,6 +25,8 @@
 require_once(__DIR__ . '/../../config.php');
 
 $courseid = required_param('courseid', PARAM_INT);
+$action = optional_param('action', '', PARAM_ALPHA);
+$itemid = optional_param('itemid', 0, PARAM_INT);
 
 require_login($courseid);
 
@@ -37,14 +39,21 @@ $url = new moodle_url('/blocks/stash/inventory.php', array('courseid' => $course
 
 $PAGE->set_context($context);
 $PAGE->set_pagelayout('course');
-$PAGE->set_title('Inventory');
-$PAGE->set_heading('Inventory');
+$PAGE->set_title(get_string('stash', 'block_stash'));
+$PAGE->set_heading(get_string('stash', 'block_stash'));
 $PAGE->set_url($url);
 
+switch ($action) {
+    case 'delete':
+        require_sesskey();
+        $item = $manager->get_item($itemid);
+        $manager->delete_item($item);
+        redirect($url, get_string('theitemhasbeendeleted', 'block_stash', $item->get_name()));
+        break;
+}
 echo $OUTPUT->header();
 
 $renderer = $PAGE->get_renderer('block_stash');
-// Might need a better check for this.
 if ($manager->can_manage()) {
 
     $strlist = get_string('itemlist', 'block_stash');

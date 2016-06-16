@@ -48,6 +48,7 @@ $string['quantity'] = 'Quantity';
 $string['reallydeletedrop'] = 'Are you sure you want to delete this drop?';
 $string['reallydeleteitem'] = 'Are you sure you want to delete this item?';
 $string['settings'] = 'Settings';
+$string['stash'] = 'Stash';
 $string['thedrophasbeendeleted'] = 'The drop \'{$a}\' has been deleted';
 $string['theitemhasbeendeleted'] = 'The item \'{$a}\' has been deleted';
 $string['unlimited'] = 'Unlimited';
