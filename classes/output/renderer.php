@@ -29,8 +29,8 @@ use moodle_url;
 use plugin_renderer_base;
 use renderable;
 use tabobject;
-use blocK_stash\drop;
-use blocK_stash\item;
+use block_stash\drop;
+use block_stash\item;
 use block_stash\external\drop_exporter;
 use block_stash\external\item_exporter;
 
@@ -60,6 +60,18 @@ class renderer extends plugin_renderer_base {
         $data->item = $exporter->export($this);
         $data->itemjson = json_encode($data->item);
         return parent::render_from_template('block_stash/drop_snippet_ui', $data);
+    }
+
+    /**
+     * Describes what drops are.
+     *
+     * @return string
+     */
+    public function drops_fullpage_help() {
+        $data = (object) [];
+        $data->heading = get_string('whataredrops', 'block_stash');
+        $data->helptext = get_string('drops_help', 'block_stash');
+        return parent::render_from_template('block_stash/fullpage_help', $data);
     }
 
     /**

@@ -30,8 +30,15 @@ $string['copypaste'] = 'Copy and paste this into an editor in different activiti
 $string['deletedrop'] = 'Delete {$a}';
 $string['deleteitem'] = 'Delete {$a}';
 $string['dropa'] = 'Drop \'{$a}\'';
-$string['dropname'] = 'Drop name';
+$string['dropname'] = 'Location';
 $string['drops'] = 'Drops';
+$string['drops_help'] = '
+<p>Drops are locations where your items are in the <em>virtual world</em>. Without a <em>drop</em> an item cannot be picked up by a student.</p>
+<p>Drops come with a few options, including the number of times a single student can pick them up, and how often they reappear after being picked up.</p>
+<p>For instance, if your students need a <em>key item</em> to access an activity, you will most likely set it so that your students can only pick it up once in that location.</p>
+<p>But if they need <em>5 coins</em> to access another one, you may set this coin to reappear each day to encourage them to visit the course everyday.</p>
+<p>Note that <em>drops</em> do not magically appear in your course, you will have to add a special code to your content in order for the drop to be displayed.</p>
+';
 $string['dropslist'] = 'List of drops';
 $string['buttontext'] = 'Button text';
 $string['edit'] = 'Edit'; // Should be replaced with the pix icon.
@@ -45,13 +52,13 @@ $string['items'] = 'Items';
 $string['itemname'] = 'Item name';
 $string['itemslist'] = 'List of items';
 $string['eventitemacquired'] = 'An item was acquired.';
-$string['maxnumber'] = 'Maximum number of items per stash.';
-$string['maxpickup'] = 'Maximum pickup';
+$string['maxnumber'] = 'Maximum collectable';
+$string['maxpickup'] = 'Supplies';
 $string['navinventory'] = 'Stash items';
 $string['navdrops'] = 'Drops';
 $string['navitems'] = 'Items';
 $string['none'] = 'None';
-$string['pickupinterval'] = 'Pickup interval';
+$string['pickupinterval'] = 'Collection interval';
 $string['pluginname'] = 'Stash';
 $string['quantity'] = 'Quantity';
 $string['reallydeletedrop'] = 'Are you sure you want to delete this drop?';
@@ -65,3 +72,8 @@ $string['unlimited'] = 'Unlimited';
 $string['stash:acquireitems'] = 'User is able to acquire items';
 $string['stash:addinstance'] = 'Add a the block to a page';
 $string['stash:view'] = 'View the stash and its content';
+$string['thedrophasbeendeleted'] = 'The drop \'{$a}\' has been deleted';
+$string['theitemhasbeendeleted'] = 'The item \'{$a}\' has been deleted';
+$string['unlimited'] = 'Unlimited';
+$string['whataredrops'] = 'What are drops?';
+

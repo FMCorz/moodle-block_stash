@@ -47,6 +47,9 @@ class item_exporter extends persistent_exporter {
 
     protected static function define_other_properties() {
         return [
+            'maxnumberformatted' => [
+                'type' => PARAM_RAW
+            ],
             'dropmanageurl' => [
                 'type' => PARAM_URL
             ],
@@ -61,6 +64,7 @@ class item_exporter extends persistent_exporter {
 
     protected function get_other_values(renderer_base $output) {
         $itemid = $this->persistent->get_id();
+        $maxnumber = $this->persistent->get_maxnumber();
 
         $dropmanageurl = new moodle_url('/blocks/stash/drop.php', ['itemid' => $itemid]);
         $imageurl = moodle_url::make_pluginfile_url($this->related['context']->id, 'block_stash', 'item', $itemid, '/', 'image');
@@ -68,6 +72,7 @@ class item_exporter extends persistent_exporter {
         $editurl = new moodle_url('/blocks/stash/item_edit.php', array('id' => $itemid, 'courseid' => 2));
 
         return [
+            'maxnumberformatted' => $maxnumber ? $maxnumber : get_string('unlimited', 'block_stash'),
             'dropmanageurl' => $dropmanageurl->out(false),
             'imageurl' => $imageurl->out(false),
             'editurl' => $editurl->out(false)

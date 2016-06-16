@@ -48,7 +48,6 @@ class page_helper {
         $PAGE->set_title($title);
         $PAGE->set_heading($heading);
         $PAGE->set_url($url);
-        $PAGE->add_body_class('block-stash-drops-page');
 
         $returnurl = new moodle_url('/blocks/stash/drops.php', ['courseid' => $manager->get_courseid()]);
 
@@ -80,7 +79,7 @@ class page_helper {
         $PAGE->set_heading($heading);
         $PAGE->set_url($url);
 
-        $returnurl = new moodle_url('/blocks/stash/items.php', ['courseid' => $manager->get_courseid()]);
+        $returnurl = new moodle_url('/blocks/stash/inventory.php', ['courseid' => $manager->get_courseid()]);
 
         $PAGE->navbar->add(get_string('stash', 'block_stash'));
         $PAGE->navbar->add($title, $returnurl);

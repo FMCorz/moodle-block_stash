@@ -50,9 +50,8 @@ class item extends persistent {
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
 
         // Max number of items.
-        $mform->addElement('text', 'maxnumber', get_string('maxnumber', 'block_stash'));
+        $mform->addElement('text', 'maxnumber', get_string('maxnumber', 'block_stash'), 'maxlength="10" size="5"');
         $mform->setType('maxnumber', PARAM_INT);
-        $mform->setDefault('maxnumber', '1');
 
         // Image.
         $mform->addElement('filemanager', 'image', 'Image', array(), $this->_customdata['fileareaoptions']);

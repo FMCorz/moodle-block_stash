@@ -137,12 +137,28 @@ class items_table extends table_sql {
         return $str;
     }
 
+    /**
+     * Formats the column.
+     *
+     * @param stdClass $row Table row.
+     * @return string Output produced.
+     */
     protected function col_maxnumber($row) {
         $str = $row->maxnumber;
         if ($row->maxnumber == 0) {
             $str = get_string('unlimited', 'block_stash');
         }
         return $str;
+    }
+
+    /**
+     * Override the default implementation to set a decent heading level.
+     */
+    public function print_nothing_to_display() {
+        global $OUTPUT;
+        echo $this->render_reset_button();
+        $this->print_initials_bar();
+        echo $OUTPUT->heading(get_string('nothingtodisplay'), 4);
     }
 
 }

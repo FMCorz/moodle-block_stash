@@ -35,15 +35,11 @@ $manager->require_manage();
 
 $context = context_course::instance($courseid);
 $url = new moodle_url('/blocks/stash/item_edit.php', array('courseid' => $courseid, 'id' => $id));
-$listurl = new moodle_url('/blocks/stash/items.php', ['courseid' => $courseid]);
-
-$PAGE->set_context($context);
-$PAGE->set_pagelayout('course');
-$PAGE->set_title(get_string('item', 'block_stash'));
-$PAGE->set_heading(get_string('item', 'block_stash'));
-$PAGE->set_url($url);
 
 $item = $id ? $manager->get_item($id) : null;
+$itemname = $item ? format_string($item->get_name(), true, ['context' => $context]) : '';
+$pagetitle = $item ? get_string('edititem', 'block_stash', $itemname) : get_string('additem', 'block_stash');
+list($title, $subtitle, $returnurl) = \block_stash\page_helper::setup_for_item($url, $manager, $item, $pagetitle);
 
 $fileareaoptions = ['maxfiles' => 1];
 $customdata = [
@@ -52,6 +48,7 @@ $customdata = [
     'stash' => $manager->get_stash(),
 ];
 
+$renderer = $PAGE->get_renderer('block_stash');
 $form = new \block_stash\form\item($url->out(false), $customdata);
 
 $draftitemid = file_get_submitted_draft_itemid('item');
@@ -64,17 +61,17 @@ if ($data = $form->get_data()) {
     unset($data->image);
 
     $thing = $manager->create_or_update_item($data, $draftitemid);
-    redirect($listurl);
+    redirect($returnurl);
 
 } else if ($form->is_cancelled()) {
-    redirect($listurl);
+    redirect($returnurl);
 }
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('item', 'block_stash'));
-
-echo $form->render();
-
-$renderer = $PAGE->get_renderer('block_stash');
-
+echo $OUTPUT->heading($title, 2);
+echo $renderer->navigation($manager, 'items');
+if (!empty($subtitle)) {
+    echo $OUTPUT->heading($subtitle, 3);
+}
+$form->display();
 echo $OUTPUT->footer();

@@ -196,9 +196,16 @@ class drops_table extends table_sql {
      */
     public function print_nothing_to_display() {
         global $OUTPUT;
-        echo $this->render_reset_button();
-        $this->print_initials_bar();
-        echo $OUTPUT->heading(get_string('nothingtodisplay'), 4);
+
+        if ($this->can_be_reset()) {
+            echo $this->render_reset_button();
+            $this->print_initials_bar();
+            echo $OUTPUT->heading(get_string('nothingtodisplay'), 4);
+
+        } else {
+            echo $this->renderer->drops_fullpage_help();
+        }
+
     }
 
 }

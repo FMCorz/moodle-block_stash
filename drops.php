@@ -65,8 +65,9 @@ if ($drop && (empty($action) || $action === 'snippet')) {
 }
 
 $strlist = get_string('dropslist', 'block_stash');
+$helpbtn = $OUTPUT->help_icon('drops', 'block_stash');
 $addbtn = $OUTPUT->single_button($addurl, get_string('addnewdrop', 'block_stash'), 'get');
-$heading = $strlist . $addbtn;
+$heading = $strlist . $helpbtn . $addbtn;
 echo $OUTPUT->heading($heading, 3);
 
 $table = new \block_stash\output\drops_table('dropstable', $manager, $renderer);
