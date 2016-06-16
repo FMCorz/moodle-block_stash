@@ -34,14 +34,8 @@ $manager = \block_stash\manager::get($courseid);
 $manager->require_enabled();
 $manager->require_view();
 
-$context = context_course::instance($courseid);
 $url = new moodle_url('/blocks/stash/inventory.php', array('courseid' => $courseid));
-
-$PAGE->set_context($context);
-$PAGE->set_pagelayout('course');
-$PAGE->set_title(get_string('stash', 'block_stash'));
-$PAGE->set_heading(get_string('stash', 'block_stash'));
-$PAGE->set_url($url);
+list($title, $subtitle, $returnurl) = \block_stash\page_helper::setup_for_item($url, $manager);
 
 switch ($action) {
     case 'delete':
@@ -51,24 +45,27 @@ switch ($action) {
         redirect($url, get_string('theitemhasbeendeleted', 'block_stash', $item->get_name()));
         break;
 }
-echo $OUTPUT->header();
 
 $renderer = $PAGE->get_renderer('block_stash');
+echo $OUTPUT->header();
+
+echo $OUTPUT->heading($title);
+echo $renderer->navigation($manager, 'items');
+
+// Might need a better check for this.
 if ($manager->can_manage()) {
 
-    $strlist = get_string('itemlist', 'block_stash');
     $addurl = new moodle_url('/blocks/stash/item_edit.php', ['courseid' => $courseid]);
     $addbtn = $OUTPUT->single_button($addurl, get_string('additem', 'block_stash'), 'get');
-    $heading = $strlist . $addbtn;
-    echo $OUTPUT->heading($heading);
-
-    $manager = \block_stash\manager::get($courseid);
+    $heading = get_string('itemslist', 'block_stash') . $addbtn;
+    echo $OUTPUT->heading($heading, 3);
 
     $table = new \block_stash\output\items_table('itemstable', $manager, $renderer);
     $table->define_baseurl($url);
     echo $table->out(50, false);
 
 } else {
+    // TODO Remove this part.
     echo $OUTPUT->heading('Inventory');
     $page = new \block_stash\output\user_inventory_page($courseid, $USER->id);
     echo $renderer->render_user_inventory($page);

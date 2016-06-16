@@ -34,36 +34,29 @@ $manager = \block_stash\manager::get($courseid);
 $manager->require_enabled();
 $manager->require_manage();
 
-$context = $manager->get_context();
 $url = new moodle_url('/blocks/stash/drop.php', ['courseid' => $manager->get_courseid(), 'dropid' => $dropid]);
-$listurl = new moodle_url('/blocks/stash/drops.php', ['courseid' => $manager->get_courseid()]);
-
-$PAGE->set_context($context);
-$PAGE->set_pagelayout('course');
-$PAGE->set_title('Item drop');
-$PAGE->set_heading('Item drop');
-$PAGE->set_url($url);
-
 $drop = $dropid ? $manager->get_drop($dropid) : null;
-$item = $itemid ? $manager->get_item($itemid) : ($drop ? $manager->get_item($drop->get_itemid()) : null);
+$pagetitle = $drop ? get_string('editdrop', 'block_stash', $drop->get_name()) : get_string('addnewdrop', 'block_stash');
+list($title, $subtitle, $returnurl) = \block_stash\page_helper::setup_for_drop($url, $manager, $drop, $pagetitle);
 
+$item = $itemid ? $manager->get_item($itemid) : ($drop ? $manager->get_item($drop->get_itemid()) : null);
 $form = new \block_stash\form\drop($url->out(false), ['persistent' => $drop, 'item' => $item, 'manager' => $manager]);
 if ($data = $form->get_data()) {
     $drop = $manager->create_or_update_drop($data);
-    $listurl->param('dropid', $drop->get_id());
-    redirect($listurl);
+    $returnurl->param('dropid', $drop->get_id());
+    redirect($returnurl);
 
 } else if ($form->is_cancelled()) {
-    redirect($listurl);
+    redirect($returnurl);
 }
 
 $renderer = $PAGE->get_renderer('block_stash');
 echo $OUTPUT->header();
 
-if ($drop) {
-    echo $OUTPUT->heading(get_string('editdrop', 'block_stash', $drop->get_name()));
-} else {
-    echo $OUTPUT->heading(get_string('addnewdrop', 'block_stash'));
+echo $OUTPUT->heading($title, 2);
+echo $renderer->navigation($manager, 'drops');
+if (!empty($subtitle)) {
+    echo $OUTPUT->heading($subtitle, 3);
 }
 
 $form->display();

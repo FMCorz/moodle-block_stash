@@ -36,18 +36,11 @@ $manager->require_manage();
 
 $context = $manager->get_context();
 $url = new moodle_url('/blocks/stash/drops.php', ['courseid' => $courseid]);
-$addurl = new moodle_url('/blocks/stash/drop.php', ['courseid' => $manager->get_courseid()]);
+$addurl = new moodle_url('/blocks/stash/drop.php', ['courseid' => $courseid]);
 
-$strdrops = get_string('drops', 'block_stash');
 $drop = $dropid ? $manager->get_drop($dropid) : null;
 $item = $drop ? $manager->get_item($drop->get_itemid()) : null;
-
-$PAGE->set_context($context);
-$PAGE->set_pagelayout('course');
-$PAGE->set_title($strdrops);
-$PAGE->set_heading($strdrops);
-$PAGE->set_url($url);
-$PAGE->add_body_class('block-stash-drops-page');
+list($title, $subtitle, $returnurl) = \block_stash\page_helper::setup_for_drop($url, $manager);
 
 switch ($action) {
     case 'delete':
@@ -63,15 +56,18 @@ switch ($action) {
 $renderer = $PAGE->get_renderer('block_stash');
 echo $OUTPUT->header();
 
+echo $OUTPUT->heading($title);
+echo $renderer->navigation($manager, 'drops');
+
 if ($drop && (empty($action) || $action === 'snippet')) {
-    echo $OUTPUT->heading(get_string('dropa', 'block_stash', $drop->get_name()));
+    echo $OUTPUT->heading(get_string('dropa', 'block_stash', $drop->get_name()), 3);
     echo $renderer->drop_snippet_ui($drop, $item, $context);
 }
 
 $strlist = get_string('dropslist', 'block_stash');
 $addbtn = $OUTPUT->single_button($addurl, get_string('addnewdrop', 'block_stash'), 'get');
 $heading = $strlist . $addbtn;
-echo $OUTPUT->heading($heading);
+echo $OUTPUT->heading($heading, 3);
 
 $table = new \block_stash\output\drops_table('dropstable', $manager, $renderer);
 $table->define_baseurl($url);

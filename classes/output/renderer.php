@@ -25,8 +25,10 @@ namespace block_stash\output;
 defined('MOODLE_INTERNAL') || die();
 
 use context;
+use moodle_url;
 use plugin_renderer_base;
 use renderable;
+use tabobject;
 use blocK_stash\drop;
 use blocK_stash\item;
 use block_stash\external\drop_exporter;
@@ -58,6 +60,38 @@ class renderer extends plugin_renderer_base {
         $data->item = $exporter->export($this);
         $data->itemjson = json_encode($data->item);
         return parent::render_from_template('block_stash/drop_snippet_ui', $data);
+    }
+
+    /**
+     * Outputs the navigation.
+     *
+     * @param block_xp_manager $manager The manager.
+     * @param string $page The page we are on.
+     * @return string The navigation.
+     */
+    public function navigation($manager, $page) {
+        $tabs = [];
+        $courseid = $manager->get_courseid();
+
+        if ($manager->can_manage()) {
+            $tabs[] = new tabobject(
+                'items',
+                new moodle_url('/blocks/stash/inventory.php', ['courseid' => $courseid]),
+                get_string('navitems', 'block_stash')
+            );
+            $tabs[] = new tabobject(
+                'drops',
+                new moodle_url('/blocks/stash/drops.php', ['courseid' => $courseid]),
+                get_string('navdrops', 'block_stash')
+            );
+        }
+
+        // If there is only one page, then that is the page we are on.
+        if (count($tabs) == 1) {
+            return '';
+        }
+
+        return $this->tabtree($tabs, $page);
     }
 
     public function render_block_content(renderable $page) {

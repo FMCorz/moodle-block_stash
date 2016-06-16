@@ -124,34 +124,18 @@
     display: none;
 }
 
-/** Drops pages. */
-.block-stash-drops-page .dropstable .block-stash-item {
+/** Stash pages. */
+.path-blocks-stash .tablewithitems .block-stash-item {
     float: left;
     margin-right: 5px;
 }
-.block-stash-drops-page .dropstable td {
+.path-blocks-stash .tablewithitems td {
     line-height: 25px;
 }
-.block-stash-drops-page .singlebutton {
+.path-blocks-stash .singlebutton {
     float: right;
 }
-.block-stash-drops-page .singlebutton div,
-.block-stash-drops-page .singlebutton input {
-    margin: 0;
-}
-
-/** Item pages. */
-.itemstable .block-stash-item {
-    float: left;
-    margin-right: 5px;
-}
-.itemstable td {
-    line-height: 25px;
-}
-.singlebutton {
-    float: right;
-}
-.singlebutton div,
-.singlebutton input {
+.path-blocks-stash .singlebutton div,
+.path-blocks-stash .singlebutton input {
     margin: 0;
 }

@@ -58,7 +58,7 @@ class items_table extends table_sql {
      */
     public function __construct($uniqueid, $manager, $renderer) {
         parent::__construct($uniqueid);
-        $this->set_attribute('class', $uniqueid . ' generaltable generalbox');
+        $this->set_attribute('class', $uniqueid . ' tablewithitems generaltable generalbox');
         $this->manager = $manager;
         $this->renderer = $renderer;
 
