@@ -27,7 +27,7 @@ namespace block_stash\event;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * The block_stash assessable submitted event class.
+ * The block_stash item acquired event class.
  *
  * @property-read array $other {
  *      Extra information about event.
