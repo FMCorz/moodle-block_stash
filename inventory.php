@@ -44,8 +44,8 @@ $renderer = $PAGE->get_renderer('block_stash');
 if (has_capability('block/stash:addinstance', $context)) {
 
     $strlist = get_string('itemlist', 'block_stash');
-    $addurl = new moodle_url('/blocks/stash/inventory_edit.php', ['courseid' => $courseid]);
-    $addbtn = $OUTPUT->single_button($addurl, get_string('addnewdrop', 'block_stash'), 'get');
+    $addurl = new moodle_url('/blocks/stash/item_edit.php', ['courseid' => $courseid]);
+    $addbtn = $OUTPUT->single_button($addurl, get_string('additem', 'block_stash'), 'get');
     $heading = $strlist . $addbtn;
     echo $OUTPUT->heading($heading);
 

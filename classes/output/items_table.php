@@ -100,7 +100,7 @@ class items_table extends table_sql {
     protected function col_actions($row) {
         global $OUTPUT;
 
-        $url = new moodle_url('/blocks/stash/inventory_edit.php');
+        $url = new moodle_url('/blocks/stash/item_edit.php');
         $url->params(['id' => $row->id, 'courseid' => $this->manager->get_courseid()]);
         $actionlink = $OUTPUT->action_link($url, '', null, null, new pix_icon('t/edit',
             get_string('edititem', 'block_stash', $row->name)));

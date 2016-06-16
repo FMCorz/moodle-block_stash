@@ -38,7 +38,7 @@ use moodleform;
  * @copyright 2016 Adrian Greeve <adriangreeve.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class inventory_edit_form extends moodleform {
+class item_edit_form extends moodleform {
 
     /**
      * Form definition

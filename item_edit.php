@@ -32,7 +32,7 @@ $manager = \block_stash\manager::get($courseid);
 $context = $manager->get_context();
 
 require_login($courseid);
-$url = new moodle_url('/blocks/stash/inventory_edit.php', array('courseid' => $courseid, 'id' => $id));
+$url = new moodle_url('/blocks/stash/item_edit.php', array('courseid' => $courseid, 'id' => $id));
 $listurl = new moodle_url('/blocks/stash/inventory.php', ['courseid' => $courseid]);
 
 $PAGE->set_context($context);

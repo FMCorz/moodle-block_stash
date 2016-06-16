@@ -65,7 +65,7 @@ class item_exporter extends persistent_exporter {
         $dropmanageurl = new moodle_url('/blocks/stash/drop.php', ['itemid' => $itemid]);
         $imageurl = moodle_url::make_pluginfile_url($this->related['context']->id, 'block_stash', 'item', $itemid, '/', 'image');
         // TODO Remove the need for the courseid, or get it from somewhere.
-        $editurl = new moodle_url('/blocks/stash/inventory_edit.php', array('id' => $itemid, 'courseid' => 2));
+        $editurl = new moodle_url('/blocks/stash/item_edit.php', array('id' => $itemid, 'courseid' => 2));
 
         return [
             'dropmanageurl' => $dropmanageurl->out(false),

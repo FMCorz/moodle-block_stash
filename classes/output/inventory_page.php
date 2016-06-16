@@ -46,7 +46,7 @@ class inventory_page implements renderable, templatable {
 
         $data = array();
         // $data['settingsurl'] = new moodle_url('/blocks/stash/settings.php');
-        $data['inventoryediturl'] = new moodle_url('/blocks/stash/inventory_edit.php', array('courseid' => $this->courseid));
+        $data['itemediturl'] = new moodle_url('/blocks/stash/item_edit.php', array('courseid' => $this->courseid));
         $data['items'] = array_map(function($item) use ($output) {
             $exporter = new item_exporter($item, ['context' => $this->manager->get_context()]);
             return $exporter->export($output);
