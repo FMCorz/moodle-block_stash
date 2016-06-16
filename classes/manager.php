@@ -109,14 +109,46 @@ class manager {
      * @return drop
      */
     public function create_or_update_drop($data) {
-        // TODO Capability checks.
-        $drop = new drop(null, $data);
-        if (!$drop->get_id()) {
+        $this->require_manage();
+
+        if (!$data->id) {
+            $drop = new drop(null, $data);
             $drop->create();
+
         } else {
+            $drop = new drop($data->id);
+            if ($data->itemid != $drop->get_itemid()) {
+                throw new coding_exception('The item ID of a drop cannot be changed.');
+            }
+            $drop->from_record($data);
             $drop->update();
         }
         return $drop;
+    }
+
+    /**
+     * Delete a drop.
+     *
+     * @param drop|int $droporid The drop, or its ID.
+     * @return void
+     */
+    public function delete_drop($droporid) {
+        global $DB;
+        $this->require_manage();
+
+        $drop = $droporid;
+        if (!is_object($drop)) {
+            $drop = $this->get_drop($droporid);
+        }
+
+        if (!$this->is_item_in_stash($drop->get_itemid())) {
+            throw new coding_exception('Unexpected drop ID.');
+        }
+
+        $transaction = $DB->start_delegated_transaction();
+        $DB->delete_records(drop_pickup::TABLE, ['dropid' => $drop->get_id()]);
+        $DB->delete_records(drop::TABLE, ['id' => $drop->get_id()]);
+        $transaction->allow_commit();
     }
 
     /**
@@ -230,7 +262,7 @@ class manager {
      * @return item[]
      */
     public function get_items() {
-        return item::get_records(['stashid' => $this->get_stash()->get_id()]);
+        return item::get_records(['stashid' => $this->get_stash()->get_id()], 'name');
     }
 
     /**
@@ -292,7 +324,7 @@ class manager {
 
         $drop = $droporid;
         if (!is_object($drop)) {
-            $drop = $this->get_item($droporid);
+            $drop = $this->get_drop($droporid);
         }
         $dp = drop_pickup::get_relation($drop->get_id(), $userid);
 

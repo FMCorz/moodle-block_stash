@@ -27,6 +27,8 @@ namespace block_stash\output;
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/tablelib.php');
 
+use action_link;
+use action_menu;
 use confirm_action;
 use html_writer;
 use moodle_url;
@@ -107,13 +109,29 @@ class drops_table extends table_sql {
     protected function col_actions($row) {
         global $OUTPUT;
 
+        $actions = [];
+
+        // Commenting for now, it's unclear what that action represents.
+        // $url = new moodle_url('/blocks/stash/drop.php');
+        // $url->params(['courseid' => $this->manager->get_courseid(), 'itemid' => $row->itemid]);
+        // $actionlink = $OUTPUT->action_link($url, '', null, null, new pix_icon('t/add',
+        //     get_string('addnewdrop', 'block_stash')));
+        // $actions[] = $actionlink;
+
+        $url = new moodle_url('/blocks/stash/drop.php');
+        $url->params(['dropid' => $row->id, 'courseid' => $this->manager->get_courseid()]);
+        $actionlink = $OUTPUT->action_link($url, '', null, null, new pix_icon('t/edit',
+            get_string('editdrop', 'block_stash', $row->name)));
+        $actions[] = $actionlink;
+
         $action = new confirm_action(get_string('reallydeletedrop', 'block_stash'));
         $url = new moodle_url($this->baseurl);
-        $url->params(['removecohort' => $row->id, 'sesskey' => sesskey()]);
+        $url->params(['action' => 'delete', 'dropid' => $row->id, 'sesskey' => sesskey()]);
         $actionlink = $OUTPUT->action_link($url, '', $action, null, new pix_icon('t/delete',
             get_string('deletedrop', 'block_stash', $row->name)));
+        $actions[] = $actionlink;
 
-        return $actionlink;
+        return implode(' ', $actions);
     }
 
     /**
@@ -171,6 +189,16 @@ class drops_table extends table_sql {
             return get_string('none', 'block_stash');
         }
         return format_time($row->pickupinterval);
+    }
+
+    /**
+     * Override the default implementation to set a decent heading level.
+     */
+    public function print_nothing_to_display() {
+        global $OUTPUT;
+        echo $this->render_reset_button();
+        $this->print_initials_bar();
+        echo $OUTPUT->heading(get_string('nothingtodisplay'), 4);
     }
 
 }

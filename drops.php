@@ -25,6 +25,8 @@
 require_once(__DIR__ . '/../../config.php');
 
 $courseid = required_param('courseid', PARAM_INT);
+$dropid = optional_param('dropid', null, PARAM_INT);
+$action = optional_param('action', null, PARAM_ALPHA);
 
 require_login($courseid);
 
@@ -33,18 +35,42 @@ $manager->require_manage();
 
 $context = $manager->get_context();
 $url = new moodle_url('/blocks/stash/drops.php', ['courseid' => $courseid]);
+$addurl = new moodle_url('/blocks/stash/drop.php', ['courseid' => $manager->get_courseid()]);
 
 $strdrops = get_string('drops', 'block_stash');
+$drop = $dropid ? $manager->get_drop($dropid) : null;
+$item = $drop ? $manager->get_item($drop->get_itemid()) : null;
 
 $PAGE->set_context($context);
 $PAGE->set_pagelayout('course');
 $PAGE->set_title($strdrops);
 $PAGE->set_heading($strdrops);
 $PAGE->set_url($url);
+$PAGE->add_body_class('block-stash-drops-page');
+
+switch ($action) {
+    case 'delete':
+        require_sesskey();
+        if (!$drop) {
+            throw new coding_exception('Unknown drop.');
+        }
+        $manager->delete_drop($drop);
+        redirect($url, get_string('thedrophasbeendeleted', 'block_stash', $drop->get_name()));
+        break;
+}
 
 $renderer = $PAGE->get_renderer('block_stash');
 echo $OUTPUT->header();
-echo $OUTPUT->heading($strdrops);
+
+if ($drop && (empty($action) || $action === 'snippet')) {
+    echo $OUTPUT->heading(get_string('dropa', 'block_stash', $drop->get_name()));
+    echo $renderer->drop_snippet_ui($drop, $item, $context);
+}
+
+$strlist = get_string('dropslist', 'block_stash');
+$addbtn = $OUTPUT->single_button($addurl, get_string('addnewdrop', 'block_stash'), 'get');
+$heading = $strlist . $addbtn;
+echo $OUTPUT->heading($heading);
 
 $table = new \block_stash\output\drops_table('dropstable', $manager, $renderer);
 $table->define_baseurl($url);

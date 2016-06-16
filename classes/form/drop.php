@@ -41,15 +41,29 @@ class drop extends persistent {
         global $PAGE, $OUTPUT;
 
         $mform = $this->_form;
+        $manager = $this->_customdata['manager'];
         $item = $this->_customdata['item'];
+        $context = $manager->get_context();
+        $itemname = $item ? format_string($item->get_name(), null, ['context' => $context]) : null;
         $drop = $this->get_persistent();
 
         $mform->addElement('header', 'generalhdr', get_string('general'));
 
         // Item ID.
-        $mform->addElement('hidden', 'itemid');
-        $mform->setType('itemid', PARAM_INT);
-        $mform->setConstant('itemid', $item->get_id());
+        if ($item) {
+            $mform->addElement('hidden', 'itemid');
+            $mform->setType('itemid', PARAM_INT);
+            $mform->setConstant('itemid', $item->get_id());
+            $mform->addElement('static', '', get_string('item', 'block_stash'), $itemname);
+
+        } else {
+            $items = $manager->get_items();
+            $options = [];
+            foreach ($items as $stashitem) {
+                $options[$stashitem->get_id()] = format_string($stashitem->get_name(), null, ['context' => $context]);
+            }
+            $mform->addElement('select', 'itemid', get_string('item', 'block_stash'), $options);
+        }
 
         // Hash code.
         $mform->addElement('hidden', 'hashcode');
@@ -57,19 +71,20 @@ class drop extends persistent {
         $mform->setConstant('hashcode', $drop->get_hashcode());
 
         // Name.
-        $mform->addElement('text', 'name', 'Name', 'maxlength="100"');
+        $mform->addElement('text', 'name', get_string('dropname', 'block_stash'),
+            'maxlength="100" placeholder="' . s(get_string('eglocationofitem', 'block_stash')) . '"');
         $mform->setType('name', PARAM_NOTAGS);
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 100), 'maxlength', 100, 'client');
 
         // Max pickup.
-        $mform->addElement('text', 'maxpickup', 'Maximum pickup', 'maxlength="10" size="5"');
+        $mform->addElement('text', 'maxpickup', get_string('maxpickup', 'block_stash'), 'maxlength="10" size="5"');
         $mform->setType('maxpickup', PARAM_INT);
         $mform->addRule('maxpickup', null, 'required', null, 'client');
         $mform->addRule('maxpickup', get_string('maximumchars', '', 10), 'maxlength', 10, 'client');
 
         // Pickup interval.
-        $mform->addElement('duration', 'pickupinterval', 'Pickup interval');
+        $mform->addElement('duration', 'pickupinterval', get_string('pickupinterval', 'block_stash'));
         $mform->setType('pickupinterval', PARAM_INT);
         $mform->disabledIf('pickupinterval', 'maxpickup', 'eq', 1);
 

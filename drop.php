@@ -24,15 +24,16 @@
 
 require_once(__DIR__ . '/../../config.php');
 
-$itemid = required_param('itemid', PARAM_INT);
+$courseid = required_param('courseid', PARAM_INT);
 $dropid = optional_param('dropid', 0, PARAM_INT);
-$manager = \block_stash\manager::get_by_itemid($itemid);
+$itemid = optional_param('itemid', 0, PARAM_INT);
+$manager = \block_stash\manager::get($courseid);
 
 $manager->require_manage();
 require_login($manager->get_courseid());
 
 $context = $manager->get_context();
-$url = new moodle_url('/blocks/stash/drop.php', ['itemid' => $itemid, 'dropid' => $dropid]);
+$url = new moodle_url('/blocks/stash/drop.php', ['courseid' => $manager->get_courseid(), 'dropid' => $dropid]);
 $listurl = new moodle_url('/blocks/stash/drops.php', ['courseid' => $manager->get_courseid()]);
 
 $PAGE->set_context($context);
@@ -41,18 +42,14 @@ $PAGE->set_title('Item drop');
 $PAGE->set_heading('Item drop');
 $PAGE->set_url($url);
 
-$item = $manager->get_item($itemid);
 $drop = $dropid ? $manager->get_drop($dropid) : null;
+$item = $itemid ? $manager->get_item($itemid) : ($drop ? $manager->get_item($drop->get_itemid()) : null);
 
-if ($drop && $drop->get_id() != $itemid) {
-    throw new coding_exception('IDs mismatch!');
-}
-
-$form = new \block_stash\form\drop($url->out(false), ['persistent' => $drop, 'item' => $item]);
+$form = new \block_stash\form\drop($url->out(false), ['persistent' => $drop, 'item' => $item, 'manager' => $manager]);
 if ($data = $form->get_data()) {
-
-    $manager->create_or_update_drop($data);
-    redirect($url);
+    $drop = $manager->create_or_update_drop($data);
+    $listurl->param('dropid', $drop->get_id());
+    redirect($listurl);
 
 } else if ($form->is_cancelled()) {
     redirect($listurl);
@@ -60,7 +57,12 @@ if ($data = $form->get_data()) {
 
 $renderer = $PAGE->get_renderer('block_stash');
 echo $OUTPUT->header();
-echo $OUTPUT->heading(format_string($item->get_name(), true, ['context' => $context]));
+
+if ($drop) {
+    echo $OUTPUT->heading(get_string('editdrop', 'block_stash', $drop->get_name()));
+} else {
+    echo $OUTPUT->heading(get_string('addnewdrop', 'block_stash'));
+}
 
 $form->display();
 

@@ -25,6 +25,7 @@
 namespace block_stash\external;
 defined('MOODLE_INTERNAL') || die();
 
+use lang_string;
 use moodle_url;
 use renderer_base;
 
@@ -43,6 +44,26 @@ class drop_exporter extends persistent_exporter {
 
     protected static function define_related() {
         return array('context' => 'context');
+    }
+
+    protected static function define_other_properties() {
+        return [
+            'maxpickupformatted' => [
+                'type' => PARAM_RAW
+            ],
+            'pickupintervalformatted' => [
+                'type' => PARAM_RAW
+            ],
+        ];
+    }
+
+    protected function get_other_values(renderer_base $output) {
+        $interval = $this->persistent->get_pickupinterval();
+        $maxpickup = $this->persistent->get_maxpickup();
+        return [
+            'maxpickupformatted' => $maxpickup ? $maxpickup : new lang_string('unlimited', 'block_stash'),
+            'pickupintervalformatted' => $interval ? format_time($interval) : new lang_string('none', 'block_stash'),
+        ];
     }
 
 }

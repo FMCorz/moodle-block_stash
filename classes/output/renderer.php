@@ -24,8 +24,14 @@
 namespace block_stash\output;
 defined('MOODLE_INTERNAL') || die();
 
+use context;
 use plugin_renderer_base;
 use renderable;
+use blocK_stash\drop;
+use blocK_stash\item;
+use block_stash\external\drop_exporter;
+use block_stash\external\item_exporter;
+
 /**
  * Block Stash renderer class.
  *
@@ -35,19 +41,23 @@ use renderable;
  */
 class renderer extends plugin_renderer_base {
 
-    public function drop($drop, $item, $context) {
-        // TODO Remove.
-        if (!$drop) {
-            return '';
-        }
-
-        $data = [];
-        $exporter = new \block_stash\external\drop_exporter($drop, ['context' => $context]);
-        $data['drop'] = json_encode($exporter->export($this));
-        $exporter = new \block_stash\external\item_exporter($item, ['context' => $context]);
-        $data['item'] = json_encode($exporter->export($this));
-
-        return parent::render_from_template('block_stash/drop_snippet', (object) $data);
+    /**
+     * Renderer to output the snippet UI.
+     *
+     * @param drop $drop The drop.
+     * @param item $item The item.
+     * @param context $context The context of the drop.
+     * @return string
+     */
+    public function drop_snippet_ui(drop $drop, item $item, context $context) {
+        $data = (object) [];
+        $exporter = new drop_exporter($drop, ['context' => $context]);
+        $data->drop = $exporter->export($this);
+        $data->dropjson = json_encode($data->drop);
+        $exporter = new item_exporter($item, ['context' => $context]);
+        $data->item = $exporter->export($this);
+        $data->itemjson = json_encode($data->item);
+        return parent::render_from_template('block_stash/drop_snippet_ui', $data);
     }
 
     public function render_block_content(renderable $page) {

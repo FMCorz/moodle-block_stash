@@ -23,11 +23,17 @@
  */
 
 $string['additem'] = 'Add an item';
+$string['addnewdrop'] = 'Add new drop';
 $string['addtoinventory'] = 'Add an item to the inventory.';
 $string['deletedrop'] = 'Delete {$a}';
+$string['dropa'] = 'Drop \'{$a}\'';
 $string['dropname'] = 'Drop name';
 $string['drops'] = 'Drops';
+$string['dropslist'] = 'List of drops';
 $string['edit'] = 'Edit'; // Should be replaced with the pix icon.
+$string['editdrop'] = 'Edit drop \'{$a}\'';
+$string['eglocationofitem'] = 'E.g. The location of the item';
+$string['item'] = 'Item';
 $string['itemname'] = 'Item name';
 $string['eventitemacquired'] = 'An item was acquired.';
 $string['maxnumber'] = 'Maximum number of items per stash.';
@@ -37,4 +43,5 @@ $string['pickupinterval'] = 'Pickup interval';
 $string['pluginname'] = 'Stash';
 $string['quantity'] = 'Quantity';
 $string['reallydeletedrop'] = 'Are you sure you want to delete this drop?';
+$string['thedrophasbeendeleted'] = 'The drop \'{$a}\' has been deleted';
 $string['unlimited'] = 'Unlimited';

@@ -17,9 +17,28 @@
 {{!
     Drop snippet builder.
 }}
-<div id="block-stash-snippet-ui-{{uniqid}}" class="block-stash-snippet-ui">
+<div id="block-stash-snippet-ui-{{uniqid}}" class="block-stash-snippet-ui row-fluid">
 
-    <div class="span3">
+    <div class="span4">
+
+        <div class="row-fluid">
+            <div class="span4">
+                {{#item}}
+                    {{>block_stash/item}}
+                {{/item}}
+            </div>
+            <div class="span8">
+                <dl>
+                    <dt>Maximum pickup</dt>
+                    <dd>{{drop.maxpickupformatted}}</dd>
+                    <dt>Pickup interval</dt>
+                    <dd>{{drop.pickupintervalformatted}}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="span4">
         <h4>Settings</h4>
 
         <div>
@@ -49,7 +68,7 @@
 
     </div>
 
-    <div class="span3">
+    <div class="span4">
         <div>
             <h4>Preview</h4>
             <div class="preview"></div>
@@ -70,8 +89,8 @@ require([
     'block_stash/drop-snippet-maker',
     'block_stash/drop-snippet-ui'
 ], function(Item, Drop, DropSnippetMaker, DropSnippetUI) {
-    var item = new Item({{{item}}});
-    var drop = new Drop({{{drop}}}, item);
+    var item = new Item({{{itemjson}}});
+    var drop = new Drop({{{dropjson}}}, item);
     var dsm = new DropSnippetMaker(drop);
     var ui = new DropSnippetUI(dsm, '#block-stash-snippet-ui-{{uniqid}}');
 });

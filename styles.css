@@ -124,11 +124,18 @@
     display: none;
 }
 
-/** Drops page. */
-.path-blocks-stash .dropstable .block-stash-item {
+/** Drops pages. */
+.block-stash-drops-page .dropstable .block-stash-item {
     float: left;
     margin-right: 5px;
 }
-.path-blocks-stash .dropstable td {
+.block-stash-drops-page .dropstable td {
     line-height: 25px;
+}
+.block-stash-drops-page .singlebutton {
+    float: right;
+}
+.block-stash-drops-page .singlebutton div,
+.block-stash-drops-page .singlebutton input {
+    margin: 0;
 }
