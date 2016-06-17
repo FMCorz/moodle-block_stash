@@ -76,7 +76,7 @@ class renderer extends plugin_renderer_base {
         if ($manager->can_manage()) {
             $tabs[] = new tabobject(
                 'items',
-                new moodle_url('/blocks/stash/inventory.php', ['courseid' => $courseid]),
+                new moodle_url('/blocks/stash/items.php', ['courseid' => $courseid]),
                 get_string('navitems', 'block_stash')
             );
             $tabs[] = new tabobject(
@@ -97,11 +97,6 @@ class renderer extends plugin_renderer_base {
     public function render_block_content(renderable $page) {
         $data = $page->export_for_template($this);
         return parent::render_from_template('block_stash/main_content', $data);
-    }
-
-    public function render_inventory_page(renderable $page) {
-        $data = $page->export_for_template($this);
-        return parent::render_from_template('block_stash/inventory', $data);
     }
 
     public function render_item_xsmall(renderable $renderable) {

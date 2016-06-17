@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * My inventory.
+ * Items page.
  *
  * @package    block_stash
  * @copyright  2016 Adrian Greeve <adriangreeve.com>
@@ -34,7 +34,7 @@ $manager = \block_stash\manager::get($courseid);
 $manager->require_enabled();
 $manager->require_view();
 
-$url = new moodle_url('/blocks/stash/inventory.php', array('courseid' => $courseid));
+$url = new moodle_url('/blocks/stash/items.php', array('courseid' => $courseid));
 list($title, $subtitle, $returnurl) = \block_stash\page_helper::setup_for_item($url, $manager);
 
 switch ($action) {

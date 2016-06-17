@@ -35,7 +35,7 @@ $manager->require_manage();
 
 $context = context_course::instance($courseid);
 $url = new moodle_url('/blocks/stash/item_edit.php', array('courseid' => $courseid, 'id' => $id));
-$listurl = new moodle_url('/blocks/stash/inventory.php', ['courseid' => $courseid]);
+$listurl = new moodle_url('/blocks/stash/items.php', ['courseid' => $courseid]);
 
 $PAGE->set_context($context);
 $PAGE->set_pagelayout('course');
@@ -75,14 +75,6 @@ echo $OUTPUT->heading('Item');
 
 echo $form->render();
 
-
-
-
 $renderer = $PAGE->get_renderer('block_stash');
-// $page = new \block_stash\output\inventory_page($courseid);
-// Show inventory for teachers (Maybe students as well).
-// echo $renderer->render_inventory_page($page);
-
-
 
 echo $OUTPUT->footer();
