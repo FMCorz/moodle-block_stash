@@ -66,12 +66,12 @@ class items_table extends table_sql {
         // Define columns.
         $this->define_columns(array(
             'name',
-            'maxnumber',
+            // 'maxnumber',
             'actions'
         ));
         $this->define_headers(array(
             get_string('itemname', 'block_stash'),
-            get_string('maxnumber', 'block_stash'),
+            // get_string('maxnumber', 'block_stash'),
             get_string('actions')
         ));
 
