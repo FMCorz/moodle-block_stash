@@ -88,6 +88,24 @@ class drop extends persistent {
     }
 
     /**
+     * Get the course ID from a drop ID.
+     *
+     * @param int $dropid The drop ID.
+     * @return int
+     */
+    public static function get_courseid_by_id($dropid) {
+        global $DB;
+        $sql = "SELECT s.courseid
+                  FROM {" . stash::TABLE . "} s
+                  JOIN {" . item::TABLE . "} i
+                    ON i.stashid = s.id
+                  JOIN {" . drop::TABLE . "} d
+                    ON d.itemid = i.id
+                 WHERE d.id = ?";
+        return $DB->get_field_sql($sql, [$dropid], MUST_EXIST);
+    }
+
+    /**
      * Is there a limit to how many times a user can pickup the item on this drop?
      *
      * @return bool

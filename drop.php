@@ -24,8 +24,12 @@
 
 require_once(__DIR__ . '/../../config.php');
 
-$courseid = required_param('courseid', PARAM_INT);
 $dropid = optional_param('dropid', 0, PARAM_INT);
+if (!$dropid) {
+    $courseid = required_param('courseid', PARAM_INT);
+} else {
+    $courseid = \block_stash\manager::get_courseid_by_dropid($dropid);
+}
 $itemid = optional_param('itemid', 0, PARAM_INT);
 
 require_login($courseid);

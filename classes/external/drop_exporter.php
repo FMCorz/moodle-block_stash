@@ -48,6 +48,9 @@ class drop_exporter extends persistent_exporter {
 
     protected static function define_other_properties() {
         return [
+            'editurl' => [
+                'type' => PARAM_URL
+            ],
             'maxpickupformatted' => [
                 'type' => PARAM_RAW
             ],
@@ -63,6 +66,7 @@ class drop_exporter extends persistent_exporter {
         $unlimited = $this->persistent->is_unlimited();
 
         return [
+            'editurl' => (new moodle_url('/blocks/stash/drop.php', ['dropid' => $this->persistent->get_id()]))->out(false),
             'maxpickupformatted' => $unlimited ? get_string('unlimited', 'block_stash') : $maxpickup,
             'pickupintervalformatted' => $interval ? format_time($interval) : get_string('none', 'block_stash'),
         ];

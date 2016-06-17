@@ -11,10 +11,6 @@
     /*position: relative;*/
 }
 
-.block_stash_edit {
-
-}
-
 .block_stash_quantity {
     border: 1px solid black;
     border-radius: 4px;
@@ -139,4 +135,27 @@
 .path-blocks-stash .singlebutton div,
 .path-blocks-stash .singlebutton input {
     margin: 0;
+}
+.path-blocks-stash .block-stash-item-drops {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.path-blocks-stash .block-stash-drop-snippet-dialogue .block-stash-drop-summary hr {
+    margin: 0
+}
+.path-blocks-stash .block-stash-drop-snippet-dialogue .block-stash-drop-summary h6,
+.path-blocks-stash .block-stash-drop-snippet-dialogue .block-stash-drop-summary p {
+    margin-bottom: 0
+}
+
+/** Snippet UI. */
+.block-stash-snippet-ui [name=snippet] {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    height: 45px;
+    cursor: initial;
+    background-color: #fff;
 }

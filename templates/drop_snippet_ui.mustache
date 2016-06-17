@@ -17,71 +17,54 @@
 {{!
     Drop snippet builder.
 }}
-<div id="block-stash-snippet-ui-{{uniqid}}" class="block-stash-snippet-ui row-fluid">
+<div id="block-stash-snippet-ui-{{uniqid}}" class="block-stash-snippet-ui">
+    <div class="row-fluid">
+        <div class="span8">
 
-    <div class="span4">
-
-        <div class="row-fluid">
-            <div class="span4">
-                {{#item}}
-                    {{>block_stash/item}}
-                {{/item}}
+            <div>
+                <label for="label-displaytype-{{uniqid}}">{{#str}}appearance, block_stash{{/str}}</label>
+                <div>
+                    <select name="displaytype" id="label-displaytype-{{uniqid}}">
+                        <option value="text">{{#str}}text, block_stash{{/str}}</option>
+                        <option value="image" selected>{{#str}}image, block_stash{{/str}}</option>
+                        <option value="imageandbutton">{{#str}}imageandbutton, block_stash{{/str}}</option>
+                    </select>
+                </div>
             </div>
-            <div class="span8">
-                <dl>
-                    <dt>{{#str}}maxpickup, block_stash{{/str}}</dt>
-                    <dd>{{drop.maxpickupformatted}}</dd>
-                    <dt>{{#str}}pickupinterval, block_stash{{/str}}</dt>
-                    <dd>{{drop.pickupintervalformatted}}</dd>
-                </dl>
+
+            <div class="snippet-label">
+                <label for="label-label-{{uniqid}}">{{#str}}text, block_stash{{/str}}</label>
+                <div>
+                    <input type="text" name="label" id="label-label-{{uniqid}}">
+                </div>
+            </div>
+
+            <div class="snippet-actiontext">
+                <label for="label-actiontext-{{uniqid}}">{{#str}}buttontext, block_stash{{/str}}</label>
+                <div>
+                    <input type="text" name="actiontext" id="label-actiontext-{{uniqid}}">
+                </div>
+            </div>
+
+        </div>
+        <div class="span4">
+            <div>
+                <div class="preview"></div>
             </div>
         </div>
     </div>
 
-    <div class="span4">
-        <h4>Settings</h4>
-
-        <div>
-            <label for="label-displaytype-{{uniqid}}">{{#str}}appearance, block_stash{{/str}}</label>
+    <div class="row-fluid">
+        <div class="span12">
             <div>
-                <select name="displaytype" id="label-displaytype-{{uniqid}}">
-                    <option value="text">{{#str}}text, block_stash{{/str}}</option>
-                    <option value="image" selected>{{#str}}image, block_stash{{/str}}</option>
-                    <option value="imageandbutton">{{#str}}imageandbutton, block_stash{{/str}}</option>
-                </select>
+                <p><strong>{{#str}}snippet, block_stash{{/str}}</strong></p>
+                <textarea name="snippet" onclick="this.select();" readonly></textarea>
+                <p><small>{{#str}}copypaste, block_stash{{/str}}</small></p>
             </div>
-        </div>
-
-        <div class="snippet-label">
-            <label for="label-label-{{uniqid}}">{{#str}}text, block_stash{{/str}}</label>
-            <div>
-                <input type="text" name="label" id="label-label-{{uniqid}}">
-            </div>
-        </div>
-
-        <div class="snippet-actiontext">
-            <label for="label-actiontext-{{uniqid}}">{{#str}}buttontext, block_stash{{/str}}</label>
-            <div>
-                <input type="text" name="actiontext" id="label-actiontext-{{uniqid}}">
-            </div>
-        </div>
-
-    </div>
-
-    <div class="span4">
-        <div>
-            <h4>Preview</h4>
-            <div class="preview"></div>
-        </div>
-
-        <div>
-            <h4>Snippet</h4>
-            <textarea name="snippet" onclick="this.select();"></textarea>
-            <p><small>{{#str}}copypaste, block_stash{{/str}}</small></p>
         </div>
     </div>
-
 </div>
+
 {{#js}}
 require([
     'block_stash/item',

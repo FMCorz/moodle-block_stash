@@ -34,6 +34,8 @@ use pix_icon;
 use stdClass;
 use table_sql;
 use block_stash\item as itemmodel;
+use block_stash\external\drop_exporter;
+use block_stash\external\item_exporter;
 
 /**
  * Items table class.
@@ -67,10 +69,12 @@ class items_table extends table_sql {
         $this->define_columns(array(
             'name',
             // 'maxnumber',
+            'drops',
             'actions'
         ));
         $this->define_headers(array(
             get_string('itemname', 'block_stash'),
+            get_string('locations', 'block_stash'),
             // get_string('maxnumber', 'block_stash'),
             get_string('actions')
         ));
@@ -88,6 +92,7 @@ class items_table extends table_sql {
         // Define various table settings.
         $this->sortable(true, 'name', SORT_ASC);
         $this->no_sorting('actions');
+        $this->no_sorting('drops');
         $this->collapsible(false);
     }
 
@@ -120,6 +125,41 @@ class items_table extends table_sql {
         $actions[] = $actionlink;
 
         return implode(' ', $actions);
+    }
+
+    /**
+     * Formats the column.
+     *
+     * @param stdClass $row Table row.
+     * @return string Output produced.
+     */
+    protected function col_drops($row) {
+        // This is everything but efficient...
+        $drops = $this->manager->get_drops($row->id);
+        if (empty($drops)) {
+            return '-';
+        }
+
+        // Yay, code duplication.
+        $item = new itemmodel(null, $row);
+        $exporter = new item_exporter($item, ['context' => $this->manager->get_context()]);
+        $itemdata = $exporter->export($this->renderer);
+
+        // Construct the list of drops.
+        $html = html_writer::start_tag('ul', ['class' => 'block-stash-item-drops']);
+        foreach ($drops as $drop) {
+            $exporter = new drop_exporter($drop, ['context' => $this->manager->get_context()]);
+            $link = html_writer::link('#', $drop->get_name(), [
+                'rel' => 'block-stash-drop',
+                'data-id' => $drop->get_id(),
+                'data-json' => json_encode($exporter->export($this->renderer)),
+                'data-item' => json_encode($itemdata)
+            ]);
+            $html .= html_writer::tag('li', $link);
+        }
+        $html .= html_writer::end_tag('ul');
+
+        return $html;
     }
 
     /**

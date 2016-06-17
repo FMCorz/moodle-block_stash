@@ -50,6 +50,15 @@ define([
     };
 
     /**
+     * Return the data of this drop.
+     *
+     * @return {Object}
+     */
+    Drop.prototype.getData = function() {
+        return this._data;
+    };
+
+    /**
      * Return the item of this drop.
      *
      * @return {Item}

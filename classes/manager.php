@@ -248,6 +248,16 @@ class manager {
     }
 
     /**
+     * Get the course ID.
+     *
+     * @param int $dropid The drop ID.
+     * @return int
+     */
+    public static function get_courseid_by_dropid($dropid) {
+        return drop::get_courseid_by_id($dropid);
+    }
+
+    /**
      * Get the context.
      *
      * @return context
@@ -340,11 +350,22 @@ class manager {
         return $drop;
     }
 
+    /**
+     * Get the drops for an item.
+     *
+     * @todo Support optional itemid.
+     * @param int $itemid The item ID.
+     * @return drop[]
+     */
     public function get_drops($itemid) {
         $this->require_enabled();
-        $this->require_view();
+        $this->require_manage();
 
-        return \block_stash\drop::get_records(['itemid' => $itemid], 'name');
+
+        if (!$this->is_item_in_stash($itemid)) {
+            throw new coding_exception('Unexpected item ID.');
+        }
+        return drop::get_records(['itemid' => $itemid], 'name');
     }
 
     /**

@@ -64,6 +64,23 @@ if ($manager->can_manage()) {
     $table->define_baseurl($url);
     echo $table->out(50, false);
 
+    $PAGE->requires->js_init_code("require([
+        'jquery',
+        'block_stash/drop',
+        'block_stash/drop-snippet-dialogue',
+        'block_stash/item'
+    ], function($, Drop, Dialogue, Item) {
+        $('table.itemstable [rel=block-stash-drop]').click(function(e) {
+            var node = $(e.currentTarget),
+                item = new Item(node.data('item')),
+                drop = new Drop(node.data('json'), item),
+                dialogue = new Dialogue(drop);
+
+            e.preventDefault();
+            dialogue.show(e);
+        });
+    });", true);
+
 } else {
     // TODO Remove this part.
     echo $OUTPUT->heading(get_string('stash', 'block_stash'));

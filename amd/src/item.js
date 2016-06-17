@@ -44,6 +44,15 @@ define([
         return this._data[property];
     };
 
+    /**
+     * Return the data of this item.
+     *
+     * @return {Object}
+     */
+    Item.prototype.getData = function() {
+        return this._data;
+    };
+
     return /** @alias module:block_stash/item */ Item;
 
 });
