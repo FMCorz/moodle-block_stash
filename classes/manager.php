@@ -315,8 +315,12 @@ class manager {
         $DB->delete_records(\block_stash\user_item::TABLE, ['itemid' => $item->get_id()]);
         // Delete the item.
         $DB->delete_records(\block_stash\item::TABLE, ['id' => $item->get_id()]);
-        $transaction->allow_commit();
 
+        // Remove image from file storage.
+        $fs = get_file_storage();
+        $fs->delete_area_files($this->context->id, 'block_stash', 'item', $item->get_id());
+
+        $transaction->allow_commit();
     }
 
     /**
@@ -555,6 +559,23 @@ class manager {
             )
         );
         $event->trigger();
+    }
+
+    /**
+     * Delete all information to do with this instance.
+     *
+     * @return void
+     */
+    public function delete_instance() {
+        global $DB;
+        $this->require_enabled();
+        $this->require_manage();
+        // Delete all items. This should also recursively delete all drops and user items as well.
+        foreach ($this->get_items() as $item) {
+            $this->delete_item($item);
+        }
+        // Delete the stash as well.
+        $DB->delete_records(\block_stash\stash::TABLE, ['id' => $this->stash->get_id()]);
     }
 
     /**

@@ -106,6 +106,7 @@
     left: -webkit-calc(50% - 90px / 2);
     left:    -moz-calc(50% - 90px / 2);
     left:         calc(50% - 90px / 2);
+    z-index: 1;
 }
 
 /** Extra small item. */
