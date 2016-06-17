@@ -172,7 +172,7 @@ class drops_table extends table_sql {
      * @return string Output produced.
      */
     protected function col_maxpickup($row) {
-        if ($row->maxpickup == 0) {
+        if ($row->maxpickup === null) {
             return get_string('unlimited', 'block_stash');
         }
         return $row->maxpickup;

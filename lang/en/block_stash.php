@@ -58,6 +58,7 @@ $string['navinventory'] = 'Stash items';
 $string['navdrops'] = 'Drops';
 $string['navitems'] = 'Items';
 $string['none'] = 'None';
+$string['number'] = 'Number';
 $string['pickupinterval'] = 'Collection interval';
 $string['pluginname'] = 'Stash';
 $string['quantity'] = 'Quantity';

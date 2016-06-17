@@ -60,9 +60,11 @@ class drop_exporter extends persistent_exporter {
     protected function get_other_values(renderer_base $output) {
         $interval = $this->persistent->get_pickupinterval();
         $maxpickup = $this->persistent->get_maxpickup();
+        $unlimited = $this->persistent->is_unlimited();
+
         return [
-            'maxpickupformatted' => $maxpickup ? $maxpickup : new lang_string('unlimited', 'block_stash'),
-            'pickupintervalformatted' => $interval ? format_time($interval) : new lang_string('none', 'block_stash'),
+            'maxpickupformatted' => $unlimited ? get_string('unlimited', 'block_stash') : $maxpickup,
+            'pickupintervalformatted' => $interval ? format_time($interval) : get_string('none', 'block_stash'),
         ];
     }
 

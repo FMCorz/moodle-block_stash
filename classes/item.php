@@ -48,7 +48,8 @@ class item extends persistent {
             ],
             'maxnumber' => [
                 'type' => PARAM_INT,
-                'default' => 0
+                'default' => null,
+                'null' => NULL_ALLOWED
             ]
         ];
     }
@@ -67,6 +68,30 @@ class item extends persistent {
                  WHERE i.id = ?
                    AND i.stashid = ?";
         return $DB->record_exists_sql($sql, [$itemid, $stashid]);
+    }
+
+    /**
+     * Is there a limit to how many of this item a user can have at once.
+     *
+     * @return bool
+     */
+    public function is_unlimited() {
+        return $this->get('maxnumber') === null;
+    }
+
+    /**
+     * Validate the max number.
+     *
+     * Null means unlimited. Zero does not have a meaning at the moment.
+     *
+     * @param string $value The value.
+     * @return true|lang_string
+     */
+    protected function validate_maxnumber($value) {
+        if ($value !== null && $value <= 0) {
+            return new lang_string('invaliddata', 'error');
+        }
+        return true;
     }
 
     /**

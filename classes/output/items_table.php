@@ -145,7 +145,7 @@ class items_table extends table_sql {
      */
     protected function col_maxnumber($row) {
         $str = $row->maxnumber;
-        if ($row->maxnumber == 0) {
+        if ($row->maxnumber === null) {
             $str = get_string('unlimited', 'block_stash');
         }
         return $str;

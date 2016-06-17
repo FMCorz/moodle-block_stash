@@ -24,7 +24,12 @@
 namespace block_stash\form;
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->libdir . '/formslib.php');
+
 use stdClass;
+use MoodleQuickForm;
+
+MoodleQuickForm::registerElementType('block_stash_integer', __DIR__ . '/integer.php', 'block_stash\\form\\integer');
 
 /**
  * Item drop form class.
@@ -78,15 +83,12 @@ class drop extends persistent {
         $mform->addRule('name', get_string('maximumchars', '', 100), 'maxlength', 100, 'client');
 
         // Max pickup.
-        $mform->addElement('text', 'maxpickup', get_string('maxpickup', 'block_stash'), 'maxlength="10" size="5"');
+        $mform->addElement('block_stash_integer', 'maxpickup', get_string('maxpickup', 'block_stash'), ['style' => 'width: 3em;']);
         $mform->setType('maxpickup', PARAM_INT);
-        $mform->addRule('maxpickup', null, 'required', null, 'client');
-        $mform->addRule('maxpickup', get_string('maximumchars', '', 10), 'maxlength', 10, 'client');
 
         // Pickup interval.
         $mform->addElement('duration', 'pickupinterval', get_string('pickupinterval', 'block_stash'));
         $mform->setType('pickupinterval', PARAM_INT);
-        $mform->disabledIf('pickupinterval', 'maxpickup', 'eq', 1);
 
         $this->add_action_buttons(true, get_string('savechanges', 'tool_lp'));
     }

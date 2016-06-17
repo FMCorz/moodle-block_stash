@@ -48,7 +48,8 @@ class drop extends persistent {
             ],
             'maxpickup' => [
                 'type' => PARAM_INT,
-                'default' => 1
+                'default' => 1,
+                'null' => NULL_ALLOWED
             ],
             'pickupinterval' => [
                 'type' => PARAM_INT,
@@ -87,6 +88,15 @@ class drop extends persistent {
     }
 
     /**
+     * Is there a limit to how many times a user can pickup the item on this drop?
+     *
+     * @return bool
+     */
+    public function is_unlimited() {
+        return $this->get('maxpickup') === null;
+    }
+
+    /**
      * Validate the hash code.
      *
      * @param string $value The hash code.
@@ -115,11 +125,13 @@ class drop extends persistent {
     /**
      * Validate the max pickup.
      *
+     * Null means unlimited. Zero does not have a meaning at the moment.
+     *
      * @param string $value The max pickup.
      * @return true|lang_string
      */
     protected function validate_maxpickup($value) {
-        if ($value < 0) {
+        if ($value !== null && $value < 1) {
             return new lang_string('invaliddata', 'error');
         }
         return true;

@@ -18,7 +18,12 @@
 namespace block_stash\form;
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->libdir . '/formslib.php');
+
 use stdClass;
+use MoodleQuickForm;
+
+MoodleQuickForm::registerElementType('block_stash_integer', __DIR__ . '/integer.php', 'block_stash\\form\\integer');
 
 class item extends persistent {
 
@@ -50,7 +55,7 @@ class item extends persistent {
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
 
         // Max number of items.
-        $mform->addElement('text', 'maxnumber', get_string('maxnumber', 'block_stash'), 'maxlength="10" size="5"');
+        $mform->addElement('block_stash_integer', 'maxnumber', get_string('maxnumber', 'block_stash'), ['style' => 'width: 3em;']);
         $mform->setType('maxnumber', PARAM_INT);
 
         // Image.
