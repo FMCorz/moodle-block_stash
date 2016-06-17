@@ -46,7 +46,7 @@ class item_edit_form extends moodleform {
     function definition () {
         $mform = $this->_form;
 
-        $mform->addElement('text', 'itemname', 'Item name');
+        $mform->addElement('text', 'itemname', get_string('itemname', 'block_stash'));
         $mform->setType('itemname', PARAM_TEXT);
 
         $mform->addElement('hidden', 'id', $this->_customdata['id']);

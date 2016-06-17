@@ -39,8 +39,8 @@ $listurl = new moodle_url('/blocks/stash/items.php', ['courseid' => $courseid]);
 
 $PAGE->set_context($context);
 $PAGE->set_pagelayout('course');
-$PAGE->set_title('Item');
-$PAGE->set_heading('Item');
+$PAGE->set_title(get_string('item', 'block_stash'));
+$PAGE->set_heading(get_string('item', 'block_stash'));
 $PAGE->set_url($url);
 
 $item = $id ? $manager->get_item($id) : null;
@@ -71,7 +71,7 @@ if ($data = $form->get_data()) {
 }
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading('Item');
+echo $OUTPUT->heading(get_string('item', 'block_stash'));
 
 echo $form->render();
 

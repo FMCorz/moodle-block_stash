@@ -66,7 +66,7 @@ if ($manager->can_manage()) {
 
 } else {
     // TODO Remove this part.
-    echo $OUTPUT->heading('Inventory');
+    echo $OUTPUT->heading(get_string('stash', 'block_stash'));
     $page = new \block_stash\output\user_inventory_page($courseid, $USER->id);
     echo $renderer->render_user_inventory($page);
 }

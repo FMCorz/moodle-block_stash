@@ -29,9 +29,9 @@
             </div>
             <div class="span8">
                 <dl>
-                    <dt>Maximum pickup</dt>
+                    <dt>{{#str}}maxpickup, block_stash{{/str}}</dt>
                     <dd>{{drop.maxpickupformatted}}</dd>
-                    <dt>Pickup interval</dt>
+                    <dt>{{#str}}pickupinterval, block_stash{{/str}}</dt>
                     <dd>{{drop.pickupintervalformatted}}</dd>
                 </dl>
             </div>
@@ -42,25 +42,25 @@
         <h4>Settings</h4>
 
         <div>
-            <label for="label-displaytype-{{uniqid}}">Appearance</label>
+            <label for="label-displaytype-{{uniqid}}">{{#str}}appearance, block_stash{{/str}}</label>
             <div>
                 <select name="displaytype" id="label-displaytype-{{uniqid}}">
-                    <option value="text">Text</option>
-                    <option value="image" selected>Image</option>
-                    <option value="imageandbutton">Image and button</option>
+                    <option value="text">{{#str}}text, block_stash{{/str}}</option>
+                    <option value="image" selected>{{#str}}image, block_stash{{/str}}</option>
+                    <option value="imageandbutton">{{#str}}imageandbutton, block_stash{{/str}}</option>
                 </select>
             </div>
         </div>
 
         <div class="snippet-label">
-            <label for="label-label-{{uniqid}}">Text</label>
+            <label for="label-label-{{uniqid}}">{{#str}}text, block_stash{{/str}}</label>
             <div>
                 <input type="text" name="label" id="label-label-{{uniqid}}">
             </div>
         </div>
 
         <div class="snippet-actiontext">
-            <label for="label-actiontext-{{uniqid}}">Button text</label>
+            <label for="label-actiontext-{{uniqid}}">{{#str}}buttontext, block_stash{{/str}}</label>
             <div>
                 <input type="text" name="actiontext" id="label-actiontext-{{uniqid}}">
             </div>
@@ -77,7 +77,7 @@
         <div>
             <h4>Snippet</h4>
             <textarea name="snippet" onclick="this.select();"></textarea>
-            <p><small>Copy/paste this where it belongs.</small></p>
+            <p><small>{{#str}}copypaste, block_stash{{/str}}</small></p>
         </div>
     </div>
 
