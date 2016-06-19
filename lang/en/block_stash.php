@@ -73,6 +73,7 @@ $string['quantity'] = 'Quantity';
 $string['reallydeletedrop'] = 'Are you sure you want to delete this location?';
 $string['saveandnext'] = 'Save and next';
 $string['savechanges'] = 'Save changes';
+$string['stashdisabled'] = 'The stash is not enabled. Was the block added to the course?';
 $string['reallydeleteitem'] = 'Are you sure you want to delete this item?';
 $string['settings'] = 'Settings';
 $string['snippet'] = 'Snippet';

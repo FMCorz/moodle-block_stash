@@ -52,6 +52,15 @@ class stash extends persistent {
     }
 
     /**
+     * Return whether there are items in this stash.
+     *
+     * @return bool
+     */
+    public function has_items() {
+        return item::record_exists_select('stashid = ?', [$this->get_id()]);
+    }
+
+    /**
      * Validate the course ID.
      *
      * @param string $value The course ID.

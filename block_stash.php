@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Classes for block_stash
+ * Classes for block_stash.
  *
  * @package    block_stash
  * @copyright  2016 Adrian Greeve <adrian@moodle.com>
@@ -24,6 +24,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Classes for block_stash.
+ *
+ * @package    block_stash
+ * @copyright  2016 Adrian Greeve <adrian@moodle.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class block_stash extends block_base {
 
     /**
@@ -63,4 +70,16 @@ class block_stash extends block_base {
         return $this->content;
 
     }
+
+    /**
+     * Callback when a block is created.
+     *
+     * @return bool
+     */
+    public function instance_create() {
+        // Reset the static cache.
+        $manager = \block_stash\manager::get($this->page->course->id, true);
+        return true;
+    }
+
 }

@@ -26,6 +26,7 @@ namespace block_stash;
 defined('MOODLE_INTERNAL') || die();
 
 use coding_exception;
+use moodle_exception;
 use context_course;
 use context_user;
 use stdClass;
@@ -54,6 +55,9 @@ class manager {
 
     /** @var int Course ID. */
     protected $courseid = null;
+
+    /** @var bool Whether the API should be open. */
+    protected $isenabled = null;
 
     /** @var stash The stash object, do not refer to directly as it's lazy loaded. */
     protected $stash;
@@ -431,6 +435,15 @@ class manager {
     }
 
     /**
+     * Return whether items are defined in this stash.
+     *
+     * @return bool
+     */
+    public function has_items() {
+        return $this->get_stash()->has_items();
+    }
+
+    /**
      * Is the stash enabled in the course?
      *
      * Not yet used, but in place in case we need it later.
@@ -438,7 +451,14 @@ class manager {
      * @return boolean True if enabled.
      */
     public function is_enabled() {
-        return true;
+        global $DB;
+        if ($this->isenabled === null) {
+            $this->isenabled = $DB->record_exists('block_instances', [
+                'blockname' => 'stash',
+                'parentcontextid' => $this->context->id
+            ]);
+        }
+        return $this->isenabled;
     }
 
     /**
@@ -620,7 +640,7 @@ class manager {
      */
     public function require_enabled() {
         if (!$this->is_enabled()) {
-            throw new coding_exception('The stash is not enabled.');
+            throw new moodle_exception('stashdisabled', 'block_stash');
         }
     }
 
