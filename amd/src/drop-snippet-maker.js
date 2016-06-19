@@ -201,6 +201,7 @@ define([
             snippet = '';
 
         // No need to scope this in an anonymous function, it already is because of require.
+        // WARNING! Changing this structure could break restores!
         snippet = '' +
             'require(["jquery", "block_stash/drop"], function($, D) {' +
             ' var d = new D({id: ' + id + ', hashcode: "' + hashcode + '"}), n = $("#' + uuid + '");' +
