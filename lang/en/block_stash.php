@@ -32,9 +32,10 @@ $string['deletedrop'] = 'Delete {$a}';
 $string['deleteitem'] = 'Delete {$a}';
 $string['dropa'] = 'Location \'{$a}\'';
 $string['dropname'] = 'Location';
+$string['dropname_help'] = 'The name of the location is only useful for you to organise them, it will not be displayed to the students.';
 $string['drops'] = 'Locations';
 $string['drops_help'] = '
-<p>Locations where your items are in the <em>virtual world</em>. Without a <em>location</em> an item cannot be picked up by a student.</p>
+<p>Locations are places where your items are in the <em>virtual world</em>. Without a <em>location</em> an item cannot be picked up by a student.</p>
 <p>Locations come with a few options, including the number of times a single student can pick them up, and how often they reappear after being picked up.</p>
 <p>For instance, if your students need a <em>key item</em> to access an activity, you will most likely set it so that your students can only pick it up once in that location.</p>
 <p>But if they need <em>5 coins</em> to access another one, you may set this coin to reappear each day to encourage them to visit the course everyday.</p>
@@ -50,18 +51,23 @@ $string['eventitemacquired'] = 'An item was acquired.';
 $string['image'] = 'Image';
 $string['imageandbutton'] = 'Image and button';
 $string['item'] = 'Item';
+$string['itemimage'] = 'Image';
+$string['itemimage_help'] = 'This image will be used to display the item. The recommended size is 100x100 pixels.';
 $string['itemname'] = 'Item name';
+$string['itemname_help'] = 'The name of the item, this will be displayed to the students.';
 $string['items'] = 'Items';
 $string['itemslist'] = 'List of items';
 $string['locations'] = 'Locations';
 $string['maxnumber'] = 'Maximum collectable';
 $string['maxpickup'] = 'Supplies';
+$string['maxpickup_help'] = 'The number of times the item can be picked up by each students in this location. For instance, if you set this to \'1\' the item will only be available once per student. If you set it to \'5\', each student can acquire the item five times in this location. A value different than \'1\' is better used in combination with \'Collection interval\'.';
 $string['navdrops'] = 'Locations';
 $string['navinventory'] = 'Stash items';
 $string['navitems'] = 'Items';
 $string['none'] = 'None';
 $string['number'] = 'Number';
 $string['pickupinterval'] = 'Collection interval';
+$string['pickupinterval_help'] = 'This defines the time required for the item to re-appear to students who already picked it up once. For instance, if you created an item \'cake\' you could set its collection interval to 24 hours to simulate the time it takes for the baker to bake another one. It is important to note that students are not affected by the pickups of other students. This setting has no effect when \'Supplies\' is set to \'1\'.';
 $string['pluginname'] = 'Stash';
 $string['quantity'] = 'Quantity';
 $string['reallydeletedrop'] = 'Are you sure you want to delete this location?';

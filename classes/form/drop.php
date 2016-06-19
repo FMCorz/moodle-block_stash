@@ -81,14 +81,17 @@ class drop extends persistent {
         $mform->setType('name', PARAM_NOTAGS);
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 100), 'maxlength', 100, 'client');
+        $mform->addHelpButton('name', 'dropname', 'block_stash');
 
         // Max pickup.
         $mform->addElement('block_stash_integer', 'maxpickup', get_string('maxpickup', 'block_stash'), ['style' => 'width: 3em;']);
         $mform->setType('maxpickup', PARAM_INT);
+        $mform->addHelpButton('maxpickup', 'maxpickup', 'block_stash');
 
         // Pickup interval.
         $mform->addElement('duration', 'pickupinterval', get_string('pickupinterval', 'block_stash'));
         $mform->setType('pickupinterval', PARAM_INT);
+        $mform->addHelpButton('pickupinterval', 'pickupinterval', 'block_stash');
 
         $this->add_action_buttons(true, get_string('savechanges', 'block_stash'));
     }

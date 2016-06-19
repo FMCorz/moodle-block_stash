@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/tablelib.php');
 
 use confirm_action;
+use help_icon;
 use html_writer;
 use moodle_url;
 use pix_icon;
@@ -78,7 +79,11 @@ class items_table extends table_sql {
             // get_string('maxnumber', 'block_stash'),
             get_string('actions')
         ));
-
+        $this->define_help_for_headers([
+            null,
+            new help_icon('drops', 'block_stash'),
+            null
+        ]);
 
         $sqlfields = itemmodel::get_sql_fields('i', '');
         $sqlfrom = "{" . itemmodel::TABLE . "} i";
