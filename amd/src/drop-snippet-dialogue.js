@@ -58,6 +58,7 @@ define([
      */
     Dialog.prototype._init = function() {
         var deferred = $.Deferred(),
+            loading = Y.Node.create('<p style="text-align: center;"><img src="' + M.util.image_url('y/loading') + '" alt=""></p>'),
             d;
 
         // New dialogue.
@@ -77,14 +78,15 @@ define([
 
         // Set content.
         d.getStdModNode(Y.WidgetStdMod.HEADER).prepend(Y.Node.create('<h1>' + this._drop.get('name') + '</h1>'));
+        d.setStdModContent(Y.WidgetStdMod.BODY, loading, Y.WidgetStdMod.REPLACE);
+        deferred.resolve();
+
+        // Async fetch real content.
         this._render().then(function(html, js) {
             Templates.runTemplateJS(js);
             d.setStdModContent(Y.WidgetStdMod.BODY, html, Y.WidgetStdMod.REPLACE);
-        }).then(function() {
-            // Resolve the promise.
-            deferred.resolve();
+            d.centerDialogue();
         });
-
 
         // Return the promise.
         return deferred;
