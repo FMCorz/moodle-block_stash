@@ -65,6 +65,7 @@ $string['pickupinterval'] = 'Collection interval';
 $string['pluginname'] = 'Stash';
 $string['quantity'] = 'Quantity';
 $string['reallydeletedrop'] = 'Are you sure you want to delete this drop?';
+$string['savechanges'] = 'Save changes';
 $string['reallydeleteitem'] = 'Are you sure you want to delete this item?';
 $string['settings'] = 'Settings';
 $string['snippet'] = 'Snippet';

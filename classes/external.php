@@ -61,6 +61,15 @@ class external extends external_api {
     }
 
     /**
+     * Is allowed from ajax?
+     * Only present for 2.9 compatibility.
+     * @return true
+     */
+    public static function is_drop_visible_is_allowed_from_ajax() {
+        return true;
+    }
+
+    /**
      * A drop has been found, hurray!
      *
      * @param int $dropid The drop ID.
@@ -99,6 +108,15 @@ class external extends external_api {
             'dropid' => new external_value(PARAM_INT),
             'hashcode' => new external_value(PARAM_ALPHANUM),
         ]);
+    }
+
+    /**
+     * Is allowed from ajax?
+     * Only present for 2.9 compatibility.
+     * @return true
+     */
+    public static function pickup_drop_is_allowed_from_ajax() {
+        return true;
     }
 
     /**

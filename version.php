@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details
+ * Version details.
  *
  * @package    block_stash
  * @copyright  2016 Adrian Greeve <adrian@moodle.com>
@@ -24,8 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2016052313;         // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2016051900;         // Requires this Moodle version
-$plugin->component = 'block_stash';      // Full name of the plugin (used for diagnostics)
+$plugin->version   = 2016061900;
+$plugin->requires  = 2015051100;
+$plugin->component = 'block_stash';
 $plugin->maturity  = MATURITY_STABLE;
 $plugin->release   = '0.0.1';

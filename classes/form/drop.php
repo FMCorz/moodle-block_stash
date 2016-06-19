@@ -29,7 +29,7 @@ require_once($CFG->libdir . '/formslib.php');
 use stdClass;
 use MoodleQuickForm;
 
-MoodleQuickForm::registerElementType('block_stash_integer', __DIR__ . '/integer.php', 'block_stash\\form\\integer');
+MoodleQuickForm::registerElementType('block_stash_integer', __DIR__ . '/integer.php', 'block_stash_form_integer');
 
 /**
  * Item drop form class.
@@ -90,7 +90,7 @@ class drop extends persistent {
         $mform->addElement('duration', 'pickupinterval', get_string('pickupinterval', 'block_stash'));
         $mform->setType('pickupinterval', PARAM_INT);
 
-        $this->add_action_buttons(true, get_string('savechanges', 'tool_lp'));
+        $this->add_action_buttons(true, get_string('savechanges', 'block_stash'));
     }
 
 }

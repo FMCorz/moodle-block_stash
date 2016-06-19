@@ -196,7 +196,10 @@ class items_table extends table_sql {
      */
     public function print_nothing_to_display() {
         global $OUTPUT;
-        echo $this->render_reset_button();
+        if (method_exists($this, 'render_reset_button')) {
+            // Compability with 2.9.
+            echo $this->render_reset_button();
+        }
         $this->print_initials_bar();
         echo $OUTPUT->heading(get_string('nothingtodisplay'), 4);
     }

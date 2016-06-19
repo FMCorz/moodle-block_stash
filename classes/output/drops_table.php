@@ -197,7 +197,8 @@ class drops_table extends table_sql {
     public function print_nothing_to_display() {
         global $OUTPUT;
 
-        if ($this->can_be_reset()) {
+        if (method_exists($this, 'can_be_reset') && $this->can_be_reset()) {
+            // Compability with 2.9.
             echo $this->render_reset_button();
             $this->print_initials_bar();
             echo $OUTPUT->heading(get_string('nothingtodisplay'), 4);

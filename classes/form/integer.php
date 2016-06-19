@@ -23,27 +23,22 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_stash\form;
-
 global $CFG;
 require_once($CFG->libdir . '/form/group.php');
-// require_once($CFG->libdir . '/form/text.php');
-
-use coding_exception;
-use html_writer;
-use MoodleQuickForm;
-use MoodleQuickForm_group;
 
 /**
  * Integer field class.
  *
  * Returns an integer, or null for unlimited.
  *
+ * Note, this is not namespaced to allow for compability with old-style constructor methods.
+ * Those are required in older versions of Moodle: < 3.0.1.
+ *
  * @package    block_stash
  * @copyright  2016 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class integer extends MoodleQuickForm_group {
+class block_stash_form_integer extends MoodleQuickForm_group {
 
     /**
      * Constructor.
@@ -61,6 +56,14 @@ class integer extends MoodleQuickForm_group {
         parent::__construct($elementname, $elementlabel);
         $this->setAttributes(array_merge((array) $this->_attributes, $attributes));
         $this->_type = 'integer';
+    }
+
+    /**
+     * Old-style constructor.
+     * @see self::__construct()
+     */
+    public function block_stash_form_integer($elementname = null, $elementlabel = null, $attributes = array()) {
+        self::__construct($elementname, $elementlabel, $attributes);
     }
 
     /**
