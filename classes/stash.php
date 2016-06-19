@@ -87,6 +87,24 @@ class stash extends persistent {
     }
 
     /**
+     * Check if a course has an item.
+     *
+     * @param int $courseid Course ID.
+     * @param int $itemid Item ID.
+     * @return bool
+     */
+    public static function course_has_item($courseid, $itemid) {
+        global $DB;
+        $sql = "SELECT 'x'
+                  FROM {" . item::TABLE . "} i
+                  JOIN {" . stash::TABLE . "} s
+                    ON s.id = i.stashid
+                 WHERE s.courseid = ?
+                   AND i.id = ?";
+        return $DB->record_exists_sql($sql, [$courseid, $itemid]);
+    }
+
+    /**
      * Return a stash by drop ID.
      *
      * @param  int $dropid The drop ID.
