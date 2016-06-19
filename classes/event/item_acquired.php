@@ -36,7 +36,7 @@ defined('MOODLE_INTERNAL') || die();
  * }
  *
  * @package    block_stash
- * @since      Moodle 3.2
+ * @since      Block stash 1.0
  * @copyright  2016 Adrian Greeve <adriangreeve.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -61,7 +61,7 @@ class item_acquired extends \core\event\base {
         return get_string('eventitemacquired', 'block_stash');
     }
 
-        /**
+    /**
      * Returns relevant URL, override in subclasses.
      * @return \moodle_url
      */
@@ -69,7 +69,6 @@ class item_acquired extends \core\event\base {
         // Not exactly sure where we should direct the user here. It's not easy getting the location of
         // where this event happened.
         return null;
-        // return new \moodle_url('/mod/assign/view.php', array('id' => $this->contextinstanceid));
     }
 
     /**

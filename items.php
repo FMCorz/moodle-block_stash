@@ -32,7 +32,7 @@ require_login($courseid);
 
 $manager = \block_stash\manager::get($courseid);
 $manager->require_enabled();
-$manager->require_view();
+$manager->require_manage();
 
 $url = new moodle_url('/blocks/stash/items.php', array('courseid' => $courseid));
 list($title, $subtitle, $returnurl) = \block_stash\page_helper::setup_for_item($url, $manager);
@@ -52,40 +52,30 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading($title);
 echo $renderer->navigation($manager, 'items');
 
-// Might need a better check for this.
-if ($manager->can_manage()) {
+$addurl = new moodle_url('/blocks/stash/item_edit.php', ['courseid' => $courseid]);
+$addbtn = $OUTPUT->single_button($addurl, get_string('additem', 'block_stash'), 'get');
+$heading = get_string('itemslist', 'block_stash') . $addbtn;
+echo $OUTPUT->heading($heading, 3);
 
-    $addurl = new moodle_url('/blocks/stash/item_edit.php', ['courseid' => $courseid]);
-    $addbtn = $OUTPUT->single_button($addurl, get_string('additem', 'block_stash'), 'get');
-    $heading = get_string('itemslist', 'block_stash') . $addbtn;
-    echo $OUTPUT->heading($heading, 3);
+$table = new \block_stash\output\items_table('itemstable', $manager, $renderer);
+$table->define_baseurl($url);
+echo $table->out(50, false);
 
-    $table = new \block_stash\output\items_table('itemstable', $manager, $renderer);
-    $table->define_baseurl($url);
-    echo $table->out(50, false);
+$PAGE->requires->js_init_code("require([
+    'jquery',
+    'block_stash/drop',
+    'block_stash/drop-snippet-dialogue',
+    'block_stash/item'
+], function($, Drop, Dialogue, Item) {
+    $('table.itemstable [rel=block-stash-drop]').click(function(e) {
+        var node = $(e.currentTarget),
+            item = new Item(node.data('item')),
+            drop = new Drop(node.data('json'), item),
+            dialogue = new Dialogue(drop);
 
-    $PAGE->requires->js_init_code("require([
-        'jquery',
-        'block_stash/drop',
-        'block_stash/drop-snippet-dialogue',
-        'block_stash/item'
-    ], function($, Drop, Dialogue, Item) {
-        $('table.itemstable [rel=block-stash-drop]').click(function(e) {
-            var node = $(e.currentTarget),
-                item = new Item(node.data('item')),
-                drop = new Drop(node.data('json'), item),
-                dialogue = new Dialogue(drop);
-
-            e.preventDefault();
-            dialogue.show(e);
-        });
-    });", true);
-
-} else {
-    // TODO Remove this part.
-    echo $OUTPUT->heading(get_string('stash', 'block_stash'));
-    $page = new \block_stash\output\user_inventory_page($courseid, $USER->id);
-    echo $renderer->render_user_inventory($page);
-}
+        e.preventDefault();
+        dialogue.show(e);
+    });
+});", true);
 
 echo $OUTPUT->footer();

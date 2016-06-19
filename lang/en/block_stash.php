@@ -78,4 +78,4 @@ $string['thedrophasbeendeleted'] = 'The drop \'{$a}\' has been deleted';
 $string['theitemhasbeendeleted'] = 'The item \'{$a}\' has been deleted';
 $string['unlimited'] = 'Unlimited';
 $string['whataredrops'] = 'What are drops?';
-
+$string['yourinventoryisempty'] = 'Your inventory is empty.';

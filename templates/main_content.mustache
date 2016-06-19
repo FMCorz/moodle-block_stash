@@ -26,11 +26,20 @@
     Context variables required for this template:
     * -
 }}
-<div>
-    {{#items}}
-        {{>block_stash/item_small}}
-    {{/items}}
-</div>
-<div>
-<a href="{{inventoryurl}}">{{#str}}settings, block_stash{{/str}}</a>
-</div>
+
+{{^canmanage}}
+    <div>
+        {{#items}}
+            {{>block_stash/item_small}}
+        {{/items}}
+        {{^items}}
+            <div class="alert alert-info">{{#str}}yourinventoryisempty, block_stash{{/str}}</div>
+        {{/items}}
+    </div>
+{{/canmanage}}
+
+{{#canmanage}}
+    <div>
+        <a href="{{inventoryurl}}">{{#str}}settings, block_stash{{/str}}</a>
+    </div>
+{{/canmanage}}

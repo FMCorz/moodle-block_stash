@@ -48,11 +48,15 @@ class block_stash extends block_base {
      * @return stdClass
      */
     public function get_content() {
-
+        if (isset($this->content)) {
+            return $this->content;
+        }
         $this->content = new stdClass();
 
         $renderer = $this->page->get_renderer('block_stash');
-        $page = new \block_stash\output\block_content($this->page->course->id);
+        $manager = \block_stash\manager::get($this->page->course->id);
+        $page = new \block_stash\output\block_content($manager);
+
         $this->content->text = $renderer->render($page);
         $this->content->footer = '';
 

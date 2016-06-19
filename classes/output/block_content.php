@@ -34,12 +34,10 @@ use block_stash\external\item_exporter;
 
 class block_content implements renderable, templatable {
 
-    protected $courseid;
     protected $manager;
 
-    public function __construct($courseid) {
-        $this->courseid = $courseid;
-        $this->manager = \block_stash\manager::get($courseid);
+    public function __construct($manager) {
+        $this->manager = $manager;
     }
 
     public function export_for_template(renderer_base $output) {
@@ -56,7 +54,9 @@ class block_content implements renderable, templatable {
             $data['items'][] = $exported;
         }
 
-        $data['inventoryurl'] = new moodle_url('/blocks/stash/items.php', array('courseid' => $this->courseid));
+        $data['canmanage'] = $this->manager->can_manage();
+        $data['hasitems'] = !empty($useritems);
+        $data['inventoryurl'] = new moodle_url('/blocks/stash/items.php', array('courseid' => $this->manager->get_courseid()));
         return $data;
     }
 
