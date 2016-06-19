@@ -36,12 +36,16 @@ use moodle_url;
  */
 class page_helper {
 
-    public static function setup_for_drop(moodle_url $url, manager $manager, $drop = null, $subtitle = '') {
+    public static function setup_for_drop(moodle_url $url, manager $manager, $drop = null, $subtitle = '', $returntype = null) {
         global $PAGE;
 
         $context = $manager->get_context();
         $heading = $context->get_context_name();
-        $title = get_string('drops', 'block_stash');
+
+        $title = get_string('items', 'block_stash');
+        if ($returntype == 'drops') {
+            $title = get_string('drops', 'block_stash');
+        }
 
         $PAGE->set_context($context);
         $PAGE->set_pagelayout('course');
@@ -49,7 +53,10 @@ class page_helper {
         $PAGE->set_heading($heading);
         $PAGE->set_url($url);
 
-        $returnurl = new moodle_url('/blocks/stash/drops.php', ['courseid' => $manager->get_courseid()]);
+        $returnurl = new moodle_url('/blocks/stash/items.php', ['courseid' => $manager->get_courseid()]);
+        if ($returntype == 'drops') {
+            $returnurl = new moodle_url('/blocks/stash/drops.php', ['courseid' => $manager->get_courseid()]);
+        }
 
         $PAGE->navbar->add(get_string('stash', 'block_stash'));
         $PAGE->navbar->add($title, $returnurl);

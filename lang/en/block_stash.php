@@ -23,27 +23,27 @@
  */
 
 $string['additem'] = 'Add an item';
-$string['addnewdrop'] = 'Add new drop';
+$string['addnewdrop'] = 'Add new location';
 $string['addtoinventory'] = 'Add an item to the inventory.';
 $string['appearance'] = 'Appearance';
 $string['buttontext'] = 'Button text';
 $string['copypaste'] = 'Copy and paste this into an editor in different activities around your course.';
 $string['deletedrop'] = 'Delete {$a}';
 $string['deleteitem'] = 'Delete {$a}';
-$string['dropa'] = 'Drop \'{$a}\'';
+$string['dropa'] = 'Location \'{$a}\'';
 $string['dropname'] = 'Location';
-$string['drops'] = 'Drops';
+$string['drops'] = 'Locations';
 $string['drops_help'] = '
-<p>Drops are locations where your items are in the <em>virtual world</em>. Without a <em>drop</em> an item cannot be picked up by a student.</p>
-<p>Drops come with a few options, including the number of times a single student can pick them up, and how often they reappear after being picked up.</p>
+<p>Locations where your items are in the <em>virtual world</em>. Without a <em>location</em> an item cannot be picked up by a student.</p>
+<p>Locations come with a few options, including the number of times a single student can pick them up, and how often they reappear after being picked up.</p>
 <p>For instance, if your students need a <em>key item</em> to access an activity, you will most likely set it so that your students can only pick it up once in that location.</p>
 <p>But if they need <em>5 coins</em> to access another one, you may set this coin to reappear each day to encourage them to visit the course everyday.</p>
-<p>Note that <em>drops</em> do not magically appear in your course, you will have to add a special code to your content in order for the drop to be displayed.</p>
+<p>Note that items do not magically appear in your course, you will have to add a special code to your content in order for the item to be displayed.</p>
 ';
-$string['dropslist'] = 'List of drops';
+$string['dropslist'] = 'List of locations';
 $string['dropsummary'] = 'Location summary';
 $string['edit'] = 'Edit'; // Should be replaced with the pix icon.
-$string['editdrop'] = 'Edit drop \'{$a}\'';
+$string['editdrop'] = 'Edit location \'{$a}\'';
 $string['edititem'] = 'Edit item \'{$a}\'';
 $string['eglocationofitem'] = 'E.g. The location of the item';
 $string['eventitemacquired'] = 'An item was acquired.';
@@ -56,7 +56,7 @@ $string['itemslist'] = 'List of items';
 $string['locations'] = 'Locations';
 $string['maxnumber'] = 'Maximum collectable';
 $string['maxpickup'] = 'Supplies';
-$string['navdrops'] = 'Drops';
+$string['navdrops'] = 'Locations';
 $string['navinventory'] = 'Stash items';
 $string['navitems'] = 'Items';
 $string['none'] = 'None';
@@ -64,7 +64,7 @@ $string['number'] = 'Number';
 $string['pickupinterval'] = 'Collection interval';
 $string['pluginname'] = 'Stash';
 $string['quantity'] = 'Quantity';
-$string['reallydeletedrop'] = 'Are you sure you want to delete this drop?';
+$string['reallydeletedrop'] = 'Are you sure you want to delete this location?';
 $string['savechanges'] = 'Save changes';
 $string['reallydeleteitem'] = 'Are you sure you want to delete this item?';
 $string['settings'] = 'Settings';
@@ -74,8 +74,8 @@ $string['stash:acquireitems'] = 'User is able to acquire items';
 $string['stash:addinstance'] = 'Add a the block to a page';
 $string['stash:view'] = 'View the stash and its content';
 $string['text'] = 'Text';
-$string['thedrophasbeendeleted'] = 'The drop \'{$a}\' has been deleted';
+$string['thedrophasbeendeleted'] = 'The location \'{$a}\' has been deleted';
 $string['theitemhasbeendeleted'] = 'The item \'{$a}\' has been deleted';
 $string['unlimited'] = 'Unlimited';
-$string['whataredrops'] = 'What are drops?';
+$string['whataredrops'] = 'What are locations?';
 $string['yourinventoryisempty'] = 'Your inventory is empty.';

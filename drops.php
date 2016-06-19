@@ -34,13 +34,14 @@ $manager = \block_stash\manager::get($courseid);
 $manager->require_enabled();
 $manager->require_manage();
 
+$returntype = 'drops';
 $context = $manager->get_context();
 $url = new moodle_url('/blocks/stash/drops.php', ['courseid' => $courseid]);
-$addurl = new moodle_url('/blocks/stash/drop.php', ['courseid' => $courseid]);
+$addurl = new moodle_url('/blocks/stash/drop.php', ['courseid' => $courseid, 'returntype' => $returntype]);
 
 $drop = $dropid ? $manager->get_drop($dropid) : null;
 $item = $drop ? $manager->get_item($drop->get_itemid()) : null;
-list($title, $subtitle, $returnurl) = \block_stash\page_helper::setup_for_drop($url, $manager);
+list($title, $subtitle, $returnurl) = \block_stash\page_helper::setup_for_drop($url, $manager, null, null, $returntype);
 
 switch ($action) {
     case 'delete':
@@ -58,11 +59,6 @@ echo $OUTPUT->header();
 
 echo $OUTPUT->heading($title);
 echo $renderer->navigation($manager, 'drops');
-
-if ($drop && (empty($action) || $action === 'snippet')) {
-    echo $OUTPUT->heading(get_string('dropa', 'block_stash', $drop->get_name()), 3);
-    echo $renderer->drop_snippet_ui($drop, $item, $context);
-}
 
 $strlist = get_string('dropslist', 'block_stash');
 $helpbtn = $OUTPUT->help_icon('drops', 'block_stash');

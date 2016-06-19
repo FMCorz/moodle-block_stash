@@ -31,6 +31,7 @@ if (!$dropid) {
     $courseid = \block_stash\manager::get_courseid_by_dropid($dropid);
 }
 $itemid = optional_param('itemid', 0, PARAM_INT);
+$returntype = optional_param('returntype', null, PARAM_ALPHA);
 
 require_login($courseid);
 
@@ -39,9 +40,12 @@ $manager->require_enabled();
 $manager->require_manage();
 
 $url = new moodle_url('/blocks/stash/drop.php', ['courseid' => $manager->get_courseid(), 'dropid' => $dropid]);
+if (!empty($returntype)) {
+    $url->param('returntype', $returntype);
+}
 $drop = $dropid ? $manager->get_drop($dropid) : null;
 $pagetitle = $drop ? get_string('editdrop', 'block_stash', $drop->get_name()) : get_string('addnewdrop', 'block_stash');
-list($title, $subtitle, $returnurl) = \block_stash\page_helper::setup_for_drop($url, $manager, $drop, $pagetitle);
+list($title, $subtitle, $returnurl) = \block_stash\page_helper::setup_for_drop($url, $manager, $drop, $pagetitle, $returntype);
 
 $item = $itemid ? $manager->get_item($itemid) : ($drop ? $manager->get_item($drop->get_itemid()) : null);
 $form = new \block_stash\form\drop($url->out(false), ['persistent' => $drop, 'item' => $item, 'manager' => $manager]);
@@ -58,7 +62,9 @@ $renderer = $PAGE->get_renderer('block_stash');
 echo $OUTPUT->header();
 
 echo $OUTPUT->heading($title, 2);
-echo $renderer->navigation($manager, 'drops');
+
+// Drops appear under 'items' by default.
+echo $renderer->navigation($manager, $returntype == 'drops' ? 'drops' : 'items');
 if (!empty($subtitle)) {
     echo $OUTPUT->heading($subtitle, 3);
 }

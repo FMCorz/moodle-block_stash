@@ -91,11 +91,15 @@ class renderer extends plugin_renderer_base {
                 new moodle_url('/blocks/stash/items.php', ['courseid' => $courseid]),
                 get_string('navitems', 'block_stash')
             );
-            $tabs[] = new tabobject(
-                'drops',
-                new moodle_url('/blocks/stash/drops.php', ['courseid' => $courseid]),
-                get_string('navdrops', 'block_stash')
-            );
+
+            // Presently we hide the drops page by default.
+            if ($page == 'drops') {
+                $tabs[] = new tabobject(
+                    'drops',
+                    new moodle_url('/blocks/stash/drops.php', ['courseid' => $courseid]),
+                    get_string('navdrops', 'block_stash')
+                );
+            }
         }
 
         // If there is only one page, then that is the page we are on.

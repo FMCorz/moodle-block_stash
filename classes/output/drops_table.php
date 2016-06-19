@@ -119,7 +119,7 @@ class drops_table extends table_sql {
         // $actions[] = $actionlink;
 
         $url = new moodle_url('/blocks/stash/drop.php');
-        $url->params(['dropid' => $row->id, 'courseid' => $this->manager->get_courseid()]);
+        $url->params(['dropid' => $row->id, 'courseid' => $this->manager->get_courseid(), 'returntype' => 'drops']);
         $actionlink = $OUTPUT->action_link($url, '', null, null, new pix_icon('t/edit',
             get_string('editdrop', 'block_stash', $row->name)));
         $actions[] = $actionlink;
