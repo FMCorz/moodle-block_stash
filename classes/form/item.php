@@ -29,7 +29,9 @@ class item extends persistent {
 
     protected static $persistentclass = 'block_stash\\item';
 
-    protected static $foreignfields = array('image');
+    protected static $fieldstoremove = array('save', 'submitbutton');
+
+    protected static $foreignfields = array('image', 'saveandnext');
 
     /**
      * Define the form - called by parent constructor
@@ -62,7 +64,20 @@ class item extends persistent {
         $mform->addElement('filemanager', 'image', 'Image', array(), $this->_customdata['fileareaoptions']);
         $mform->addRule('image', null, 'required', null, 'client');
 
-        $this->add_action_buttons(true, get_string('savechanges', 'block_stash'));
+        // Buttons.
+        $buttonarray = [];
+        if (!$this->get_persistent()->get_id()) {
+            // Only for new items.
+            $buttonarray[] = &$mform->createElement('submit', 'saveandnext', get_string('saveandnext', 'block_stash'),
+                ['class' => 'form-submit']);
+            $buttonarray[] = &$mform->createElement('submit', 'save', get_string('savechanges', 'block_stash'));
+        } else {
+            $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('savechanges', 'block_stash'));
+        }
+
+        $buttonarray[] = &$mform->createElement('cancel');
+        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
+        $mform->closeHeaderBefore('buttonar');
     }
 
 }

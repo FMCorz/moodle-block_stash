@@ -57,10 +57,15 @@ $form->set_data((object) array('image' => $draftitemid));
 
 if ($data = $form->get_data()) {
 
+    $saveandnext = !empty($data->saveandnext);
+    unset($data->saveandnext);
     $draftitemid = $data->image;
     unset($data->image);
 
     $thing = $manager->create_or_update_item($data, $draftitemid);
+    if ($saveandnext) {
+        redirect(new moodle_url('/blocks/stash/drop.php', ['itemid' => $thing->get_id(), 'courseid' => $manager->get_courseid()]));
+    }
     redirect($returnurl);
 
 } else if ($form->is_cancelled()) {
