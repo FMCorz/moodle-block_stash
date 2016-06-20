@@ -60,8 +60,12 @@ class block_stash extends block_base {
         }
         $this->content = new stdClass();
 
-        $renderer = $this->page->get_renderer('block_stash');
         $manager = \block_stash\manager::get($this->page->course->id);
+        if (!$manager->can_view()) {
+            return $this->content;
+        }
+
+        $renderer = $this->page->get_renderer('block_stash');
         $page = new \block_stash\output\block_content($manager);
 
         $this->content->text = $renderer->render($page);

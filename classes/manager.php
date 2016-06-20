@@ -26,9 +26,10 @@ namespace block_stash;
 defined('MOODLE_INTERNAL') || die();
 
 use coding_exception;
-use moodle_exception;
 use context_course;
 use context_user;
+use moodle_exception;
+use required_capability_exception;
 use stdClass;
 
 /**
@@ -273,11 +274,12 @@ class manager {
     /**
      * Get the stash.
      *
+     * For internal use, this does not perform any capability checks.
+     *
      * @return stash
      */
     public function get_stash() {
         $this->require_enabled();
-        $this->require_view();
 
         if (!$this->stash) {
             $stash = stash::get_record(['courseid' => $this->courseid]);
@@ -293,12 +295,13 @@ class manager {
     /**
      * Get an item.
      *
+     * For internal use, this does not perform any capability checks.
+     *
      * @param int $itemid The item ID.
      * @return item
      */
     public function get_item($itemid) {
         $this->require_enabled();
-        $this->require_view();
 
         $item = new item($itemid);
         if ($item->get_stashid() != $this->get_stash()->get_id()) {
@@ -340,12 +343,13 @@ class manager {
     /**
      * Get an item drop.
      *
+     * For internal use, this does not perform any capability checks.
+     *
      * @param int $drop The drop ID.
      * @return item
      */
     public function get_drop($dropid) {
         $this->require_enabled();
-        $this->require_view();
 
         $drop = new \block_stash\drop($dropid);
         if (!$this->is_item_in_stash($drop->get_itemid())) {
@@ -365,7 +369,6 @@ class manager {
         $this->require_enabled();
         $this->require_manage();
 
-
         if (!$this->is_item_in_stash($itemid)) {
             throw new coding_exception('Unexpected item ID.');
         }
@@ -379,7 +382,7 @@ class manager {
      */
     public function get_items() {
         $this->require_enabled();
-        $this->require_view();
+        $this->require_manage();
 
         return item::get_records(['stashid' => $this->get_stash()->get_id()], 'name');
     }
@@ -387,19 +390,14 @@ class manager {
     /**
      * Get the item of a user.
      *
+     * For internal use, this does not perform any capability checks.
+     *
      * @param int $userid The user ID.
      * @param int $itemid The item ID.
      * @return user_item
      */
     public function get_user_item($userid, $itemid) {
         global $USER;
-        $this->require_enabled();
-
-        if ($userid == $USER->id) {
-            $this->require_view();
-        } else {
-            $this->require_manage();
-        }
 
         if (!$this->is_item_in_stash($itemid)) {
             throw new coding_exception('Unexpected item ID.');
@@ -473,9 +471,7 @@ class manager {
      */
     public function is_drop_visible($droporid, $userid = null) {
         global $USER;
-
         $this->require_enabled();
-        $this->require_view();
 
         $userid = !empty($userid) ? $userid : $USER->id;
         if ($userid == $USER->id) {
@@ -499,10 +495,7 @@ class manager {
      * @param int $itemid The item ID.
      * @return bool
      */
-    public function is_item_in_stash($itemid) {
-        $this->require_enabled();
-        $this->require_view();
-
+    protected function is_item_in_stash($itemid) {
         return item::is_item_in_stash($itemid, $this->get_stash()->get_id());
     }
 
@@ -662,7 +655,7 @@ class manager {
      */
     public function require_view($userid = null) {
         if (!$this->can_view($userid)) {
-            throw new required_capability_exception($this->get_context(), self::CAN_VIEW, 'nopermissions');
+            throw new required_capability_exception($this->get_context(), self::CAN_VIEW, 'nopermissions', '');
         }
     }
 
