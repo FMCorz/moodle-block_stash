@@ -77,7 +77,7 @@ class drop extends persistent {
 
         // Name.
         $mform->addElement('text', 'name', get_string('dropname', 'block_stash'),
-            'maxlength="100" placeholder="' . s(get_string('eglocationofitem', 'block_stash')) . '"');
+            'maxlength="100" placeholder="' . s(get_string('eginthecastle', 'block_stash')) . '"');
         $mform->setType('name', PARAM_NOTAGS);
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 100), 'maxlength', 100, 'client');
