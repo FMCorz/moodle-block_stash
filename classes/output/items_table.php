@@ -209,4 +209,19 @@ class items_table extends table_sql {
         echo $OUTPUT->heading(get_string('nothingtodisplay'), 4);
     }
 
+    /**
+     * Defines a help icon for the header
+     *
+     * Always use this function if you need to create header with sorting and help icon.
+     *
+     * @param renderable[] $helpicons An array of renderable objects to be used as help icons
+     */
+    public function define_help_for_headers($helpicons) {
+        // Check if parent method exists.
+        if (method_exists('table_sql', 'define_help_for_headers')) {
+            parent::define_help_for_headers($helpicons);
+        }
+        // This method does not exist in the parent yet. Do nothing.
+    }
+
 }
