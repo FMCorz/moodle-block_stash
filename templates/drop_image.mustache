@@ -1,0 +1,53 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    Drop with an image and an optional button.
+}}
+<div id="{{uuid}}" style="display: {{#checkvisibility}}none{{/checkvisibility}}{{^checkvisibility}}inline{{/checkvisibility}};">
+    <div class="block-stash-item">
+        {{^actiontext}}<a href="#">{{/actiontext}}
+        <div class="item-image" style="background-image: url({{drop.item.imageurl}});">
+            <div class="item-label" title="{{drop.item.name}}">{{drop.item.name}}</div>
+        </div>
+        {{^actiontext}}</a>{{/actiontext}}
+        {{#actiontext}}
+            <div class="item-action">
+                <button>{{.}}</button>
+            </div>
+        {{/actiontext}}
+    </div>
+</div>
+{{#js}}
+require(["jquery", "block_stash/drop"], function($, D) {
+    var d = new D({id: {{drop.id}}, hashcode: '{{drop.hashcode}}'}),
+        n = $("#{{uuid}}");
+
+    if (!n.length) return;
+
+    {{#checkvisibility}}
+    d.isVisible().then(function() {
+        n.css('display', 'inline');
+    });
+    {{/checkvisibility}}
+
+    n.find("a, button").click(function(e) {
+        e.preventDefault();
+        d.pickup();
+        n.remove();
+    });
+});
+{{/js}}

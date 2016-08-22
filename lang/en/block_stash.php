@@ -66,6 +66,7 @@ $string['navinventory'] = 'Stash items';
 $string['navitems'] = 'Items';
 $string['none'] = 'None';
 $string['number'] = 'Number';
+$string['pickupa'] = 'Pick up \'{$a}\'';
 $string['pickupinterval'] = 'Collection interval';
 $string['pickupinterval_help'] = 'This defines the time required for the item to re-appear to students who already picked it up once. For instance, if you created an item \'cake\' you could set its collection interval to 24 hours to simulate the time it takes for the baker to bake another one. It is important to note that students are not affected by the pickups of other students. This setting has no effect when \'Supplies\' is set to \'1\'.';
 $string['pluginname'] = 'Stash';
