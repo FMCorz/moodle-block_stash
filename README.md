@@ -37,11 +37,11 @@ Note that teachers cannot pick up the objects, for them they will always re-appe
 Recommended plugins
 -------------------
 
-## Stash filter
+### Stash filter
 
 This [filter plugin](https://moodle.org/plugins/filter_stash) makes it easier and more reliable to add the items to your course content. We very highly recommend you to use it.
 
-## Stash availability
+### Stash availability
 
 This [availability plugin](https://github.com/FMCorz/moodle-availability_stash) allows to restrict the access to activity modules and resources based on the objects collected by a student.
 
