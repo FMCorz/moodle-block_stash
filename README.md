@@ -21,6 +21,8 @@ Installation
 
 Simply install the plugin and add the block to a course page.
 
+_Please read the [Recommended plugins](#recommended-plugins) section._
+
 Getting started
 ---------------
 
@@ -32,10 +34,16 @@ Getting started
 When viewing the content the object will now appear.
 Note that teachers cannot pick up the objects, for them they will always re-appear.
 
-Restricting access based on students' objects
----------------------------------------------
+Recommended plugins
+-------------------
 
-Have a look at the availability plugin [Stash](https://github.com/FMCorz/moodle-availability_stash).
+## Stash filter
+
+This [filter plugin](https://moodle.org/plugins/filter_stash) makes it easier and more reliable to add the items to your course content. We very highly recommend you to use it.
+
+## Stash availability
+
+This [availability plugin](https://github.com/FMCorz/moodle-availability_stash) allows to restrict the access to activity modules and resources based on the objects collected by a student.
 
 License
 -------
