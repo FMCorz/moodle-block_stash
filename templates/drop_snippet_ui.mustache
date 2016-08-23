@@ -63,15 +63,26 @@
             </div>
         </div>
     </div>
+
+    {{#haswarnings}}
+    <div class="row-fluid">
+        <div class="span12">
+            {{#warnings}}
+                <div class="alert alert-warning"><small>{{{.}}}</small></div>
+            {{/warnings}}
+        </div>
+    </div>
+    {{/haswarnings}}
 </div>
 
 {{#js}}
 require([
     'block_stash/item',
     'block_stash/drop',
-    'block_stash/drop-snippet-maker',
-    'block_stash/drop-snippet-ui'
-], function(Item, Drop, DropSnippetMaker, DropSnippetUI) {
+    'block_stash/drop-snippet-ui',
+    {{#altsnippetmaker}}'{{{.}}}'{{/altsnippetmaker}}
+    {{^altsnippetmaker}}'block_stash/drop-snippet-maker'{{/altsnippetmaker}}
+], function(Item, Drop, DropSnippetUI, DropSnippetMaker) {
     var item = new Item({{{itemjson}}});
     var drop = new Drop({{{dropjson}}}, item);
     var dsm = new DropSnippetMaker(drop);

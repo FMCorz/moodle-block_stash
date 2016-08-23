@@ -24,9 +24,7 @@
 define([
     'jquery',
     'core/templates',
-    'core/yui',
-    'block_stash/drop-snippet-maker',
-    'block_stash/drop-snippet-ui',
+    'core/yui'
 ], function($, Templates, Y) {
 
     /**
@@ -49,7 +47,9 @@ define([
     Dialog.prototype._drop = null;
     Dialog.prototype._maker = null;
     Dialog.prototype._ready = null;
+    Dialog.prototype._altSnippetMaker = null;
     Dialog.prototype._ui = null;
+    Dialog.prototype._warnings = null;
 
     /**
      * Initialise the things.
@@ -114,15 +114,35 @@ define([
             dropjson: JSON.stringify(this._drop.getData()),
             item: this._drop.getItem().getData(),
             itemjson: JSON.stringify(this._drop.getItem().getData()),
+            altsnippetmaker: this._altSnippetMaker,
+            warnings: this._warnings,
+            haswarnings: this._warnings && this._warnings.length,
         };
         return Templates.render('block_stash/drop_snippet_dialogue', context);
+    };
+
+    /**
+     * Sets an alternate snippet maker module.
+     *
+     * @param {String} module The name of the module, or null.
+     */
+    Dialog.prototype.setAlternateSnippetMaker = function(module) {
+        this._altSnippetMaker = module;
+    };
+
+    /**
+     * Sets warnings to display.
+     *
+     * @param {Array} warnings An array of warnings.
+     */
+    Dialog.prototype.setWarnings = function(warnings) {
+        this._warnings = warnings;
     };
 
     /**
      * Initialise the things.
      *
      * @param {Event} e The event.
-     * @return {Void}
      */
     Dialog.prototype.show = function(e) {
         this._ready.then(function() {

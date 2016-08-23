@@ -223,7 +223,6 @@ define([
      * Set the display type.
      *
      * @param {String} v The display type.
-     * @return {Void}
      */
     Maker.prototype.setDisplayType = function(v) {
         this._displayType = v;
@@ -233,7 +232,6 @@ define([
      * Set the action text.
      *
      * @param {String} v The action text.
-     * @return {Void}
      */
     Maker.prototype.setActionText = function(v) {
         this._actionText = v;
@@ -243,7 +241,6 @@ define([
      * Set the label.
      *
      * @param {String} v The label.
-     * @return {Void}
      */
     Maker.prototype.setLabel = function(v) {
         this._label = v;
@@ -261,7 +258,7 @@ define([
     /**
      * Wrap some script in a function waiting for the document to be ready.
      *
-     * @param {String} v The script.
+     * @param {String} code The script.
      * @return {String} The new script.
      */
     Maker.prototype._wrapForOnReady = function(code) {
