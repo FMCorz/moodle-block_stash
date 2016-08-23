@@ -106,13 +106,13 @@ $PAGE->requires->js_init_code("require([
     'block_stash/drop-snippet-dialogue',
     'block_stash/item'
 ], function($, Drop, Dialogue, Item) {
+    var altsnippetmaker = $altsnippetmaker,
+        warnings = $warnings;
     $('table.itemstable [rel=block-stash-drop]').click(function(e) {
         var node = $(e.currentTarget),
             item = new Item(node.data('item')),
             drop = new Drop(node.data('json'), item),
-            dialogue = new Dialogue(drop, $altsnippetmaker);
-            dialogue.setAlternateSnippetMaker($altsnippetmaker);
-            dialogue.setWarnings($warnings);
+            dialogue = new Dialogue(drop, warnings, altsnippetmaker);
 
         e.preventDefault();
         dialogue.show(e);

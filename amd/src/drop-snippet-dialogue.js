@@ -31,12 +31,15 @@ define([
      * Snippet dialogue class.
      *
      * @param {Drop} drop The drop.
-     * @param {Node} container The container of the Dialog.
+     * @param {Array} warnings List of warnings.
+     * @param {String} altSnippetMaker The name of the alternat snippet maker module.
      */
-    function Dialog(drop) {
+    function Dialog(drop, warnings, altSnippetMaker) {
         var deferred = $.Deferred();
         this._ready = deferred.promise();
         this._drop = drop;
+        this._warnings = warnings;
+        this._altSnippetMaker = altSnippetMaker;
         Y.use('moodle-core-notification', function() {
             this._init().then(function() {
                 deferred.resolve();
@@ -119,24 +122,6 @@ define([
             haswarnings: this._warnings && this._warnings.length,
         };
         return Templates.render('block_stash/drop_snippet_dialogue', context);
-    };
-
-    /**
-     * Sets an alternate snippet maker module.
-     *
-     * @param {String} module The name of the module, or null.
-     */
-    Dialog.prototype.setAlternateSnippetMaker = function(module) {
-        this._altSnippetMaker = module;
-    };
-
-    /**
-     * Sets warnings to display.
-     *
-     * @param {Array} warnings An array of warnings.
-     */
-    Dialog.prototype.setWarnings = function(warnings) {
-        this._warnings = warnings;
     };
 
     /**
