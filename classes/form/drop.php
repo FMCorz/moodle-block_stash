@@ -42,6 +42,10 @@ class drop extends persistent {
 
     protected static $persistentclass = 'block_stash\\drop';
 
+    protected static $fieldstoremove = array('save', 'submitbutton');
+
+    protected static $foreignfields = array('saveandnext');
+
     public function definition() {
         global $PAGE, $OUTPUT;
 
@@ -93,7 +97,19 @@ class drop extends persistent {
         $mform->setType('pickupinterval', PARAM_INT);
         $mform->addHelpButton('pickupinterval', 'pickupinterval', 'block_stash');
 
-        $this->add_action_buttons(true, get_string('savechanges', 'block_stash'));
-    }
+        // Buttons.
+        $buttonarray = [];
+        if (!$this->get_persistent()->get_id()) {
+            // Only for new items.
+            $buttonarray[] = &$mform->createElement('submit', 'saveandnext', get_string('saveandnext', 'block_stash'),
+                ['class' => 'form-submit']);
+            $buttonarray[] = &$mform->createElement('submit', 'save', get_string('savechanges', 'block_stash'));
+        } else {
+            $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('savechanges', 'block_stash'));
+        }
+
+        $buttonarray[] = &$mform->createElement('cancel');
+        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
+        $mform->closeHeaderBefore('buttonar');    }
 
 }

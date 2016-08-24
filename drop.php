@@ -50,7 +50,20 @@ list($title, $subtitle, $returnurl) = \block_stash\page_helper::setup_for_drop($
 $item = $itemid ? $manager->get_item($itemid) : ($drop ? $manager->get_item($drop->get_itemid()) : null);
 $form = new \block_stash\form\drop($url->out(false), ['persistent' => $drop, 'item' => $item, 'manager' => $manager]);
 if ($data = $form->get_data()) {
+
+    $saveandnext = !empty($data->saveandnext);
+    unset($data->saveandnext);
+
     $drop = $manager->create_or_update_drop($data);
+
+    if ($saveandnext) {
+        $dropsnippeturl = new moodle_url('/blocks/stash/drop_snippet.php', ['dropid' => $drop->get_id()]);
+        if (!empty($returntype)) {
+            $dropsnippeturl->param('returntype', $returntype);
+        }
+        redirect($dropsnippeturl);
+    }
+
     $returnurl->param('dropid', $drop->get_id());
     redirect($returnurl);
 

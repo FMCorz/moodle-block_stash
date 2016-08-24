@@ -59,6 +59,12 @@ class renderer extends plugin_renderer_base {
         $exporter = new item_exporter($item, ['context' => $context]);
         $data->item = $exporter->export($this);
         $data->itemjson = json_encode($data->item);
+
+        list($altsnippetmaker, $warning) = \block_stash\helper::get_alternate_amd_snippet_maker($context);
+        $data->altsnippetmaker = $altsnippetmaker;
+        $data->warnings = [$warning];
+        $data->haswarnings = !empty($warning);
+
         return parent::render_from_template('block_stash/drop_snippet_ui', $data);
     }
 

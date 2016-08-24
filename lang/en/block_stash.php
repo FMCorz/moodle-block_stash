@@ -25,7 +25,9 @@
 $string['additem'] = 'Add an item';
 $string['addnewdrop'] = 'Add new location';
 $string['addtoinventory'] = 'Add an item to the inventory.';
+$string['aftercreatinglocationhelp'] = 'Once you have created the item and the location, you need to add a code snippet to your course for the item to be displayed. After customising how the item will be displayed to your students, copy the snippet below and paste it in your content, in the description of an assignment for instance.';
 $string['appearance'] = 'Appearance';
+$string['backtostart'] = 'Back to the main screen';
 $string['buttontext'] = 'Button text';
 $string['copypaste'] = 'Copy and paste this into an editor in different activities around your course.';
 $string['deletedrop'] = 'Delete {$a}';
@@ -42,6 +44,7 @@ $string['drops_help'] = '
 <p>Note that items do not magically appear in your course, you will have to add a special code to your content in order for the item to be displayed.</p>
 ';
 $string['dropslist'] = 'List of locations';
+$string['dropsnippet'] = 'Snippet for \'{$a}\'';
 $string['dropsummary'] = 'Location summary';
 $string['edit'] = 'Edit'; // Should be replaced with the pix icon.
 $string['editdrop'] = 'Edit location \'{$a}\'';
@@ -90,4 +93,5 @@ $string['thedrophasbeendeleted'] = 'The location \'{$a}\' has been deleted';
 $string['theitemhasbeendeleted'] = 'The item \'{$a}\' has been deleted';
 $string['unlimited'] = 'Unlimited';
 $string['whataredrops'] = 'What are locations?';
+$string['whatsnext'] = 'What\'s next?';
 $string['yourinventoryisempty'] = 'Your inventory is empty.';

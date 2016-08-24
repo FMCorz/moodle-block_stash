@@ -53,7 +53,7 @@ echo $OUTPUT->heading($title);
 echo $renderer->navigation($manager, 'items');
 
 $addurl = new moodle_url('/blocks/stash/item_edit.php', ['courseid' => $courseid]);
-$addbtn = $OUTPUT->single_button($addurl, get_string('additem', 'block_stash'), 'get');
+$addbtn = $OUTPUT->single_button($addurl, get_string('additem', 'block_stash'), 'get', ['class' => 'singlebutton heading-button']);
 $heading = get_string('itemslist', 'block_stash') . $addbtn;
 echo $OUTPUT->heading($heading, 3);
 
@@ -61,43 +61,8 @@ $table = new \block_stash\output\items_table('itemstable', $manager, $renderer);
 $table->define_baseurl($url);
 echo $table->out(50, false);
 
-
-// Check availability of the filter.
-$pluginmanager = core_plugin_manager::instance();
-$filters = $pluginmanager->get_plugins_of_type('filter');
-$hasfilter = array_key_exists('stash', $filters);
-
-// TODO: When MDL-55663 lands everywhere we should use the core function.
-// $enabledfilters = $pluginmanager->get_enabled_plugins('filter');
-// $hasfilterenabled = array_key_exists('stash', $enabledfilters);
-$hasfilterenabled = $DB->record_exists_select('filter_active', 'filter = ? AND contextid = ? AND active != ?', [
-    'stash', context_system::instance()->id, TEXTFILTER_DISABLED]);
-
-$activefilters = filter_get_active_in_context($manager->get_context());
-$isfilteractive = array_key_exists('stash', $activefilters);
-
-$altsnippetmaker = json_encode($isfilteractive ? 'filter_stash/drop-snippet-maker' : null);
-
-$a = (object) [
-    'installurl' => (new moodle_url('https://moodle.org/plugins/filter_stash'))->out(),
-    'enableurl' => (new moodle_url('/admin/filters.php'))->out(),
-    'activeurl' => (new moodle_url('/filter/manage.php', ['contextid' => $manager->get_context()->id]))->out(),
-];
-
-// Note, the order of the checks is important!
-$warning = null;
-if ($isfilteractive) {
-    // All good.
-} else if (!$hasfilter) {
-    // It is not installed.
-    $warning = get_string('filterstashnotinstalled', 'block_stash', $a);
-} else if (!$hasfilterenabled) {
-    // It is globally disabled, it cannot be overriden in other contexts.
-    $warning = get_string('filterstashnotenabled', 'block_stash', $a);
-} else if (!$isfilteractive) {
-    // It is not enabled in the course.
-    $warning = get_string('filterstashnotactive', 'block_stash', $a);
-}
+list($altsnippetmaker, $warning) = \block_stash\helper::get_alternate_amd_snippet_maker($manager->get_context());
+$altsnippetmaker = json_encode($altsnippetmaker);
 $warnings = json_encode($warning ? [$warning] : null);
 
 $PAGE->requires->js_init_code("require([
