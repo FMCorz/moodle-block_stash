@@ -15,13 +15,14 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    Small item.
+    User item.
 
-    This should be kept in sync with other item partials.
+    Displays a user item, which is effectively the item with
+    the quantity owned by the user.
 }}
-<div class="block-stash-item item-quantity-{{quantity}}" title="{{name}}">
-    <div class="item-image" style="background-image: url({{imageurl}});">
-        <div class="item-quantity">{{quantity}}</div>
-        <div class="item-label">{{name}}</div>
+<div class="block-stash-item item-small item-quantity-{{useritem.quantity}}" title="{{item.name}}" data-id="{{item.id}}">
+    <div class="item-image" style="background-image: url({{item.imageurl}});">
+        <div class="item-quantity">{{useritem.quantity}}</div>
+        <div class="item-label">{{item.name}}</div>
     </div>
 </div>

@@ -39,6 +39,7 @@ use external_single_structure;
 use external_multiple_structure;
 
 use block_stash\manager;
+use block_stash\external\user_item_summary_exporter;
 
 /**
  * External API class.
@@ -127,6 +128,7 @@ class external extends external_api {
      * @return bool
      */
     public static function pickup_drop($dropid, $hashcode) {
+        global $PAGE, $USER;
         $params = self::validate_parameters(self::pickup_drop_parameters(), compact('dropid', 'hashcode'));
         extract($params);
 
@@ -140,7 +142,14 @@ class external extends external_api {
 
         $manager->pickup_drop($drop);
 
-        return true;
+        // TODO Do not disclose so much information to the student.
+        $output = $PAGE->get_renderer('block_stash');
+        $exporter = new user_item_summary_exporter([], [
+            'context' => $manager->get_context(),
+            'item' => $manager->get_item($drop->get_itemid()),
+            'useritem' => $manager->get_user_item($USER->id, $drop->get_itemid())
+        ]);
+        return $exporter->export($output);
     }
 
     /**
@@ -148,6 +157,6 @@ class external extends external_api {
      * @return external_value
      */
     public static function pickup_drop_returns() {
-        return new external_value(PARAM_BOOL);
+        return user_item_summary_exporter::get_read_structure();
     }
 }

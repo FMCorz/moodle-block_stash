@@ -14,7 +14,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Item module.
+ * Base module.
+ *
+ * This simply allows for data to be added and fetched from an object.
  *
  * @package    block_stash
  * @copyright  2016 Frédéric Massart - FMCorz.net
@@ -22,19 +24,37 @@
  */
 
 define([
-    'block_stash/base'
-], function(Base) {
+], function() {
 
     /**
-     * Item class.
+     * Base class.
      *
-     * @param {Object} itemdata Data of the item.
+     * @param {Object} data Data of the item.
      */
-    function Item(itemdata) {
-        Base.prototype.constructor.apply(this, [itemdata]);
+    function Base(data) {
+        this._data = data || {};
     }
-    Item.prototype = Object.create(Base.prototype);
+    Base.prototype._data = null;
 
-    return /** @alias module:block_stash/item */ Item;
+    /**
+     * Return a property of the item.
+     *
+     * @param {String} property The name of the property.
+     * @return {Mixed}
+     */
+    Base.prototype.get = function(property) {
+        return this._data[property];
+    };
+
+    /**
+     * Return the data of this item.
+     *
+     * @return {Object}
+     */
+    Base.prototype.getData = function() {
+        return this._data;
+    };
+
+    return /** @alias module:block_stash/base */ Base;
 
 });

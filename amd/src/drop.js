@@ -25,7 +25,11 @@ define([
     'jquery',
     'core/ajax',
     'core/log',
-], function($, Ajax, Log) {
+    'block_stash/base',
+    'block_stash/counselor',
+    'block_stash/item',
+    'block_stash/user-item',
+], function($, Ajax, Log, Base, Counselor, Item, UserItem) {
 
     /**
      * Drop class.
@@ -34,29 +38,12 @@ define([
      * @param {Item} item The item related to this drop.
      */
     function Drop(dropdata, item) {
-        this._data = dropdata || {};
+        Base.prototype.constructor.apply(this, [dropdata]);
         this._item = item;
     }
-    Drop.prototype._data = null;
+    Drop.prototype = Object.create(Base.prototype);
 
-    /**
-     * Return a property of the drop.
-     *
-     * @param {String} property The name of the property.
-     * @return {Mixed}
-     */
-    Drop.prototype.get = function(property) {
-        return this._data[property];
-    };
-
-    /**
-     * Return the data of this drop.
-     *
-     * @return {Object}
-     */
-    Drop.prototype.getData = function() {
-        return this._data;
-    };
+    Drop.prototype.EVENT_PICKEDUP = 'drop:pickedup';
 
     /**
      * Return the item of this drop.
@@ -101,7 +88,16 @@ define([
             }
         }])[0].fail(function() {
             Log.debug('The item could not be picked up.');
-        });
+
+        }).then(function(data) {
+            // Do not change this._item as it's not a predictable behaviour.
+            var userItem = new UserItem(data.useritem, new Item(data.item));
+            Counselor.trigger(this.EVENT_PICKEDUP, {
+                id: this.get('id'),
+                hashcode: this.get('hashcode'),
+                useritem: userItem
+            });
+        }.bind(this));
     };
 
     return /** @alias module:block_stash/drop */ Drop;

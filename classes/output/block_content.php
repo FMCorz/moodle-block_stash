@@ -30,7 +30,7 @@ use renderable;
 use renderer_base;
 use templatable;
 use moodle_url;
-use block_stash\external\item_exporter;
+use block_stash\external\user_item_summary_exporter;
 
 class block_content implements renderable, templatable {
 
@@ -46,14 +46,18 @@ class block_content implements renderable, templatable {
 
         $useritems = $this->manager->get_all_user_items_in_stash($USER->id);
         foreach ($useritems as $item) {
-            $exporter = new item_exporter($item->item, ['context' => $this->manager->get_context()]);
+            $exporter = new user_item_summary_exporter([], [
+                'context' => $this->manager->get_context(),
+                'item' => $item->item,
+                'useritem' => $item->useritem,
+            ]);
 
             $exported = $exporter->export($output);
-            $exported->quantity = $item->useritem->get_quantity();
 
             $data['items'][] = $exported;
         }
 
+        $data['id'] = $this->manager->get_stash()->get_id();
         $data['canmanage'] = $this->manager->can_manage();
         $data['hasitems'] = !empty($useritems);
         $data['inventoryurl'] = new moodle_url('/blocks/stash/items.php', array('courseid' => $this->manager->get_courseid()));

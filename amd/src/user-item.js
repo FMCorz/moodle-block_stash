@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Item module.
+ * User item module.
  *
  * @package    block_stash
  * @copyright  2016 Frédéric Massart - FMCorz.net
@@ -26,15 +26,25 @@ define([
 ], function(Base) {
 
     /**
-     * Item class.
+     * UserItem class.
      *
-     * @param {Object} itemdata Data of the item.
+     * @param {Object} data Data of the item.
      */
-    function Item(itemdata) {
-        Base.prototype.constructor.apply(this, [itemdata]);
+    function UserItem(data, item) {
+        Base.prototype.constructor.apply(this, [data]);
+        this._item = item;
     }
-    Item.prototype = Object.create(Base.prototype);
+    UserItem.prototype = Object.create(Base.prototype);
 
-    return /** @alias module:block_stash/item */ Item;
+    /**
+     * Return the item of this user item.
+     *
+     * @return {Item}
+     */
+    UserItem.prototype.getItem = function() {
+        return this._item;
+    };
+
+    return /** @alias module:block_stash/user-item */ UserItem;
 
 });

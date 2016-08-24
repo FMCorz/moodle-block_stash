@@ -27,10 +27,11 @@
     * -
 }}
 
+<div id="stash-area-{{id}}" data-id="{{id}}">
 {{^canmanage}}
-    <div>
+    <div class="item-list">
         {{#items}}
-            {{>block_stash/item_small}}
+            {{>block_stash/user_item}}
         {{/items}}
         {{^items}}
             <div class="alert alert-info">{{#str}}yourinventoryisempty, block_stash{{/str}}</div>
@@ -43,3 +44,9 @@
         <a href="{{inventoryurl}}">{{#str}}settings, block_stash{{/str}}</a>
     </div>
 {{/canmanage}}
+</div>
+{{#js}}
+require(['block_stash/stash-area'], function(StashArea) {
+    var Area = new StashArea('#stash-area-{{id}}');
+});
+{{/js}}
