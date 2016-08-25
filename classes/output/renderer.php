@@ -29,10 +29,11 @@ use moodle_url;
 use plugin_renderer_base;
 use renderable;
 use tabobject;
-use block_stash\drop;
+use block_stash\drop as dropmodel;
 use block_stash\item;
 use block_stash\external\drop_exporter;
 use block_stash\external\item_exporter;
+
 
 /**
  * Block Stash renderer class.
@@ -51,7 +52,7 @@ class renderer extends plugin_renderer_base {
      * @param context $context The context of the drop.
      * @return string
      */
-    public function drop_snippet_ui(drop $drop, item $item, context $context) {
+    public function drop_snippet_ui(dropmodel $drop, item $item, context $context) {
         $data = (object) [];
         $exporter = new drop_exporter($drop, ['context' => $context]);
         $data->drop = $exporter->export($this);
