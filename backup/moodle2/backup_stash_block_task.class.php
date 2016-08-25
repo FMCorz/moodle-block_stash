@@ -68,12 +68,9 @@ class backup_stash_block_task extends backup_block_task {
      * @return string
      */
     public static function encode_content_links($content) {
-        static $search = null;
-
-        // Replace Javascript in Snippet.
-        $search = preg_quote('new D({id: ') . '([0-9]+)' . preg_quote(', hashcode: "') . '[a-z0-9]+' . preg_quote('"})');
-        $content = preg_replace('/' . $search . '/i', 'new D($@BLOCKSTASHDROPSNIPPET*$1@$)', $content);
-
+        foreach (\block_stash\restore_decode_rule::get_decode_rules_classes() as $class) {
+            $content = $class::encode_content($content);
+        }
         return $content;
     }
 }

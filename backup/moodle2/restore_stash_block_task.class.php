@@ -85,9 +85,10 @@ class restore_stash_block_task extends restore_block_task {
      * @return array
      */
     public static function define_decode_rules() {
-        return [
-            new block_stash_snippet_item_restore_decode_rule('BLOCKSTASHDROPSNIPPET', '', 'block_stash_drop')
-        ];
+        $rules = array_map(function($class) {
+            return new $class();
+        }, \block_stash\restore_decode_rule::get_decode_rules_classes());
+        return $rules;
     }
 
     /**
@@ -96,72 +97,10 @@ class restore_stash_block_task extends restore_block_task {
      * @return string
      */
     public static function encode_content_links($content) {
-        return $content;
-    }
-}
-
-/**
- * Decode rule to replace values in snippets.
- */
-class block_stash_snippet_item_restore_decode_rule extends restore_decode_rule {
-
-    /** @var array Cache. */
-    protected $cache = array();
-
-    /**
-     * Nasty override to get things done.
-     *
-     * @param string $content The content.
-     * @return string
-     */
-    public function decode($content) {
-        if (preg_match_all($this->cregexp, $content, $matches) === 0) {
-            return $content;
-        }
-
-        foreach ($matches[0] as $key => $tosearch) {
-            foreach ($this->mappings as $mappingkey => $mappingsource) {
-                $oldid = $matches[$mappingkey][$key];
-                $drop = $this->get_drop($oldid);
-            }
-
-            if ($drop) {
-                $replacement = '{id: ' . $drop->get_id() . ', hashcode: "' . $drop->get_hashcode() . '"}';
-            } else {
-                $replacement = '{id: 0, hashcode: "WHOOPS' . $oldid . '"}';
-            }
-            $content = str_replace($tosearch, $replacement, $content);
-
+        foreach (\block_stash\restore_decode_rule::get_decode_rules_classes() as $class) {
+            $content = $class::encode_content($content);
         }
         return $content;
     }
 
-    /**
-     * Get the drop by mapping ID.
-     * @param int $oldid The old drop ID.
-     * @return drop|false
-     */
-    protected function get_drop($oldid) {
-        if (!isset($this->cache[$oldid])) {
-            $newid = $this->get_mapping('block_stash_drop', $oldid);
-            if ($newid) {
-                $this->cache[$oldid] = new drop($newid);
-            } else {
-                $this->cache[$oldid] = false;
-            }
-        }
-        return $this->cache[$oldid];
-    }
-
-    /**
-     * Bypass the validation.
-     * @param string $linkname The link name.
-     * @param string $urltemplate The URL template.
-     * @param string $mappings The mapping.
-     * @return array
-     */
-    protected function validate_params($linkname, $urltemplate, $mappings) {
-        // Bypass validation.
-        return ['1' => $mappings];
-    }
 }
