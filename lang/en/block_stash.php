@@ -93,5 +93,7 @@ $string['thedrophasbeendeleted'] = 'The location \'{$a}\' has been deleted';
 $string['theitemhasbeendeleted'] = 'The item \'{$a}\' has been deleted';
 $string['unlimited'] = 'Unlimited';
 $string['whataredrops'] = 'What are locations?';
+$string['whatisadrophelp'] = 'A location is a place where you intend to display your item.';
+$string['whatsthis'] = 'What\'s this?';
 $string['whatsnext'] = 'What\'s next?';
 $string['yourinventoryisempty'] = 'Your inventory is empty.';

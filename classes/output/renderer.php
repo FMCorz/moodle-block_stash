@@ -25,6 +25,7 @@ namespace block_stash\output;
 defined('MOODLE_INTERNAL') || die();
 
 use context;
+use html_writer;
 use moodle_url;
 use plugin_renderer_base;
 use renderable;
@@ -67,6 +68,36 @@ class renderer extends plugin_renderer_base {
         $data->haswarnings = !empty($warning);
 
         return parent::render_from_template('block_stash/drop_snippet_ui', $data);
+    }
+
+    /**
+     * Explanation on what to do with a drop snippet.
+     *
+     * @return string
+     */
+    public function drop_snippet_whatsnext() {
+        $o = '';
+        $o .= html_writer::start_div('alert alert-info');
+        $o .= html_writer::tag('strong', get_string('whatsnext', 'block_stash'));
+        $o .= ' ';
+        $o .= get_string('aftercreatinglocationhelp', 'block_stash');
+        $o .= html_writer::end_div();
+        return $o;
+    }
+
+    /**
+     * Explanation on what a drop/location is.
+     *
+     * @return string
+     */
+    public function drop_whats_that() {
+        $o = '';
+        $o .= html_writer::start_div('alert alert-info');
+        $o .= html_writer::tag('strong', get_string('whatsthis', 'block_stash'));
+        $o .= ' ';
+        $o .= get_string('whatisadrophelp', 'block_stash');
+        $o .= html_writer::end_div();
+        return $o;
     }
 
     /**

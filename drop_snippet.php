@@ -54,11 +54,7 @@ if (!empty($subtitle)) {
     echo $OUTPUT->heading($subtitle, 3);
 }
 
-echo html_writer::start_div('alert alert-info');
-echo html_writer::tag('strong', get_string('whatsnext', 'block_stash'));
-echo ' ';
-echo get_string('aftercreatinglocationhelp', 'block_stash');
-echo html_writer::end_div();
+echo $renderer->drop_snippet_whatsnext();
 
 echo $renderer->drop_snippet_ui($drop, $item, $manager->get_context());
 

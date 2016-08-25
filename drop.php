@@ -79,7 +79,11 @@ echo $OUTPUT->heading($title, 2);
 // Drops appear under 'items' by default.
 echo $renderer->navigation($manager, $returntype == 'drops' ? 'drops' : 'items');
 if (!empty($subtitle)) {
-    echo $OUTPUT->heading($subtitle, 3);
+    echo $OUTPUT->heading($subtitle . $OUTPUT->help_icon('drops', 'block_stash'), 3);
+}
+
+if (empty($drop)) {
+    echo $renderer->drop_whats_that();
 }
 
 $form->display();
