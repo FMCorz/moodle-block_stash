@@ -55,6 +55,24 @@ class user_item extends persistent {
     }
 
     /**
+     * Delete all entries for a user in a stash.
+     *
+     * @param int $userid The user ID.
+     * @param int $stashid The stash ID.
+     */
+    public static function delete_all_for_user_in_stash($userid, $stashid) {
+        global $DB;
+        $sql = 'DELETE FROM {' . self::TABLE . '}
+                 WHERE userid = :userid
+                   AND itemid IN (
+                       SELECT id
+                         FROM {' . item::TABLE . '}
+                        WHERE stashid = :stashid
+                   )';
+        $DB->execute($sql, ['userid' => $userid, 'stashid' => $stashid]);
+    }
+
+    /**
      * Get all items in the stash of a user.
      *
      * @param int $userid The user ID.

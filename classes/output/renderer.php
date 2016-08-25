@@ -138,6 +138,12 @@ class renderer extends plugin_renderer_base {
                     get_string('navdrops', 'block_stash')
                 );
             }
+
+            $tabs[] = new tabobject(
+                'report',
+                new moodle_url('/blocks/stash/report.php', ['courseid' => $courseid]),
+                get_string('navreport', 'block_stash')
+            );
         }
 
         // If there is only one page, then that is the page we are on.

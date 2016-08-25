@@ -28,7 +28,7 @@
 }}
 
 <div id="stash-area-{{id}}" data-id="{{id}}">
-{{^canmanage}}
+{{#canacquireitems}}
     <div class="item-list">
         {{#items}}
             {{>block_stash/user_item}}
@@ -37,11 +37,14 @@
             <div class="alert alert-info">{{#str}}yourinventoryisempty, block_stash{{/str}}</div>
         {{/items}}
     </div>
-{{/canmanage}}
+{{/canacquireitems}}
 
 {{#canmanage}}
     <div>
-        <a href="{{inventoryurl}}">{{#str}}settings, block_stash{{/str}}</a>
+        <small>
+            <a href="{{inventoryurl}}">{{#str}}setup, block_stash{{/str}}</a> -
+            <a href="{{reporturl}}">{{#str}}report, block_stash{{/str}}</a>
+        </small>
     </div>
 {{/canmanage}}
 </div>

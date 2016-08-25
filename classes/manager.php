@@ -596,6 +596,18 @@ class manager {
     }
 
     /**
+     * Reset the stash of a user.
+     *
+     * This empties the stash as if the user had never had anything.
+     *
+     * @param int $userid The user ID.
+     */
+    public function reset_stash_of($userid) {
+        \block_stash\user_item::delete_all_for_user_in_stash($userid, $this->get_stash()->get_id());
+        \block_stash\drop_pickup::delete_all_for_user_in_stash($userid, $this->get_stash()->get_id());
+    }
+
+    /**
      * Delete all information to do with this instance.
      *
      * @return void

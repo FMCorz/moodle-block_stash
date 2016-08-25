@@ -150,7 +150,6 @@ class restore_stash_block_structure_step extends restore_structure_step {
         $data->userid = $this->get_mappingid('user', $data->userid);
         unset($data->id);
         $ui = new user_item(null, $data);
-        error_log(json_encode($ui->get_errors()));
         $ui->create();
     }
 

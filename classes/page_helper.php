@@ -103,4 +103,34 @@ class page_helper {
         return [$title, $subtitle, $returnurl];
     }
 
+    public static function setup_for_report(moodle_url $url, manager $manager, $user = null, $subtitle = '') {
+        global $PAGE;
+
+        $context = $manager->get_context();
+        $heading = $context->get_context_name();
+        $title = get_string('report', 'block_stash');
+
+        $PAGE->set_context($context);
+        $PAGE->set_pagelayout('course');
+        $PAGE->set_title($title);
+        $PAGE->set_heading($heading);
+        $PAGE->set_url($url);
+
+        $returnurl = new moodle_url('/blocks/stash/report.php', ['courseid' => $manager->get_courseid()]);
+
+        $PAGE->navbar->add(get_string('stash', 'block_stash'));
+        $PAGE->navbar->add($title, $returnurl);
+
+        if (!empty($user)) {
+            $PAGE->navbar->add(fullname($user));
+            if (!empty($subtitle)) {
+                $PAGE->navbar->add($subtitle, $url);
+            }
+        } else if (!empty($subtitle)) {
+            $PAGE->navbar->add($subtitle, $url);
+        }
+
+        return [$title, $subtitle, $returnurl];
+    }
+
 }

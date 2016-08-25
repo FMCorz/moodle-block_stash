@@ -30,11 +30,10 @@
 }
 
 .block-stash-item .item-image .item-quantity {
-    top: 0;
-    left: 0;
-    bottom: auto;
-    right: auto;
-    text-align: left;
+    top: auto;
+    left: auto;
+    right: 0;
+    bottom: 0;
 }
 
 /** Actions (used in drops). */
@@ -53,18 +52,13 @@
     height: 50px;
 }
 
-.block-stash-item.item-small .item-image .item-label {
+.block-stash-item.item-small .item-image .item-label,
+.block-stash-item.item-xsmall .item-image .item-label {
     display: none;
 }
 
-.block-stash-item.item-small .item-image .item-quantity {
-    top: auto;
-    left: auto;
-    right: 0;
-    bottom: 0;
-}
-
-.block-stash-item.item-small:hover .item-label {
+.block-stash-item.item-small:hover .item-label,
+.block-stash-item.item-xsmall:hover .item-label {
     display: block;
     bottom: -22px;
     background-color: black;
@@ -87,9 +81,13 @@
     height: 25px;
 }
 
-.block-stash-item.item-xsmall .item-label,
-.block-stash-item.item-xsmall .item-quantity {
-    display: none;
+.block-stash-item.item-xsmall:hover .item-label {
+    top: 2px;
+    left: 28px;
+    width: auto;
+    bottom: auto;
+    height: 20px;
+    line-height: 20px;
 }
 
 /** Quantity rules. */
@@ -123,6 +121,12 @@
 .path-blocks-stash .block-stash-drop-snippet-dialogue .block-stash-drop-summary h6,
 .path-blocks-stash .block-stash-drop-snippet-dialogue .block-stash-drop-summary p {
     margin-bottom: 0
+}
+.path-blocks-stash .reporttable .c0 {
+    width: 35px;
+}
+.path-blocks-stash .reporttable .stash-items .block-stash-item {
+    margin-bottom: 5px;
 }
 
 /** Snippet UI. */

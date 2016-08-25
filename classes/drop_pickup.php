@@ -59,6 +59,26 @@ class drop_pickup extends persistent {
     }
 
     /**
+     * Delete all entries for a user in a stash.
+     *
+     * @param int $userid The user ID.
+     * @param int $stashid The stash ID.
+     */
+    public static function delete_all_for_user_in_stash($userid, $stashid) {
+        global $DB;
+        $sql = 'DELETE FROM {' . self::TABLE . '}
+                 WHERE userid = :userid
+                   AND dropid IN (
+                       SELECT d.id
+                         FROM {' . drop::TABLE . '} d
+                         JOIN {' . item::TABLE . '} i
+                           ON i.id = d.itemid
+                        WHERE i.stashid = :stashid
+                   )';
+        $DB->execute($sql, ['userid' => $userid, 'stashid' => $stashid]);
+    }
+
+    /**
      * Get a drop pickup for a drop and user.
      *
      * This creates the row if it does not exist.
