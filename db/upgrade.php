@@ -175,6 +175,27 @@ function xmldb_block_stash_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2016052306, 'stash');
     }
 
-    return true;
+    if ($oldversion < 2016082600) {
 
+        // Define field detail to be added to block_stash_items.
+        $table = new xmldb_table('block_stash_items');
+        $field = new xmldb_field('detail', XMLDB_TYPE_TEXT, null, null, null, null, null, 'maxnumber');
+
+        // Conditionally launch add field detail.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $field = new xmldb_field('detailformat', XMLDB_TYPE_INTEGER, '1', null, null, null, null, 'detail');
+
+        // Conditionally launch add field detailformat.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Stash savepoint reached.
+        upgrade_block_savepoint(true, 2016082600, 'stash');
+    }
+
+    return true;
 }

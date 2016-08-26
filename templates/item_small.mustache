@@ -15,10 +15,13 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    Extra small item.
+    Small item.
+
+    This should be kept in sync with other item partials.
 }}
-<div class="block-stash-item item-xsmall" title="{{name}}" data-id="{{id}}">
+<div class="block-stash-item item-small item-quantity-{{quantity}}" title="{{name}}" data-item-id="{{id}}">
     <div class="item-image" style="background-image: url({{imageurl}});">
+        <div class="item-quantity">{{quantity}}</div>
         <div class="item-label">{{name}}</div>
     </div>
 </div>

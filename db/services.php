@@ -42,5 +42,14 @@ $functions = [
         // TODO Add capability name here.
         'capabilities'  => '',
         'ajax'          => true
+    ],
+    'block_stash_get_item_detail' => [
+        'classname'     => 'block_stash\\external',
+        'methodname'    => 'get_item_detail',
+        'description'   => 'Get detail for an item.',
+        'type'          => 'read',
+        // TODO Add capability name here.
+        'capabilities'  => '',
+        'ajax'          => true
     ]
 ];

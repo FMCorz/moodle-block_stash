@@ -121,12 +121,25 @@ class manager {
         $this->require_enabled();
         $this->require_manage();
 
+        $editordetail = $data->detail_editor;
+        $editoroptions = $data->editoroptions;
+        $fileareaoptions = $data->fileareaoptions;
+        unset($data->detail_editor);
+        unset($data->detailtrust);
+        unset($data->editoroptions);
+        unset($data->fileareaoptions);
+
         $item = new item(null, $data);
         if (!$item->get_id()) {
             $item->create();
-        } else {
-            $item->update();
         }
+
+        $data->detail_editor = $editordetail;
+        $data = file_postupdate_standard_editor($data, 'detail', $editoroptions, $this->context, 'block_stash', 'detail'
+                , $item->get_id());
+        $item->set_detail($data->detail);
+        $item->set_detailformat($data->detailformat);
+        $item->update();
 
         // Rename the image to 'image.ext', in case we want to add a second one later.
         $fs = get_file_storage();
@@ -143,7 +156,6 @@ class manager {
             }
         }
 
-        $fileareaoptions = ['maxfiles' => 1];
         file_save_draft_area_files($draftitemid, $this->context->id, 'block_stash', 'item', $item->get_id(), $fileareaoptions);
 
         return $item;

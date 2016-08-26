@@ -50,6 +50,16 @@ class item extends persistent {
                 'type' => PARAM_INT,
                 'default' => null,
                 'null' => NULL_ALLOWED
+            ],
+            'detail' => [
+                'type' => PARAM_RAW,
+                'default' => null,
+                'null' => NULL_ALLOWED
+            ],
+            'detailformat' => [
+                'type' => PARAM_INT,
+                'default' => null,
+                'null' => NULL_ALLOWED
             ]
         ];
     }

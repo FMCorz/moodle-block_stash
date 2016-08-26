@@ -48,8 +48,18 @@
     </div>
 {{/canmanage}}
 </div>
+
 {{#js}}
-require(['block_stash/stash-area'], function(StashArea) {
+require([
+    'jquery',
+    'block_stash/item-detail',
+    'block_stash/stash-area'
+], function($, itemdetail, StashArea) {
     var Area = new StashArea('#stash-area-{{id}}');
+    $('.block-stash-item').click(function(e) {
+        var dialogue = new itemdetail(this.getAttribute("data-id"));
+        e.preventDefault();
+        dialogue.show(e);
+    });
 });
 {{/js}}

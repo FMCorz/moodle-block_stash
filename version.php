@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2016082500;
+$plugin->version   = 2016082600;
 $plugin->requires  = 2015051100;
 $plugin->component = 'block_stash';
 $plugin->maturity  = MATURITY_STABLE;

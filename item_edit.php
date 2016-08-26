@@ -42,8 +42,10 @@ $pagetitle = $item ? get_string('edititem', 'block_stash', $itemname) : get_stri
 list($title, $subtitle, $returnurl) = \block_stash\page_helper::setup_for_item($url, $manager, $item, $pagetitle);
 
 $fileareaoptions = ['maxfiles' => 1];
+$editoroptions = ['noclean' => true, 'maxfiles' => -1, 'maxbytes' => $CFG->maxbytes, 'context' => $context];
 $customdata = [
     'fileareaoptions' => $fileareaoptions,
+    'editoroptions' => $editoroptions,
     'persistent' => $item,
     'stash' => $manager->get_stash(),
 ];
@@ -53,7 +55,18 @@ $form = new \block_stash\form\item($url->out(false), $customdata);
 
 $draftitemid = file_get_submitted_draft_itemid('item');
 file_prepare_draft_area($draftitemid, $context->id, 'block_stash', 'item', $id, $fileareaoptions);
-$form->set_data((object) array('image' => $draftitemid));
+$data = new stdClass();
+if (!is_null($item)) {
+    $data->id = $item->get_id();
+    $data->detail = $item->get_detail();
+    $data->detailformat = $item->get_detailformat();
+} else {
+    $data->id = $id;
+    $data->detail = '';
+    $data->detailformat = 1;
+}
+$data = file_prepare_standard_editor($data, 'detail', $editoroptions, $context, 'block_stash', 'detail', $data->id);
+$form->set_data((object) array('image' => $draftitemid, 'detail_editor' => $data->detail_editor));
 
 if ($data = $form->get_data()) {
 
@@ -62,9 +75,13 @@ if ($data = $form->get_data()) {
     $draftitemid = $data->image;
     unset($data->image);
 
-    $thing = $manager->create_or_update_item($data, $draftitemid);
+    // Add editor options to the data stdClass.
+    $data->editoroptions = $editoroptions;
+    $data->fileareaoptions = $fileareaoptions;
+
+    $saveditem = $manager->create_or_update_item($data, $draftitemid);
     if ($saveandnext) {
-        redirect(new moodle_url('/blocks/stash/drop.php', ['itemid' => $thing->get_id(), 'courseid' => $manager->get_courseid()]));
+        redirect(new moodle_url('/blocks/stash/drop.php', ['itemid' => $saveditem->get_id(), 'courseid' => $manager->get_courseid()]));
     }
     redirect($returnurl);
 

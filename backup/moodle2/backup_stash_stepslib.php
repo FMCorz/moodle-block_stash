@@ -50,7 +50,7 @@ class backup_stash_block_structure_step extends backup_block_structure_step {
         // Define each element separated.
         $stash = new backup_nested_element('stash', ['id'], ['name']);
         $items = new backup_nested_element('items');
-        $item = new backup_nested_element('item', ['id'], ['name', 'maxnumber']);
+        $item = new backup_nested_element('item', ['id'], ['name', 'maxnumber', 'detail', 'detailformat']);
         $drops = new backup_nested_element('drops');
         $drop = new backup_nested_element('drop', ['id'], ['name', 'maxpickup', 'pickupinterval', 'hashcode']);
         $pickups = new backup_nested_element('pickups');
@@ -86,6 +86,7 @@ class backup_stash_block_structure_step extends backup_block_structure_step {
         $pickup->annotate_ids('user', 'userid');
         $useritem->annotate_ids('user', 'userid');
         $item->annotate_files('block_stash', 'item', 'id', context_course::instance($this->get_courseid())->id);
+        $item->annotate_files('block_stash', 'detail', 'id', context_course::instance($this->get_courseid())->id);
 
         // Return the root element.
         return $wrapper;

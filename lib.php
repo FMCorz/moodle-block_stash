@@ -53,6 +53,8 @@ function block_stash_pluginfile($course, $cm, $context, $filearea, $args, $force
     if ($filearea == 'item' && $context->contextlevel == CONTEXT_COURSE) {
         $files = $fs->get_area_files($context->id, 'block_stash', 'item', $itemid, '', false);
         $file = array_pop($files);
+    } else if ($filearea == 'detail' && $context->contextlevel == CONTEXT_COURSE) {
+        $file = $fs->get_file($context->id, 'block_stash', 'detail', $itemid, $filepath, $filename);
     }
 
     if (!$file) {

@@ -90,6 +90,11 @@
     line-height: 20px;
 }
 
+.block-stash-item.item-medium .item-image {
+    width: 100px;
+    height: 100px;
+}
+
 /** Quantity rules. */
 .block-stash-item.item-quantity-1 .item-quantity {
     display: none;
@@ -138,4 +143,13 @@
     height: 45px;
     cursor: initial;
     background-color: #fff;
+}
+
+.block-stash-item-detail {
+    padding: 0 10px;
+}
+
+.block-stash-item-detail .block-stash-item {
+    float: left;
+    padding-right: 5px;
 }

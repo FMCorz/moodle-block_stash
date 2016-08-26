@@ -38,6 +38,7 @@ use external_format_value;
 use external_single_structure;
 use external_multiple_structure;
 
+use block_stash\external\item_exporter;
 use block_stash\manager;
 use block_stash\external\user_item_summary_exporter;
 
@@ -158,5 +159,66 @@ class external extends external_api {
      */
     public static function pickup_drop_returns() {
         return user_item_summary_exporter::get_read_structure();
+    }
+
+    /**
+     * External function parameter structure.
+     * @return external_function_paramters
+     */
+    public static function get_item_detail_parameters() {
+        return new external_function_parameters([
+            'itemid' => new external_value(PARAM_INT)
+        ]);
+    }
+
+    /**
+     * Is allowed from ajax?
+     * Only present for 2.9 compatibility.
+     * @return true
+     */
+    public static function get_item_detail_is_allowed_from_ajax() {
+        return true;
+    }
+
+    /**
+     * Checks to see if the user has access to this item and returns the item detail.
+     *
+     * @param  int $itemid The item ID
+     * @return [type]         [description]
+     */
+    public static function get_item_detail($itemid) {
+        global $USER, $PAGE;
+        $params = self::validate_parameters(self::get_item_detail_parameters(), compact('itemid'));
+        extract($params);
+
+        $manager = manager::get_by_itemid($itemid);
+        self::validate_context($manager->get_context());
+
+        try {
+            $useritem = $manager->get_user_item($USER->id, $itemid);
+        } catch (Exception $e) {
+            $useritem = null;
+        }
+
+        $record = null;
+        if (!is_null($useritem)) {
+            $item = $manager->get_item($useritem->get_itemid());
+            $output = $PAGE->get_renderer('block_stash');
+            $exporter = new item_exporter($item, array('context' => $manager->get_context()));
+            $record = $exporter->export($output);
+            // Formatting of the details should be done in the exporter.
+            $record->detail = file_rewrite_pluginfile_urls($record->detail, 'pluginfile.php', $manager->get_context()->id,
+                    'block_stash', 'detail', $item->get_id());
+        }
+        return $record;
+    }
+
+    /**
+     * External function return structure.
+     *
+     * @return external_value
+     */
+    public static function get_item_detail_returns() {
+        return item_exporter::get_read_structure();
     }
 }

@@ -158,6 +158,7 @@ class restore_stash_block_structure_step extends restore_structure_step {
      */
     protected function after_execute() {
         $this->add_related_files('block_stash', 'item', 'block_stash_item', $this->task->get_old_course_contextid());
+        $this->add_related_files('block_stash', 'detail', 'block_stash_item', $this->task->get_old_course_contextid());
     }
 
 }

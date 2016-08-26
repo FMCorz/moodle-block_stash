@@ -31,13 +31,13 @@ class item extends persistent {
 
     protected static $fieldstoremove = array('save', 'submitbutton');
 
-    protected static $foreignfields = array('image', 'saveandnext');
+    protected static $foreignfields = array('image', 'saveandnext', 'detail_editor');
 
     /**
      * Define the form - called by parent constructor
      */
     public function definition() {
-        global $PAGE, $OUTPUT;
+        global $PAGE, $OUTPUT, $CFG;
 
         $mform = $this->_form;
         $stash = $this->_customdata['stash'];
@@ -65,6 +65,12 @@ class item extends persistent {
         $mform->addElement('filemanager', 'image', get_string('itemimage', 'block_stash'), array(), $this->_customdata['fileareaoptions']);
         $mform->addRule('image', null, 'required', null, 'client');
         $mform->addHelpButton('image', 'itemimage', 'block_stash');
+
+        // Detail.
+        $mform->addElement('editor', 'detail_editor', get_string('itemdetail', 'block_stash'), array('rows' => 10),
+                $this->_customdata['editoroptions']);
+        $mform->setType('detail_editor', PARAM_RAW);
+        $mform->addHelpButton('detail_editor', 'itemdetail', 'block_stash');
 
         // Buttons.
         $buttonarray = [];

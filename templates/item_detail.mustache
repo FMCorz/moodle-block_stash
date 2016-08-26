@@ -15,10 +15,10 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    Extra small item.
+    item detail builder.
 }}
-<div class="block-stash-item item-xsmall" title="{{name}}" data-id="{{id}}">
-    <div class="item-image" style="background-image: url({{imageurl}});">
-        <div class="item-label">{{name}}</div>
-    </div>
+
+<div class="block-stash-item-detail">
+    {{>block_stash/item}}
+    {{{detail}}}
 </div>
