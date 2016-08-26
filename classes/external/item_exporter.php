@@ -52,9 +52,6 @@ class item_exporter extends persistent_exporter {
             ],
             'imageurl' => [
                 'type' => PARAM_URL
-            ],
-            'editurl' => [
-                'type' => PARAM_URL
             ]
         ];
     }
@@ -65,13 +62,10 @@ class item_exporter extends persistent_exporter {
         $unlimited = $this->persistent->is_unlimited();
 
         $imageurl = moodle_url::make_pluginfile_url($this->related['context']->id, 'block_stash', 'item', $itemid, '/', 'image');
-        // TODO Remove the need for the courseid, or get it from somewhere.
-        $editurl = new moodle_url('/blocks/stash/item_edit.php', array('id' => $itemid, 'courseid' => 2));
 
         return [
             'maxnumberformatted' => $unlimited ? get_string('unlimited', 'block_stash') : $maxnumber,
             'imageurl' => $imageurl->out(false),
-            'editurl' => $editurl->out(false)
         ];
     }
 

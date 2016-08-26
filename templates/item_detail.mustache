@@ -15,10 +15,18 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    item detail builder.
+    Item detail.
 }}
-
-<div class="block-stash-item-detail">
-    {{>block_stash/item}}
-    {{{detail}}}
+<div class="block-stash-item-detail clearfix">
+    <div class="item-preview">
+        {{>block_stash/item}}
+    </div>
+    <div class="item-description">
+        {{#detail}}
+            {{{.}}}
+        {{/detail}}
+        {{^detail}}
+            <p>{{#str}}whatisthisthing, block_stash{{/str}}</p>
+        {{/detail}}
+    </div>
 </div>

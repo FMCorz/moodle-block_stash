@@ -22,10 +22,9 @@
  */
 
 define([
-    'jquery',
     'core/templates',
-    'core/yui'
-], function($, Templates, Y) {
+    'block_stash/dialogue-base'
+], function(Templates, DialogueBase) {
 
     /**
      * Snippet dialogue class.
@@ -35,75 +34,18 @@ define([
      * @param {String} altSnippetMaker The name of the alternat snippet maker module.
      */
     function Dialog(drop, warnings, altSnippetMaker) {
-        var deferred = $.Deferred();
-        this._ready = deferred.promise();
         this._drop = drop;
         this._warnings = warnings;
         this._altSnippetMaker = altSnippetMaker;
-        Y.use('moodle-core-notification', function() {
-            this._init().then(function() {
-                deferred.resolve();
-            });
-        }.bind(this));
+        this.setTitle(drop.get('name'));
+        DialogueBase.prototype.constructor.apply(this, []);
     }
-    Dialog.prototype._dialogue = null;
+    Dialog.prototype = Object.create(DialogueBase.prototype);
+    Dialog.prototype.constructor = Dialog;
+
     Dialog.prototype._drop = null;
-    Dialog.prototype._maker = null;
-    Dialog.prototype._ready = null;
     Dialog.prototype._altSnippetMaker = null;
-    Dialog.prototype._ui = null;
     Dialog.prototype._warnings = null;
-
-    /**
-     * Initialise the things.
-     *
-     * @return {Void}
-     */
-    Dialog.prototype._init = function() {
-        var deferred = $.Deferred(),
-            loading = Y.Node.create('<p style="text-align: center;"><img src="' + M.util.image_url('y/loading') + '" alt=""></p>'),
-            d;
-
-        // New dialogue.
-        d = new M.core.dialogue({
-            draggable: true,
-            modal: true,
-            width: '600px',
-        });
-        this._dialogue = d;
-
-        // Destroy on hide.
-        var origHide = d.hide;
-        d.hide = function() {
-            origHide.apply(d, arguments);
-            this.destroy();
-        }.bind(d);
-
-        // Set content.
-        d.getStdModNode(Y.WidgetStdMod.HEADER).prepend(Y.Node.create('<h1>' + this._drop.get('name') + '</h1>'));
-        d.setStdModContent(Y.WidgetStdMod.BODY, loading, Y.WidgetStdMod.REPLACE);
-        deferred.resolve();
-
-        // Async fetch real content.
-        this._render().then(function(html, js) {
-            Templates.runTemplateJS(js);
-            d.setStdModContent(Y.WidgetStdMod.BODY, html, Y.WidgetStdMod.REPLACE);
-            d.centerDialogue();
-        });
-
-        // Return the promise.
-        return deferred;
-    };
-
-    /**
-     * Find a node in this Dialog.
-     *
-     * @param {String} selector The selector.
-     * @return {Node}
-     */
-    Dialog.prototype.find = function(selector) {
-        return this._container.find(selector);
-    };
 
     /**
      * Render the dialogue.
@@ -121,17 +63,11 @@ define([
             warnings: this._warnings,
             haswarnings: this._warnings && this._warnings.length,
         };
-        return Templates.render('block_stash/drop_snippet_dialogue', context);
-    };
-
-    /**
-     * Initialise the things.
-     *
-     * @param {Event} e The event.
-     */
-    Dialog.prototype.show = function(e) {
-        this._ready.then(function() {
-            this._dialogue.show(e);
+        return Templates.render('block_stash/drop_snippet_dialogue', context)
+        .then(function(html, js) {
+            this._setDialogueContent(html);
+            this.center();
+            Templates.runTemplateJS(js);
         }.bind(this));
     };
 

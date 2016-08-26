@@ -102,6 +102,7 @@ $string['thestashofhasbeenreset'] = 'The stash of {$a} has been reset';
 $string['unlimited'] = 'Unlimited';
 $string['whataredrops'] = 'What are locations?';
 $string['whatisadrophelp'] = 'A location is a place where you intend to display your item.';
+$string['whatisthisthing'] = 'What is this thing? I am certain you can find a use for it!';
 $string['whatsthis'] = 'What\'s this?';
 $string['whatsnext'] = 'What\'s next?';
 $string['yourinventoryisempty'] = 'Your inventory is empty.';

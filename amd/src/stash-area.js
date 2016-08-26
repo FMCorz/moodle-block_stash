@@ -25,8 +25,9 @@ define([
     'jquery',
     'core/templates',
     'block_stash/counselor',
+    'block_stash/item-dialogue',
     'block_stash/drop'
-], function($, Templates, Counselor, Drop) {
+], function($, Templates, Counselor, ItemDialogue, Drop) {
 
     /**
      * Stash class.
@@ -36,11 +37,16 @@ define([
      */
     function StashArea(node) {
         this._node = $(node);
-
-        Counselor.on(Drop.prototype.EVENT_PICKEDUP, this._dropPickedUpListener.bind(this));
+        this._setUp();
     }
     StashArea.prototype._node = null;
     StashArea.prototype._userItemTemplate = 'block_stash/user_item';
+
+    StashArea.prototype._setUp = function() {
+        Counselor.on(Drop.prototype.EVENT_PICKEDUP, this._dropPickedUpListener.bind(this));
+
+        this._setUpUserItemAreClickable();
+    };
 
     /**
      * Add a user item to the stash.
@@ -50,8 +56,12 @@ define([
      */
     StashArea.prototype.addUserItem = function(userItem) {
         return this._renderUserItem(userItem).then(function(html, js) {
-            $(html).data('useritem', userItem);
-            this._node.find('.item-list').append(html);
+            var node = $(html),
+                container = this._node.find('.item-list');
+            node.data('useritem', userItem);
+            this._makeUserItemNodeClickable(node);
+            container.append(' ');  // A hacky separator to replicate natural rendering.
+            container.append(node);
             Templates.runTemplateJS(js);
         }.bind(this));
     };
@@ -78,7 +88,7 @@ define([
             this.updateUserItemQuantity(userItem);
         } else {
             this.addUserItem(userItem).then(function() {
-                this._node.find('.alert').hide();
+                this._node.find('.empty-content').remove();
             }.bind(this));
         }
     };
@@ -94,6 +104,17 @@ define([
     };
 
     /**
+     * Make a user item node clickable.
+     *
+     * @param {Node} node The node.
+     */
+    StashArea.prototype._makeUserItemNodeClickable = function(node) {
+        node.attr('tabindex', 0);
+        node.attr('role', 'button');
+        node.attr('aria-haspopup', 'true');
+    };
+
+    /**
      * Render a user item.
      *
      * @param {UserItem} userItem The user item.
@@ -103,6 +124,38 @@ define([
         return Templates.render(this._userItemTemplate, {
             item: userItem.getItem().getData(),
             useritem: userItem.getData(),
+        });
+    };
+
+    /**
+     * Set-up process to handle items being clickable.
+     */
+    StashArea.prototype._setUpUserItemAreClickable = function() {
+        // Make all items as clickable.
+        this._node.find('.item-list .block-stash-item').each(function(i, node) {
+            this._makeUserItemNodeClickable($(node));
+        }.bind(this));
+
+        // Delegate event.
+        var handler = function(e) {
+            var node = $(e.currentTarget),
+                itemId = node.data('id');
+
+            if (!itemId) {
+                return;
+            }
+
+            var dialogue = new ItemDialogue(itemId);
+            e.preventDefault();
+            dialogue.show(e);
+        };
+        var selector = '.block-stash-item[aria-haspopup="true"]';
+        this._node.find('.item-list').delegate(selector, 'click', handler);
+        this._node.find('.item-list').delegate(selector, 'keydown', function(e) {
+            if (e.keyCode != 13 && e.keyCode != 32) {
+                return;
+            }
+            handler(e);
         });
     };
 

@@ -165,7 +165,7 @@ class external extends external_api {
      * External function parameter structure.
      * @return external_function_paramters
      */
-    public static function get_item_detail_parameters() {
+    public static function get_item_parameters() {
         return new external_function_parameters([
             'itemid' => new external_value(PARAM_INT)
         ]);
@@ -176,40 +176,37 @@ class external extends external_api {
      * Only present for 2.9 compatibility.
      * @return true
      */
-    public static function get_item_detail_is_allowed_from_ajax() {
+    public static function get_item_is_allowed_from_ajax() {
         return true;
     }
 
     /**
-     * Checks to see if the user has access to this item and returns the item detail.
+     * Get the item.
      *
-     * @param  int $itemid The item ID
-     * @return [type]         [description]
+     * @param  int $itemid The item ID.
+     * @return stdClass The exported item.
      */
-    public static function get_item_detail($itemid) {
+    public static function get_item($itemid) {
         global $USER, $PAGE;
-        $params = self::validate_parameters(self::get_item_detail_parameters(), compact('itemid'));
+        $params = self::validate_parameters(self::get_item_parameters(), compact('itemid'));
         extract($params);
 
         $manager = manager::get_by_itemid($itemid);
         self::validate_context($manager->get_context());
 
-        try {
-            $useritem = $manager->get_user_item($USER->id, $itemid);
-        } catch (Exception $e) {
-            $useritem = null;
+        if (!$manager->can_manage() && !$manager->has_ever_had($itemid, $USER->id)) {
+            throw new coding_exception('Unauthorised call.');
         }
 
-        $record = null;
-        if (!is_null($useritem)) {
-            $item = $manager->get_item($useritem->get_itemid());
-            $output = $PAGE->get_renderer('block_stash');
-            $exporter = new item_exporter($item, array('context' => $manager->get_context()));
-            $record = $exporter->export($output);
-            // Formatting of the details should be done in the exporter.
-            $record->detail = file_rewrite_pluginfile_urls($record->detail, 'pluginfile.php', $manager->get_context()->id,
-                    'block_stash', 'detail', $item->get_id());
-        }
+        $item = $manager->get_item($itemid);
+
+        $output = $PAGE->get_renderer('block_stash');
+        $exporter = new item_exporter($item, array('context' => $manager->get_context()));
+        $record = $exporter->export($output);
+        // TODO Formatting of the details should be done in the exporter.
+        $record->detail = file_rewrite_pluginfile_urls($record->detail, 'pluginfile.php', $manager->get_context()->id,
+                'block_stash', 'detail', $item->get_id());
+
         return $record;
     }
 
@@ -218,7 +215,7 @@ class external extends external_api {
      *
      * @return external_value
      */
-    public static function get_item_detail_returns() {
+    public static function get_item_returns() {
         return item_exporter::get_read_structure();
     }
 }

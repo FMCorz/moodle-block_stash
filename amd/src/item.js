@@ -22,8 +22,9 @@
  */
 
 define([
-    'block_stash/base'
-], function(Base) {
+    'core/ajax',
+    'block_stash/base',
+], function(Ajax, Base) {
 
     /**
      * Item class.
@@ -34,6 +35,24 @@ define([
         Base.prototype.constructor.apply(this, [itemdata]);
     }
     Item.prototype = Object.create(Base.prototype);
+
+    /**
+     * Get an item.
+     *
+     * @param {Number} itemId The item ID.
+     * @return {Promise} Resolved with the item.
+     * @static
+     */
+    Item.getItem = function(itemId) {
+        return Ajax.call([{
+            methodname: 'block_stash_get_item',
+            args: {
+                itemid: itemId
+            }
+        }])[0].then(function(data) {
+            return new Item(data);
+        });
+    };
 
     return /** @alias module:block_stash/item */ Item;
 

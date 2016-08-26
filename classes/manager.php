@@ -445,6 +445,31 @@ class manager {
     }
 
     /**
+     * Whether the user has ever had an item.
+     *
+     * /!\ As we do not support losing items, this method currently only
+     * checks if the user has any of the item. Once we implement losing items
+     * we'll have to update this method.
+     *
+     * @param int $itemid The item ID.
+     * @param int $userid The user ID.
+     * @return bool
+     */
+    public function has_ever_had($itemid, $userid = null) {
+        global $USER;
+
+        $userid = !empty($userid) ? $userid : $USER->id;
+        if ($userid == $USER->id) {
+            $this->require_view();
+        } else {
+            $this->require_manage();
+        }
+
+        $ui = $this->get_user_item($userid, $itemid);
+        return $ui->get_quantity() > 0;
+    }
+
+    /**
      * Return whether items are defined in this stash.
      *
      * @return bool

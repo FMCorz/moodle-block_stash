@@ -3,6 +3,10 @@
     display: inline-block;
 }
 
+.block-stash-item[aria-haspopup="true"] {
+    cursor: pointer;
+}
+
 .block-stash-item .item-image {
     background-position: center center;
     background-size: cover;
@@ -34,6 +38,7 @@
     left: auto;
     right: 0;
     bottom: 0;
+    line-height: 20px;
 }
 
 /** Actions (used in drops). */
@@ -145,11 +150,17 @@
     background-color: #fff;
 }
 
-.block-stash-item-detail {
-    padding: 0 10px;
-}
-
-.block-stash-item-detail .block-stash-item {
+/** Item details. */
+.block-stash-item-detail .item-preview {
     float: left;
-    padding-right: 5px;
+}
+.block-stash-item-detail .item-description {
+    margin-left: 110px;
+}
+.dir-rtl .block-stash-item-detail .item-preview {
+    float: right;
+}
+.dir-rtl .block-stash-item-detail .item-description {
+    margin-right: 110px;
+    margin-left: 0;
 }
