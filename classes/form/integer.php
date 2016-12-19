@@ -55,7 +55,10 @@ class block_stash_form_integer extends MoodleQuickForm_group {
 
         parent::__construct($elementname, $elementlabel);
         $this->setAttributes(array_merge((array) $this->_attributes, $attributes));
-        $this->_type = 'integer';
+
+        // The type of this element must not be changed or it creates a series of unpredictable
+        // in Boost (3.2 onwards) as the Mustache templates would not be picked adequately.
+        // $this->_type = 'integer';
     }
 
     /**
