@@ -823,13 +823,38 @@ class manager {
 
         } else {
             $trade = new trade($data->id);
-            if ($data->itemid != $trade->get_tradeid()) {
-                throw new coding_exception('The item ID of a trade cannot be changed.');
-            }
+            // if ($data->itemid != $trade->get_id()) {
+            //     throw new coding_exception('The item ID of a trade cannot be changed.');
+            // }
             $trade->from_record($data);
             $trade->update();
         }
         return $trade;
+    }
+
+    /**
+     * Create or update a trade item based on the data passed.
+     *
+     * @param stdClass $data Data to use to create or update.
+     * @return drop
+     */
+    public function create_or_update_tradeitem($data) {
+        $this->require_enabled();
+        $this->require_manage();
+
+        if (!isset($data->id)) {
+            // $data->gainloss = ($data->gainloss) ? true : false;
+            $tradeitem = new tradeitems(null, $data);
+            $tradeitem->create();
+        } else {
+            $tradeitem = new tradeitems($data->id);
+            if ($data->tradeid != $tradeitem->get_tradeid()) {
+                throw new coding_exception('The item ID of a trade cannot be changed.');
+            }
+            $tradeitem->from_record($data);
+            $tradeitem->update();
+        }
+        // return $trade;
     }
 
     /**
@@ -890,6 +915,14 @@ class manager {
             $drop->update();
         }
         return $drop;
+    }
+
+    public function get_trade_items($tradeid) {
+        $this->require_enabled();
+
+        return tradeitems::get_records(['tradeid' => $tradeid]);
+
+
     }
 
 }

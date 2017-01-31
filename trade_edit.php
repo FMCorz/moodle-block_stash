@@ -45,32 +45,30 @@ list($title, $subtitle, $returnurl) = \block_stash\page_helper::setup_for_trade(
 $customdata = [
     'persistent' => $trade,
     'stash' => $manager->get_stash(),
+    'manager' => $manager,
 ];
 
 $renderer = $PAGE->get_renderer('block_stash');
 $form = new \block_stash\form\trade($url->out(false), $customdata);
 
-// $draftitemid = file_get_submitted_draft_itemid('item');
-// file_prepare_draft_area($draftitemid, $context->id, 'block_stash', 'item', $id, $fileareaoptions);
-// $data = new stdClass();
-// if (!is_null($item)) {
-//     $data->id = $item->get_id();
-//     $data->detail = $item->get_detail();
-//     $data->detailformat = $item->get_detailformat();
-// } else {
-//     $data->id = $id;
-//     $data->detail = '';
-//     $data->detailformat = 1;
-// }
-// $data = file_prepare_standard_editor($data, 'detail', $editoroptions, $context, 'block_stash', 'detail', $data->id);
-// $form->set_data((object) array('image' => $draftitemid, 'detail_editor' => $data->detail_editor));
 
 if ($data = $form->get_data()) {
 
     $saveandnext = !empty($data->saveandnext);
     unset($data->saveandnext);
 
+    $tradeitemdata = new stdClass();
+    $tradeitemdata->itemid = $data->itemid;
+    $tradeitemdata->quantity = $data->quantity;
+    $tradeitemdata->gainloss = $data->gainloss;
+    unset($data->itemid);
+    unset($data->quantity);
+    unset($data->gainloss);
+
     $savedtrade = $manager->create_or_update_trade($data);
+    $tradeitemdata->tradeid = $savedtrade->get_id();
+    $manager->create_or_update_tradeitem($tradeitemdata);
+
     if ($saveandnext) {
         redirect(new moodle_url('/blocks/stash/tradedrop.php', ['tradeid' => $savedtrade->get_id(), 'courseid' => $manager->get_courseid()]));
     }
@@ -87,4 +85,12 @@ if (!empty($subtitle)) {
     echo $OUTPUT->heading($subtitle, 3);
 }
 $form->display();
+
+// Just for now I'm going to put the trade items here.
+if ($trade) {
+    $tradeitems = $trade->get_full_trade_items_list($trade->get_id());
+    print_object($tradeitems);
+}
+
+
 echo $OUTPUT->footer();

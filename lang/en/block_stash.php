@@ -57,6 +57,8 @@ $string['eventitemacquired'] = 'An item was acquired.';
 $string['filterstashnotactive'] = 'The filter plugin is installed but not yet enabled for this course. Visit <a href="{$a->activeurl}" target="_blank">this page</a> to enable it for this course.';
 $string['filterstashnotenabled'] = 'The filter plugin is installed but not yet <a href="{$a->enableurl}" target="_blank">enabled</a>.';
 $string['filterstashnotinstalled'] = 'We recommend that you install and enable the <a href="{$a->installurl}" target="_blank">filter plugin for Stash</a>. It makes it easier and more reliable to use the snippets.';
+$string['gain'] = "Gain";
+$string['gainloss'] = "Gain or lose";
 $string['image'] = 'Image';
 $string['imageandbutton'] = 'Image and button';
 $string['item'] = 'Item';
@@ -69,6 +71,7 @@ $string['itemname_help'] = 'The name of the item, this will be displayed to the 
 $string['items'] = 'Items';
 $string['itemslist'] = 'List of items';
 $string['locations'] = 'Locations';
+$string['loss'] = 'Loss';
 $string['maxnumber'] = 'Maximum collectible';
 $string['maxpickup'] = 'Supplies';
 $string['maxpickup_help'] = 'The number of times the item can be picked up by each students in this location. For instance, if you set this to \'1\' the item will only be available once per student. If you set it to \'5\', each student can acquire the item five times in this location. A value different than \'1\' is better used in combination with the \'Collection interval\'.';
@@ -104,6 +107,7 @@ $string['trade'] = 'Trade';
 $string['tradedrops'] = 'Locations';
 $string['tradedrops_help'] = '
 <p>Locations are places where your trade widgets are in the <em>virtual world</em>. Without a <em>location</em> a trade widget cannot be interacted with by a student.</p>';
+$string['tradeitems'] = 'Trade items';
 $string['tradelist'] = 'List of trade widgets';
 $string['tradename'] = 'Trade name';
 $string['tradename_help'] = 'The name of the trade widget, this may be displayed to the students.';
