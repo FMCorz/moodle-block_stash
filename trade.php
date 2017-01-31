@@ -57,7 +57,7 @@ $addbtn = $OUTPUT->single_button($addurl, get_string('addtrade', 'block_stash'),
 $heading = get_string('tradelist', 'block_stash') . $addbtn;
 echo $OUTPUT->heading($heading, 3);
 
-$table = new \block_stash\output\trades_table('itemstable', $manager, $renderer);
+$table = new \block_stash\output\trades_table('tradestable', $manager, $renderer);
 $table->define_baseurl($url);
 echo $table->out(50, false);
 
@@ -67,16 +67,13 @@ $warnings = json_encode($warning ? [$warning] : null);
 
 $PAGE->requires->js_init_code("require([
     'jquery',
-    'block_stash/drop',
-    'block_stash/drop-snippet-dialogue',
-    'block_stash/item'
-], function($, Drop, Dialogue, Item) {
-    var altsnippetmaker = $altsnippetmaker,
-        warnings = $warnings;
-    $('table.itemstable [rel=block-stash-drop]').click(function(e) {
+    'block_stash/trade',
+    'block_stash/trade-snippet-dialogue',
+], function($, Trade, Dialogue) {
+    var warnings = $warnings;
+    $('table.tradestable [rel=block-stash-drop]').click(function(e) {
         var node = $(e.currentTarget),
-            item = new Item(node.data('item')),
-            drop = new Drop(node.data('json'), item),
+            trade = new Trade(node.data('trade')),
             dialogue = new Dialogue(drop, warnings, altsnippetmaker);
 
         e.preventDefault();
