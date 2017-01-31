@@ -15,17 +15,42 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * Persistent exporter.
  *
  * @package    block_stash
- * @copyright  2016 Adrian Greeve <adrian@moodle.com>
+ * @copyright  2017 Adrian Greeve - adriangreeve.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_stash\external;
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2017013003;
-$plugin->requires  = 2015051100;
-$plugin->component = 'block_stash';
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = '1.1.0';
+use lang_string;
+use moodle_url;
+use renderer_base;
+
+/**
+ * Persistent exporter class.
+ *
+ * @package    block_stash
+ * @copyright  2017 Adrian Greeve - adriangreeve.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class tradedrop_exporter extends persistent_exporter {
+
+    protected static function define_class() {
+        return 'block_stash\\tradedrop';
+    }
+
+    protected static function define_related() {
+        return array('context' => 'context');
+    }
+
+    // protected static function define_other_properties() {
+    //     return [
+    //         'editurl' => [
+    //             'type' => PARAM_URL
+    //         ],
+    //     ];
+    // }
+}

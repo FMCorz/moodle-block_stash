@@ -101,6 +101,21 @@ class renderer extends plugin_renderer_base {
     }
 
     /**
+     * Explanation on what a trade drop/location is.
+     *
+     * @return string
+     */
+    public function tradedrop_whats_that() {
+        $o = '';
+        $o .= html_writer::start_div('alert alert-info');
+        $o .= html_writer::tag('strong', get_string('whatsthis', 'block_stash'));
+        $o .= ' ';
+        $o .= get_string('whatisatradedrophelp', 'block_stash');
+        $o .= html_writer::end_div();
+        return $o;
+    }
+
+    /**
      * Describes what drops are.
      *
      * @return string
@@ -138,6 +153,13 @@ class renderer extends plugin_renderer_base {
                     get_string('navdrops', 'block_stash')
                 );
             }
+
+            // I want to hide this depending on the block filter being enabled and there being at least one item defined.
+            $tabs[] = new tabobject(
+                'trade',
+                new moodle_url('/blocks/stash/trade.php', ['courseid' => $courseid]),
+                get_string('navtrade', 'block_stash')
+            );
 
             $tabs[] = new tabobject(
                 'report',

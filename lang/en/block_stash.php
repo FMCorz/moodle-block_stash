@@ -24,7 +24,9 @@
 
 $string['additem'] = 'Add an item';
 $string['addnewdrop'] = 'Add new location';
+// $string['addnewtradedrop'] = 'Add new location';
 $string['addtoinventory'] = 'Add an item to the inventory.';
+$string['addtrade'] = 'Add a trade widget';
 $string['aftercreatinglocationhelp'] = 'Once you have created the item and the location, you need to add a code snippet to your course for the item to be displayed. After customising how the item will be displayed to your students, copy the snippet below and paste it in your content, in the description of an assignment for instance.';
 $string['appearance'] = 'Appearance';
 $string['backtostart'] = 'Back to the main screen';
@@ -49,6 +51,7 @@ $string['dropsummary'] = 'Location summary';
 $string['edit'] = 'Edit'; // Should be replaced with the pix icon.
 $string['editdrop'] = 'Edit location \'{$a}\'';
 $string['edititem'] = 'Edit item \'{$a}\'';
+$string['edittrade'] = 'Edit trade widget \'{$a}\'';
 $string['eginthecastle'] = 'E.g. In the castle';
 $string['eventitemacquired'] = 'An item was acquired.';
 $string['filterstashnotactive'] = 'The filter plugin is installed but not yet enabled for this course. Visit <a href="{$a->activeurl}" target="_blank">this page</a> to enable it for this course.';
@@ -73,6 +76,7 @@ $string['navdrops'] = 'Locations';
 $string['navinventory'] = 'Stash items';
 $string['navitems'] = 'Items';
 $string['navreport'] = 'Report';
+$string['navtrade'] = 'Trade';
 $string['none'] = 'None';
 $string['number'] = 'Number';
 $string['pickupa'] = 'Pick up \'{$a}\'';
@@ -96,12 +100,21 @@ $string['stash:acquireitems'] = 'User is able to acquire items';
 $string['stash:addinstance'] = 'Add a the block to a page';
 $string['stash:view'] = 'View the stash and its content';
 $string['text'] = 'Text';
+$string['trade'] = 'Trade';
+$string['tradedrops'] = 'Locations';
+$string['tradedrops_help'] = '
+<p>Locations are places where your trade widgets are in the <em>virtual world</em>. Without a <em>location</em> a trade widget cannot be interacted with by a student.</p>';
+$string['tradelist'] = 'List of trade widgets';
+$string['tradename'] = 'Trade name';
+$string['tradename_help'] = 'The name of the trade widget, this may be displayed to the students.';
 $string['thedrophasbeendeleted'] = 'The location \'{$a}\' has been deleted';
 $string['theitemhasbeendeleted'] = 'The item \'{$a}\' has been deleted';
 $string['thestashofhasbeenreset'] = 'The stash of {$a} has been reset';
+$string['thetradehasbeendeleted'] = 'The trade widget \'{$a}\' has been deleted';
 $string['unlimited'] = 'Unlimited';
 $string['whataredrops'] = 'What are locations?';
 $string['whatisadrophelp'] = 'A location is a place where you intend to display your item.';
+$string['whatisatradedrophelp'] = 'A location is a place where you intend to display your trade widget.';
 $string['whatisthisthing'] = 'What is this thing? I am certain you can find a use for it!';
 $string['whatsthis'] = 'What\'s this?';
 $string['whatsnext'] = 'What\'s next?';

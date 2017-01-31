@@ -213,6 +213,31 @@ class manager {
     }
 
     /**
+     * Delete a trade drop.
+     *
+     * @param drop|int $droporid The drop, or its ID.
+     * @return void
+     */
+    public function delete_tradedrop($droporid) {
+        global $DB;
+        $this->require_enabled();
+        $this->require_manage();
+
+        $tradedrop = $droporid;
+        if (!is_object($tradedrop)) {
+            $tradedrop = $this->get_tradedrop($droporid);
+        }
+
+        if (!$this->is_trade_in_stash($tradedrop->get_tradeid())) {
+            throw new coding_exception('Unexpected trade tradedrop ID.');
+        }
+
+        $transaction = $DB->start_delegated_transaction();
+        $DB->delete_records(tradedrop::TABLE, ['id' => $tradedrop->get_id()]);
+        $transaction->allow_commit();
+    }
+
+    /**
      * Get an instance of the manager.
      *
      * @param int $courseid The course ID.
@@ -272,6 +297,16 @@ class manager {
      */
     public static function get_courseid_by_dropid($dropid) {
         return drop::get_courseid_by_id($dropid);
+    }
+
+    /**
+     * Get the course ID.
+     *
+     * @param int $dropid The drop ID.
+     * @return int
+     */
+    public static function get_courseid_by_tradedropid($tradedropid) {
+        return tradedrop::get_courseid_by_id($tradedropid);
     }
 
     /**
@@ -348,6 +383,30 @@ class manager {
         // Remove image from file storage.
         $fs = get_file_storage();
         $fs->delete_area_files($this->context->id, 'block_stash', 'item', $item->get_id());
+
+        $transaction->allow_commit();
+    }
+
+    /**
+     * Delete a trade widget from everywhere.
+     *
+     * @param object $trade
+     */
+    public function delete_trade($trade) {
+        global $DB;
+        $this->require_enabled();
+        $this->require_manage();
+
+        // Delete drops.
+        $tradedrops = $this->get_tradedrops($trade->get_id());
+        $transaction = $DB->start_delegated_transaction();
+
+        foreach ($tradedrops as $drop) {
+            $this->delete_tradedrop($drop);
+        }
+
+        // Delete the trade.
+        $DB->delete_records(\block_stash\trade::TABLE, ['id' => $trade->get_id()]);
 
         $transaction->allow_commit();
     }
@@ -537,6 +596,16 @@ class manager {
     }
 
     /**
+     * Whether the trade is part of this stash.
+     *
+     * @param int $tradeid The trade ID.
+     * @return bool
+     */
+    protected function is_trade_in_stash($tradeid) {
+        return trade::is_trade_in_stash($tradeid, $this->get_stash()->get_id());
+    }
+
+    /**
      * Pickup a drop.
      *
      * @param drop|int $droporid The drop, or its ID.
@@ -706,6 +775,121 @@ class manager {
         if (!$this->can_view($userid)) {
             throw new required_capability_exception($this->get_context(), self::CAN_VIEW, 'nopermissions', '');
         }
+    }
+
+    /**
+     * Get a trade widget.
+     *
+     * For internal use, this does not perform any capability checks.
+     *
+     * @param int $tradeid The trade widget ID.
+     * @return item
+     */
+    public function get_trade($tradeid) {
+        $this->require_enabled();
+
+        $trade = new trade($tradeid);
+        if ($trade->get_stashid() != $this->get_stash()->get_id()) {
+            throw new coding_exception('Unexpected trade ID.');
+        }
+        return $trade;
+    }
+
+    /**
+     * Get the trades defined in this course.
+     *
+     * @return trade[]
+     */
+    public function get_trades() {
+        $this->require_enabled();
+        $this->require_manage();
+
+        return trade::get_records(['stashid' => $this->get_stash()->get_id()], 'name');
+    }
+
+    /**
+     * Create or update a trade based on the data passed.
+     *
+     * @param stdClass $data Data to use to create or update.
+     * @return drop
+     */
+    public function create_or_update_trade($data) {
+        $this->require_enabled();
+        $this->require_manage();
+
+        if (!$data->id) {
+            $trade = new trade(null, $data);
+            $trade->create();
+
+        } else {
+            $trade = new trade($data->id);
+            if ($data->itemid != $trade->get_tradeid()) {
+                throw new coding_exception('The item ID of a trade cannot be changed.');
+            }
+            $trade->from_record($data);
+            $trade->update();
+        }
+        return $trade;
+    }
+
+    /**
+     * Get an trade drop.
+     *
+     * For internal use, this does not perform any capability checks.
+     *
+     * @param int $drop The drop ID.
+     * @return tradedrop
+     */
+    public function get_tradedrop($dropid) {
+        $this->require_enabled();
+
+        $drop = new \block_stash\tradedrop($dropid);
+        if (!$this->is_trade_in_stash($drop->get_tradeid())) {
+            throw new coding_exception('Unexpected drop ID.');
+        }
+        return $drop;
+    }
+
+    /**
+     * Get the drops for a trade.
+     *
+     * @todo Support optional tradeid.
+     * @param int $itemid The trade ID.
+     * @return tradedrop[]
+     */
+    public function get_tradedrops($tradeid) {
+        $this->require_enabled();
+        $this->require_manage();
+
+        if (!$this->is_trade_in_stash($tradeid)) {
+            throw new coding_exception('Unexpected trade ID.');
+        }
+        return tradedrop::get_records(['tradeid' => $tradeid], 'name');
+    }
+
+    /**
+     * Create or update an item drop based on the data passed.
+     *
+     * @param stdClass $data Data to use to create or update.
+     * @return drop
+     */
+    public function create_or_update_tradedrop($data) {
+        $this->require_enabled();
+        $this->require_manage();
+
+        if (!$data->id) {
+            $drop = new tradedrop(null, $data);
+            $drop->create();
+
+        } else {
+            $drop = new tradedrop($data->id);
+            if ($data->itemid != $drop->get_tradeid()) {
+                throw new coding_exception('The trade ID of a drop cannot be changed.');
+            }
+            $drop->from_record($data);
+            $drop->update();
+        }
+        return $drop;
     }
 
 }
