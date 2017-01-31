@@ -73,6 +73,43 @@ class page_helper {
         return [$title, $subtitle, $returnurl];
     }
 
+    public static function setup_for_tradedrop(moodle_url $url, manager $manager, $tradedrop = null, $subtitle = '', $returntype = null) {
+        global $PAGE;
+
+        $context = $manager->get_context();
+        $heading = $context->get_context_name();
+
+        $title = get_string('trade', 'block_stash');
+        if ($returntype == 'tradedrops') {
+            $title = get_string('tradedrops', 'block_stash');
+        }
+
+        $PAGE->set_context($context);
+        $PAGE->set_pagelayout('course');
+        $PAGE->set_title($title);
+        $PAGE->set_heading($heading);
+        $PAGE->set_url($url);
+
+        $returnurl = new moodle_url('/blocks/stash/trade.php', ['courseid' => $manager->get_courseid()]);
+        if ($returntype == 'tradedrops') {
+            $returnurl = new moodle_url('/blocks/stash/tradedrops.php', ['courseid' => $manager->get_courseid()]);
+        }
+
+        $PAGE->navbar->add(get_string('stash', 'block_stash'));
+        $PAGE->navbar->add($title, $returnurl);
+
+        if (!empty($tradedrop)) {
+            $PAGE->navbar->add($tradedrop->get_name());  // Drops don't have URLs yet.
+            if (!empty($subtitle)) {
+                $PAGE->navbar->add($subtitle, $url);
+            }
+        } else if (!empty($subtitle)) {
+            $PAGE->navbar->add($subtitle, $url);
+        }
+
+        return [$title, $subtitle, $returnurl];
+    }
+
     public static function setup_for_item(moodle_url $url, manager $manager, $item = null, $subtitle = '') {
         global $PAGE;
 
@@ -93,6 +130,36 @@ class page_helper {
 
         if (!empty($item)) {
             $PAGE->navbar->add($item->get_name());  // Items don't have URLs yet.
+            if (!empty($subtitle)) {
+                $PAGE->navbar->add($subtitle, $url);
+            }
+        } else if (!empty($subtitle)) {
+            $PAGE->navbar->add($subtitle, $url);
+        }
+
+        return [$title, $subtitle, $returnurl];
+    }
+
+    public static function setup_for_trade(moodle_url $url, manager $manager, $trade = null, $subtitle = '') {
+        global $PAGE;
+
+        $context = $manager->get_context();
+        $heading = $context->get_context_name();
+        $title = get_string('trade', 'block_stash');
+
+        $PAGE->set_context($context);
+        $PAGE->set_pagelayout('course');
+        $PAGE->set_title($title);
+        $PAGE->set_heading($heading);
+        $PAGE->set_url($url);
+
+        $returnurl = new moodle_url('/blocks/stash/trade.php', ['courseid' => $manager->get_courseid()]);
+
+        $PAGE->navbar->add(get_string('stash', 'block_stash'));
+        $PAGE->navbar->add($title, $returnurl);
+
+        if (!empty($trade)) {
+            $PAGE->navbar->add($trade->get_name());  // Items don't have URLs yet.
             if (!empty($subtitle)) {
                 $PAGE->navbar->add($subtitle, $url);
             }
