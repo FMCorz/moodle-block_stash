@@ -69,9 +69,9 @@ if ($data = $form->get_data()) {
     $tradeitemdata->tradeid = $savedtrade->get_id();
     $manager->create_or_update_tradeitem($tradeitemdata);
 
-    if ($saveandnext) {
-        redirect(new moodle_url('/blocks/stash/tradedrop.php', ['tradeid' => $savedtrade->get_id(), 'courseid' => $manager->get_courseid()]));
-    }
+    // if ($saveandnext) {
+    //     redirect(new moodle_url('/blocks/stash/tradedrop.php', ['tradeid' => $savedtrade->get_id(), 'courseid' => $manager->get_courseid()]));
+    // }
     redirect($returnurl);
 
 } else if ($form->is_cancelled()) {

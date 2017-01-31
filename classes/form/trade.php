@@ -42,7 +42,7 @@ class trade extends persistent {
         $mform = $this->_form;
         $stash = $this->_customdata['stash'];
         $manager = $this->_customdata['manager'];
-        $competency = $this->get_persistent();
+        $trade = $this->get_persistent();
 
         $mform->addElement('header', 'generalhdr', get_string('general'));
 
@@ -50,6 +50,11 @@ class trade extends persistent {
         $mform->addElement('hidden', 'stashid');
         $mform->setType('stashid', PARAM_INT);
         $mform->setConstant('stashid', $stash->get_id());
+
+        // Hash code.
+        $mform->addElement('hidden', 'hashcode');
+        $mform->setType('hashcode', PARAM_ALPHANUM);
+        $mform->setConstant('hashcode', $trade->get_hashcode());
 
         // Name.
         $mform->addElement('text', 'name', get_string('tradename', 'block_stash'), 'maxlength="255"');
@@ -77,8 +82,8 @@ class trade extends persistent {
         $buttonarray = [];
         if (!$this->get_persistent()->get_id()) {
             // Only for new items.
-            $buttonarray[] = &$mform->createElement('submit', 'saveandnext', get_string('saveandnext', 'block_stash'),
-                ['class' => 'form-submit']);
+            // $buttonarray[] = &$mform->createElement('submit', 'saveandnext', get_string('saveandnext', 'block_stash'),
+            //     ['class' => 'form-submit']);
             $buttonarray[] = &$mform->createElement('submit', 'save', get_string('savechanges', 'block_stash'));
         } else {
             $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('savechanges', 'block_stash'));

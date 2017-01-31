@@ -35,7 +35,6 @@ use pix_icon;
 use stdClass;
 use table_sql;
 use block_stash\trade as trademodel;
-use block_stash\external\tradedrop_exporter;
 use block_stash\external\trade_exporter;
 
 /**
@@ -70,7 +69,7 @@ class trades_table extends table_sql {
         $this->define_columns(array(
             'name',
             // 'maxnumber',
-            'drops',
+            // 'trades',
             'actions'
         ));
         $this->define_headers(array(
@@ -81,7 +80,7 @@ class trades_table extends table_sql {
         ));
         $this->define_help_for_headers([
             null,
-            new help_icon('drops', 'block_stash'),
+            // new help_icon('trades', 'block_stash'),
             null
         ]);
 
@@ -97,7 +96,7 @@ class trades_table extends table_sql {
         // Define various table settings.
         $this->sortable(true, 'name', SORT_ASC);
         $this->no_sorting('actions');
-        $this->no_sorting('drops');
+        // $this->no_sorting('trades');
         $this->collapsible(false);
     }
 
@@ -116,11 +115,11 @@ class trades_table extends table_sql {
             get_string('edititem', 'block_stash', $row->name)));
         $actions[] = $actionlink;
 
-        $url = new moodle_url('/blocks/stash/tradedrop.php');
-        $url->params(['tradeid' => $row->id, 'courseid' => $this->manager->get_courseid()]);
-        $actionlink = $OUTPUT->action_link($url, '', null, null, new pix_icon('t/add',
-            get_string('addnewdrop', 'block_stash', $row->name)));
-        $actions[] = $actionlink;
+        // $url = new moodle_url('/blocks/stash/tradedrop.php');
+        // $url->params(['tradeid' => $row->id, 'courseid' => $this->manager->get_courseid()]);
+        // $actionlink = $OUTPUT->action_link($url, '', null, null, new pix_icon('t/add',
+        //     get_string('addnewdrop', 'block_stash', $row->name)));
+        // $actions[] = $actionlink;
 
         $action = new confirm_action(get_string('reallydeleteitem', 'block_stash'));
         $url = new moodle_url($this->baseurl);
@@ -130,41 +129,6 @@ class trades_table extends table_sql {
         $actions[] = $actionlink;
 
         return implode(' ', $actions);
-    }
-
-    /**
-     * Formats the column.
-     *
-     * @param stdClass $row Table row.
-     * @return string Output produced.
-     */
-    protected function col_drops($row) {
-        // This is everything but efficient...
-        $drops = $this->manager->get_tradedrops($row->id);
-        if (empty($drops)) {
-            return '-';
-        }
-
-        // Yay, code duplication.
-        $trade = new trademodel(null, $row);
-        $exporter = new trade_exporter($trade, ['context' => $this->manager->get_context()]);
-        $itemdata = $exporter->export($this->renderer);
-
-        // Construct the list of drops.
-        $html = html_writer::start_tag('ul', ['class' => 'block-stash-item-drops']);
-        foreach ($drops as $drop) {
-            $exporter = new tradedrop_exporter($drop, ['context' => $this->manager->get_context()]);
-            $link = html_writer::link('#', $drop->get_name(), [
-                'rel' => 'block-stash-drop',
-                'data-id' => $drop->get_id(),
-                'data-json' => json_encode($exporter->export($this->renderer)),
-                'data-item' => json_encode($itemdata)
-            ]);
-            $html .= html_writer::tag('li', $link);
-        }
-        $html .= html_writer::end_tag('ul');
-
-        return $html;
     }
 
     /**
