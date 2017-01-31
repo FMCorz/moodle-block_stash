@@ -71,10 +71,10 @@ $PAGE->requires->js_init_code("require([
     'block_stash/trade-snippet-dialogue',
 ], function($, Trade, Dialogue) {
     var warnings = $warnings;
-    $('table.tradestable [rel=block-stash-drop]').click(function(e) {
+    $('table.tradestable [rel=block-stash-trade]').click(function(e) {
         var node = $(e.currentTarget),
             trade = new Trade(node.data('trade')),
-            dialogue = new Dialogue(drop, warnings, altsnippetmaker);
+            dialogue = new Dialogue(trade, warnings);
 
         e.preventDefault();
         dialogue.show(e);

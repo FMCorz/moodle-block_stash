@@ -57,6 +57,7 @@ define([
             warnings: this._warnings,
             haswarnings: this._warnings && this._warnings.length,
         };
+        window.console.log(context);
         return Templates.render('block_stash/trade_snippet_dialogue', context)
         .then(function(html, js) {
             this._setDialogueContent(html);
