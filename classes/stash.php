@@ -146,4 +146,24 @@ class stash extends persistent {
         return $stash;
     }
 
+    /**
+     * Return a stash by item ID.
+     *
+     * @param  int $itemid The item ID.
+     * @return stash
+     */
+    public static function get_by_tradeid($tradeid) {
+        global $DB;
+
+        $sql = "SELECT s.*
+                  FROM {" . trade::TABLE . "} t
+                  JOIN {" . self::TABLE . "} s
+                    ON s.id = t.stashid
+                 WHERE t.id = ?";
+        $record = $DB->get_record_sql($sql, [$tradeid], MUST_EXIST);
+        $stash = new static(null, $record);
+
+        return $stash;
+    }
+
 }

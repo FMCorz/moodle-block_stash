@@ -218,4 +218,36 @@ class external extends external_api {
     public static function get_item_returns() {
         return item_exporter::get_read_structure();
     }
+
+    /**
+     * External function parameter structure.
+     * @return external_function_paramters
+     */
+    public static function get_trade_items_parameters() {
+        return new external_function_parameters([
+            'tradeid' => new external_value(PARAM_INT)
+        ]);
+    }
+
+    /**
+     * Is allowed from ajax?
+     * Only present for 2.9 compatibility.
+     * @return true
+     */
+    public static function get_trade_items_is_allowed_from_ajax() {
+        return true;
+    }
+
+    public static function get_trade_items($tradeid) {
+        $params = self::validate_parameters(self::get_trade_items_parameters(), compact('tradeid'));
+        extract($params);
+
+        $manager = manager::get_by_tradeid($tradeid);
+        self::validate_context($manager->get_context());
+    }
+
+    public static function get_trade_items_returns() {
+        return trade_items_exporter::get_read_structure();
+    }
+
 }

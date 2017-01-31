@@ -138,10 +138,15 @@ class trades_table extends table_sql {
      * @return string Output produced.
      */
     protected function col_name($row) {
-        $renderable = new trade(new trademodel(null, $row), $this->manager);
-        $str = '';
-        $str .= $this->renderer->render_item_xsmall($renderable);
-        $str .= format_string($row->name, null, ['context' => $this->manager->get_context()]);
+        $trade = new trademodel(null, $row);
+        $exporter = new trade_exporter($trade, ['context' => $this->manager->get_context()]);
+        $tradedata = $exporter->export($this->renderer);
+        $link = html_writer::link('#', $trade->get_name(), [
+            'rel' => 'block-stash-trade',
+            'data-id' => $trade->get_id(),
+            'data-trade' => json_encode($tradedata)
+        ]);
+        $str = $link;
 
         return $str;
     }
