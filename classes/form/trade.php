@@ -31,7 +31,7 @@ class trade extends persistent {
 
     protected static $fieldstoremove = array('save', 'submitbutton');
 
-    protected static $foreignfields = array('image', 'saveandnext', 'detail_editor');
+    protected static $foreignfields = array('itemid', 'quantity', 'gainloss', 'saveandnext');
 
     /**
      * Define the form - called by parent constructor
@@ -41,6 +41,7 @@ class trade extends persistent {
 
         $mform = $this->_form;
         $stash = $this->_customdata['stash'];
+        $manager = $this->_customdata['manager'];
         $competency = $this->get_persistent();
 
         $mform->addElement('header', 'generalhdr', get_string('general'));
@@ -57,20 +58,20 @@ class trade extends persistent {
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
         $mform->addHelpButton('name', 'tradename', 'block_stash');
 
-        // Max number of items.
-        // $mform->addElement('block_stash_integer', 'maxnumber', get_string('maxnumber', 'block_stash'), ['style' => 'width: 3em;']);
-        // $mform->setType('maxnumber', PARAM_INT);
+        // Items.
+        $mform->addElement('header', 'tradeitems', get_string('tradeitems', 'block_stash'));
 
-        // Image.
-        // $mform->addElement('filemanager', 'image', get_string('itemimage', 'block_stash'), array(), $this->_customdata['fileareaoptions']);
-        // $mform->addRule('image', null, 'required', null, 'client');
-        // $mform->addHelpButton('image', 'itemimage', 'block_stash');
-
-        // Detail.
-        // $mform->addElement('editor', 'detail_editor', get_string('itemdetail', 'block_stash'), array('rows' => 10),
-        //         $this->_customdata['editoroptions']);
-        // $mform->setType('detail_editor', PARAM_RAW);
-        // $mform->addHelpButton('detail_editor', 'itemdetail', 'block_stash');
+        $options = [];
+        $items = $manager->get_items();
+        foreach ($items as $key => $item) {
+            $options[$item->get_id()] = $item->get_name();
+        }
+        
+        $mform->addElement('select', 'itemid', get_string('item', 'block_stash'), $options);
+        $mform->addElement('text', 'quantity', get_string('quantity', 'block_stash'));
+        $mform->setType('quantity', PARAM_INT);
+        $options = [1 => get_string('gain', 'block_stash'), 0 => get_string('loss', 'block_stash')];
+        $mform->addElement('select', 'gainloss', get_string('gainloss', 'block_stash'), $options);
 
         // Buttons.
         $buttonarray = [];

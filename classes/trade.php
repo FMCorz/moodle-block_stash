@@ -78,4 +78,17 @@ class trade extends persistent {
         return true;
     }
 
+    public function get_full_trade_items_list($tradeid) {
+        global $DB;
+
+        $tradeitemfields = tradeitems::get_sql_fields('ti', 'tradeitem');
+        $itemfields = item::get_sql_fields('i', 'item');
+        $sql = "SELECT $itemfields, $tradeitemfields
+                  FROM {" . tradeitems::TABLE . "} ti
+                  JOIN {" . item::TABLE . "} i ON ti.itemid = i.id
+                 WHERE ti.tradeid = ?";
+        return $DB->get_records_sql($sql, [$tradeid]);
+
+    }
+
 }
