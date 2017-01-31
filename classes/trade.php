@@ -45,6 +45,12 @@ class trade extends persistent {
             ],
             'name' => [
                 'type' => PARAM_TEXT,
+            ],
+            'hashcode' => [
+                'type' => PARAM_ALPHANUM,
+                'default' => function() {
+                    return random_string(40);
+                }
             ]
         ];
     }
@@ -73,6 +79,19 @@ class trade extends persistent {
      */
     protected function validate_stashid($value) {
         if (!stash::record_exists($value)) {
+            return new lang_string('invaliddata', 'error');
+        }
+        return true;
+    }
+
+    /**
+     * Validate the hash code.
+     *
+     * @param string $value The hash code.
+     * @return true|lang_string
+     */
+    protected function validate_hashcode($value) {
+        if (strlen($value) != 40) {
             return new lang_string('invaliddata', 'error');
         }
         return true;

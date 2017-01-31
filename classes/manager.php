@@ -213,31 +213,6 @@ class manager {
     }
 
     /**
-     * Delete a trade drop.
-     *
-     * @param drop|int $droporid The drop, or its ID.
-     * @return void
-     */
-    public function delete_tradedrop($droporid) {
-        global $DB;
-        $this->require_enabled();
-        $this->require_manage();
-
-        $tradedrop = $droporid;
-        if (!is_object($tradedrop)) {
-            $tradedrop = $this->get_tradedrop($droporid);
-        }
-
-        if (!$this->is_trade_in_stash($tradedrop->get_tradeid())) {
-            throw new coding_exception('Unexpected trade tradedrop ID.');
-        }
-
-        $transaction = $DB->start_delegated_transaction();
-        $DB->delete_records(tradedrop::TABLE, ['id' => $tradedrop->get_id()]);
-        $transaction->allow_commit();
-    }
-
-    /**
      * Get an instance of the manager.
      *
      * @param int $courseid The course ID.
@@ -297,16 +272,6 @@ class manager {
      */
     public static function get_courseid_by_dropid($dropid) {
         return drop::get_courseid_by_id($dropid);
-    }
-
-    /**
-     * Get the course ID.
-     *
-     * @param int $dropid The drop ID.
-     * @return int
-     */
-    public static function get_courseid_by_tradedropid($tradedropid) {
-        return tradedrop::get_courseid_by_id($tradedropid);
     }
 
     /**
@@ -855,66 +820,6 @@ class manager {
             $tradeitem->update();
         }
         // return $trade;
-    }
-
-    /**
-     * Get an trade drop.
-     *
-     * For internal use, this does not perform any capability checks.
-     *
-     * @param int $drop The drop ID.
-     * @return tradedrop
-     */
-    public function get_tradedrop($dropid) {
-        $this->require_enabled();
-
-        $drop = new \block_stash\tradedrop($dropid);
-        if (!$this->is_trade_in_stash($drop->get_tradeid())) {
-            throw new coding_exception('Unexpected drop ID.');
-        }
-        return $drop;
-    }
-
-    /**
-     * Get the drops for a trade.
-     *
-     * @todo Support optional tradeid.
-     * @param int $itemid The trade ID.
-     * @return tradedrop[]
-     */
-    public function get_tradedrops($tradeid) {
-        $this->require_enabled();
-        $this->require_manage();
-
-        if (!$this->is_trade_in_stash($tradeid)) {
-            throw new coding_exception('Unexpected trade ID.');
-        }
-        return tradedrop::get_records(['tradeid' => $tradeid], 'name');
-    }
-
-    /**
-     * Create or update an item drop based on the data passed.
-     *
-     * @param stdClass $data Data to use to create or update.
-     * @return drop
-     */
-    public function create_or_update_tradedrop($data) {
-        $this->require_enabled();
-        $this->require_manage();
-
-        if (!$data->id) {
-            $drop = new tradedrop(null, $data);
-            $drop->create();
-
-        } else {
-            $drop = new tradedrop($data->id);
-            if ($data->itemid != $drop->get_tradeid()) {
-                throw new coding_exception('The trade ID of a drop cannot be changed.');
-            }
-            $drop->from_record($data);
-            $drop->update();
-        }
-        return $drop;
     }
 
     public function get_trade_items($tradeid) {
