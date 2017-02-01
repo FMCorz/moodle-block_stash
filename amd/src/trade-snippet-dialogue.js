@@ -23,8 +23,10 @@
 
 define([
     'core/templates',
-    'block_stash/dialogue-base'
-], function(Templates, DialogueBase) {
+    'block_stash/dialogue-base',
+    'core/ajax',
+    'core/notification'
+], function(Templates, DialogueBase, ajax, Notification) {
 
     /**
      * Snippet dialogue class.
@@ -51,6 +53,20 @@ define([
      * @return {Promise}
      */
     Dialog.prototype._render = function() {
+
+        ajax.call([
+            {methodname: 'block_stash_get_trade_items', args: {
+                tradeid: this._trade.get('id')
+            }}
+        ])[0].done(function(stuff) {
+
+            window.console.log('eyah');
+            window.console.log(stuff);
+
+        }).fail(Notification.exception);
+
+
+
         var context = {
             trade: this._trade.getData(),
             tradejson: JSON.stringify(this._trade.getData()),

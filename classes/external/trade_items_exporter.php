@@ -38,7 +38,7 @@ use renderer_base;
 class trade_items_exporter extends persistent_exporter {
 
     protected static function define_class() {
-        return 'block_stash\\trade_items';
+        return 'block_stash\\tradeitems';
     }
 
     protected static function define_related() {

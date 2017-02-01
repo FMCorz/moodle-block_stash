@@ -56,7 +56,7 @@ $functions = [
         'classname'    => 'block_stash\\external',
         'methodname'   => 'get_trade_items',
         'description'  => 'Get all trade items for the trade widget',
-        'type'         => 'read'
+        'type'         => 'read',
         'capabilities' => '',
         'ajax'         => true
     ],
