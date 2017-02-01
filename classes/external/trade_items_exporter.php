@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 use moodle_url;
 use renderer_base;
+use stdClass;
 
 /**
  * Persistent exporter class.
@@ -42,7 +43,30 @@ class trade_items_exporter extends persistent_exporter {
     }
 
     protected static function define_related() {
-        return array('context' => 'context');
+        return [
+            'context' => 'context',
+            'item' => 'block_stash\\item'
+        ];
+    }
+
+    protected static function define_other_properties() {
+        return [
+            'itemname' => [
+                'type' => PARAM_TEXT
+            ],
+            'imageurl' => [
+                'type' => PARAM_URL
+            ]
+        ];
+    }
+
+    protected function get_other_values(renderer_base $output) {
+        $item = $this->related['item'];
+        $imageurl = moodle_url::make_pluginfile_url($this->related['context']->id, 'block_stash', 'item', $item->get_id(), '/', 'image');
+        return [
+            'itemname' => $item->get_name(),
+            'imageurl' => $imageurl->out(false)
+        ];
     }
 
 }

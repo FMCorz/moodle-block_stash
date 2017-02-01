@@ -37,6 +37,7 @@ use external_value;
 use external_format_value;
 use external_single_structure;
 use external_multiple_structure;
+use stdClass;
 
 use block_stash\external\item_exporter;
 use block_stash\manager;
@@ -249,18 +250,21 @@ class external extends external_api {
         self::validate_context($manager->get_context());
 
         $tradeitems = $manager->get_trade_items($tradeid);
-        error_log(json_encode($tradeitems));
 
+        $records = [];
         $output = $PAGE->get_renderer('block_stash');
-        $exporter = new trade_items_exporter($tradeitems, array('context' => $manager->get_context()));
-        $record = $exporter->export($output);
-
-        return $record;
+        foreach ($tradeitems as $tradeitem) {
+            $item = $manager->get_item($tradeitem->get_itemid());
+            $exporter = new trade_items_exporter($tradeitem, array('context' => $manager->get_context(), 'item' => $item));
+            $records[] = $exporter->export($output);
+        }
+        return $records;
     }
 
     public static function get_trade_items_returns() {
-        // return null;
-        // return trade_items_exporter::get_read_structure();
+        return new external_multiple_structure(
+            trade_items_exporter::get_read_structure()
+        );
     }
 
 }

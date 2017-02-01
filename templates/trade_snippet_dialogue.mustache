@@ -17,6 +17,43 @@
 {{!
     Drop snippet dialogue.
 }}
-<div class="block-stash-drop-snippet-dialogue">
-
+<div class="block-stash-trade-snippet-dialogue">
+    <div>{{uniqid}}</div>
+    <div>{{trade.name}}</div>
+    <div class="block-stash-trade-items">
+        <div>Item</div>
+        {{#tradeitems}}
+            <div class="item">
+            {{#gainloss}}
+            {{>block_stash/item_xsmall}} {{itemname}} ({{quantity}})
+            {{/gainloss}}
+            </div>
+        {{/tradeitems}}
+        <div>Cost</div>
+        {{#tradeitems}}
+            <div class="item">
+            {{^gainloss}}
+            {{>block_stash/item_xsmall}} {{itemname}} ({{quantity}})
+            {{/gainloss}}
+            </div>
+        {{/tradeitems}}
+    </div>
+    <div>
+        <p><strong>{{#str}}snippet, block_stash{{/str}}</strong></p>
+        <textarea id="supertmep" name="snippet" onclick="this.select();" readonly></textarea>
+        <p><small>{{#str}}copypaste, block_stash{{/str}}</small></p>
+    </div>
 </div>
+
+{{#js}}
+require([
+    'jquery',
+    'block_stash/trade',
+    'block_stash/trade-snippet-maker'
+], function($, Trade, TradeSnippetMaker) {
+    var trade = new Trade({{{tradejson}}});
+    var tsm = new TradeSnippetMaker(trade);
+    var snippetbox = $('#supertmep');
+    snippetbox.html(tsm.getSnippet());
+});
+{{/js}}
