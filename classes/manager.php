@@ -821,7 +821,6 @@ class manager {
         $this->require_manage();
 
         if (!isset($data->id)) {
-            // $data->gainloss = ($data->gainloss) ? true : false;
             $tradeitem = new tradeitems(null, $data);
             $tradeitem->create();
         } else {
@@ -832,15 +831,12 @@ class manager {
             $tradeitem->from_record($data);
             $tradeitem->update();
         }
-        // return $trade;
     }
 
     public function get_trade_items($tradeid) {
         $this->require_enabled();
 
         return tradeitems::get_records(['tradeid' => $tradeid]);
-
-
     }
 
 }

@@ -53,33 +53,29 @@ define([
      * @return {Promise}
      */
     Dialog.prototype._render = function() {
-
-        ajax.call([
-            {methodname: 'block_stash_get_trade_items', args: {
-                tradeid: this._trade.get('id')
-            }}
-        ])[0].done(function(stuff) {
-
-            window.console.log('eyah');
-            window.console.log(stuff);
-
-        }).fail(Notification.exception);
-
-
-
         var context = {
             trade: this._trade.getData(),
             tradejson: JSON.stringify(this._trade.getData()),
             warnings: this._warnings,
             haswarnings: this._warnings && this._warnings.length,
         };
-        window.console.log(context);
-        return Templates.render('block_stash/trade_snippet_dialogue', context)
-        .then(function(html, js) {
-            this._setDialogueContent(html);
-            this.center();
-            Templates.runTemplateJS(js);
+
+        return ajax.call([
+            {methodname: 'block_stash_get_trade_items', args: {
+                tradeid: this._trade.get('id')
+            }}
+        ])[0].then(function(stuff) {
+            context.tradeitems = stuff;
+            Templates.render('block_stash/trade_snippet_dialogue', context)
+            .then(function(html, js) {
+                // window.console.log(context);
+                this._setDialogueContent(html);
+                this.center();
+                Templates.runTemplateJS(js);
+            }.bind(this));
+
         }.bind(this));
+
     };
 
     return /** @alias module:block_stash/drop-snippet-dialogue */ Dialog;
