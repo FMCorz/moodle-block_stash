@@ -41,6 +41,7 @@ use external_multiple_structure;
 use block_stash\external\item_exporter;
 use block_stash\manager;
 use block_stash\external\user_item_summary_exporter;
+use block_stash\external\trade_items_exporter;
 
 /**
  * External API class.
@@ -239,15 +240,27 @@ class external extends external_api {
     }
 
     public static function get_trade_items($tradeid) {
+        global $PAGE;
+
         $params = self::validate_parameters(self::get_trade_items_parameters(), compact('tradeid'));
         extract($params);
 
         $manager = manager::get_by_tradeid($tradeid);
         self::validate_context($manager->get_context());
+
+        $tradeitems = $manager->get_trade_items($tradeid);
+        error_log(json_encode($tradeitems));
+
+        $output = $PAGE->get_renderer('block_stash');
+        $exporter = new trade_items_exporter($tradeitems, array('context' => $manager->get_context()));
+        $record = $exporter->export($output);
+
+        return $record;
     }
 
     public static function get_trade_items_returns() {
-        return trade_items_exporter::get_read_structure();
+        // return null;
+        // return trade_items_exporter::get_read_structure();
     }
 
 }

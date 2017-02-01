@@ -261,8 +261,8 @@ class manager {
      * @param int $tradeid The trade ID.
      * @return manager
      */
-    public static function get_by_tradeid($trade) {
-        $stash = stash::get_by_trade($trade);
+    public static function get_by_tradeid($tradeid) {
+        $stash = stash::get_by_tradeid($tradeid);
         $manager = self::get($stash->get_courseid());
         $manager->stash = $stash;
         return $manager;
