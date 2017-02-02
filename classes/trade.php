@@ -46,6 +46,12 @@ class trade extends persistent {
             'name' => [
                 'type' => PARAM_TEXT,
             ],
+            'losstitle' => [
+                'type' => PARAM_TEXT,
+            ],
+            'gaintitle' => [
+                'type' => PARAM_TEXT,
+            ],
             'hashcode' => [
                 'type' => PARAM_ALPHANUM,
                 'default' => function() {

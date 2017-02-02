@@ -839,4 +839,93 @@ class manager {
         return tradeitems::get_records(['tradeid' => $tradeid]);
     }
 
+    public function do_trade($tradeid, $userid = null) {
+        global $USER;
+        $this->require_enabled();
+
+        if ($userid == $USER->id) {
+            $this->require_acquire_items();
+        } else {
+            // The current user needs to be able to manage, and the target user
+            // must have the permission to acquire items.
+            $this->require_manage();
+            $this->require_acquire_items($userid);
+        }
+
+        $tradeitems = $this->get_trade_items($tradeid);
+        $requireditems = [];
+        $itemstoacquire = [];
+        foreach ($tradeitems as $tradeitem) {
+            if (!$tradeitem->get_gainloss()) {
+                // Check the user has this item available to trade.
+                if (!$this->user_has_item_to_trade($tradeitem->get_itemid(), $tradeitem->get_quantity(), $userid)) {
+                    // If the user doesn't have any of the required items then cancel the trade.
+                    return false;
+                }
+                $requireditems[] = $tradeitem;
+            } else {
+                $itemstoacquire[] = $tradeitem;
+            }
+        }
+        // If we get this far, then follow through with the trade.
+        $this->remove_user_items($requireditems, $userid);
+        foreach ($itemstoacquire as $items) {
+            $this->pickup_item($items->get_itemid(), $items->get_quantity(), $userid);
+        }
+        // Send back summary information.
+    }
+
+    public function user_has_item_to_trade($itemid, $quantity, $userid) {
+        $this->require_enabled();
+
+        if (!$useritem = user_item::get_record(['itemid' => $itemid, 'userid' => $userid])) {
+            return false;
+        }
+        if ($useritem->get_quantity() < $quantity) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * This is used in trading to reduce the number or required items
+     *
+     * @param array $tradeitems an array of tradeitem objects.
+     * @param int $userid The ID of the user that we are removing items from.
+     * @return [type] [description]
+     */
+    public function remove_user_items($tradeitems, $userid = null) {
+        global $USER;
+        $this->require_enabled();
+
+        if ($userid == $USER->id) {
+            $this->require_acquire_items();
+        } else {
+            // The current user needs to be able to manage, and the target user
+            // must have the permission to acquire items.
+            $this->require_manage();
+            $this->require_acquire_items($userid);
+        }
+
+        foreach ($tradeitems as $tradeitem) {
+            $useritem = $this->get_user_item($userid, $tradeitem->get_itemid());
+            $currentquantity = intval($useritem->get_quantity());
+
+            // TODO Check if can have more than $quantity items.
+            // TODO Create a method that automatically pushes to the database to prevent race conditions.
+            $useritem->set_quantity($currentquantity - $tradeitem->get_quantity());
+            $useritem->update();
+            // TODO create this event.
+            // $event = \block_stash\event\item_removed::create(array(
+            //         'context' => $this->context,
+            //         'userid' => $USER->id,
+            //         'courseid' => $this->courseid,
+            //         'objectid' => $item->get_id(),
+            //         'relateduserid' => $userid,
+            //         'other' => array('quantity' => $quantity)
+            //     )
+            // );
+            // $event->trigger();
+        }
+    }
 }

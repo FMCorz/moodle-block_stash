@@ -40,6 +40,34 @@ define([
     Trade.prototype = Object.create(Base.prototype);
 
 
+    Trade.prototype.do = function() {
+
+        window.console.log(this.get('id'));
+        window.console.log(this.get('hashcode'));
+
+        return Ajax.call([{
+            methodname: 'block_stash_complete_trade',
+            args: {
+                tradeid: this.get('id'),
+                hashcode: this.get('hashcode')
+            }
+        }])[0].fail(function() {
+            Log.debug('The trade could not be completed.');
+
+        }).then(function(data) {
+
+            // Notify other areas about item removal and acquirement.
+
+            // Do not change this._item as it's not a predictable behaviour.
+            // var userItem = new UserItem(data.useritem, new Item(data.item));
+            // Counselor.trigger(this.EVENT_PICKEDUP, {
+            //     id: this.get('id'),
+            //     hashcode: this.get('hashcode'),
+            //     useritem: userItem
+            // });
+        }.bind(this));
+    }
+
 
     return /** @alias module:block_stash/trade */ Trade;
 

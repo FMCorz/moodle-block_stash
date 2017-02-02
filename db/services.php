@@ -60,4 +60,12 @@ $functions = [
         'capabilities' => '',
         'ajax'         => true
     ],
+    'block_stash_complete_trade' => [
+        'classname'    => 'block_stash\\external',
+        'methodname'   => 'complete_trade',
+        'description'  => 'Complete a trade with a user',
+        'type'         => 'write',
+        'capabilities' => '',
+        'ajax'         => true
+    ],
 ];
