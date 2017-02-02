@@ -206,6 +206,8 @@ function xmldb_block_stash_upgrade($oldversion) {
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('stashid', XMLDB_TYPE_INTEGER, '11', null, XMLDB_NOTNULL, null, null);
         $table->add_field('name', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $table->add_field('losstitle', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $table->add_field('gaintitle', XMLDB_TYPE_TEXT, null, null, null, null, null);
         $table->add_field('hashcode', XMLDB_TYPE_CHAR, '40', null, XMLDB_NOTNULL, null, null);
         $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
         $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
