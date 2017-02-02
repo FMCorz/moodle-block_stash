@@ -19,9 +19,53 @@
 }}
 <div id="{{uuid}}" style="display: inline;">
     <div class="block-stash-trade" title="{{trade.name}}" data-id="{{trade.id}}">
-        <div class="trade-label">{{trade.name}}</div>
-        {{#tradeitems}}
-            {{>block_stash/item_xsmall}} {{itemname}} ({{quantity}})
-        {{/tradeitems}}
+        <div class="trade-label text-xs-center p-y-1">{{trade.name}}</div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="block-stash-column-title">{{trade.gaintitle}}</div>
+                        {{#tradeitems}}
+                            {{#gainloss}}
+                            <div class="block-stash-trade-item">
+                            {{>block_stash/item_xsmall}} {{itemname}} ({{quantity}})
+                            </div>
+                            {{/gainloss}}
+                        {{/tradeitems}}
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="block-stash-column-title">{{trade.losstitle}}</div>
+                        {{#tradeitems}}
+                            {{^gainloss}}
+                            <div class="block-stash-trade-item">
+                            {{>block_stash/item_xsmall}} {{itemname}} ({{quantity}})
+                            </div>
+                            {{/gainloss}}
+                        {{/tradeitems}}
+                    </div>
+                </div>
+            </div>
+        <div class="accept-trade text-xs-center p-y-1">
+            <button>Accept</button>
+        </div>
     </div>
 </div>
+
+{{#js}}
+require(["jquery", "block_stash/trade"], function($, Trade) {
+    var trade = new Trade({id: {{trade.id}}, hashcode: '{{trade.hashcode}}'}),
+        node = $("#{{uuid}}");
+
+    if (!node.length) return;
+
+    {{#checkvisibility}}
+    trade.isVisible().then(function() {
+        node.css('display', 'inline');
+    });
+    {{/checkvisibility}}
+
+    node.find("button").click(function(e) {
+        e.preventDefault();
+        trade.do();
+    });
+});
+{{/js}}

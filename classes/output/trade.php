@@ -76,6 +76,7 @@ class trade implements renderable, templatable {
         $exporter = new trade_exporter($this->trade, ['context' => $this->manager->get_context()]);
         $data['trade'] = $exporter->export($output);
         $data['tradeitems'] = [];
+        $data['uuid'] = uniqid();
         foreach ($this->tradeitems as $tradeitem) {
             $item = $this->manager->get_item($tradeitem->get_itemid());
             $exporter = new trade_items_exporter($tradeitem, ['context' => $this->manager->get_context(), 'item' => $item]);

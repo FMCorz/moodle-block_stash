@@ -267,4 +267,44 @@ class external extends external_api {
         );
     }
 
+    /**
+     * External function parameter structure.
+     * @return external_function_paramters
+     */
+    public static function complete_trade_parameters() {
+        return new external_function_parameters([
+            'tradeid' => new external_value(PARAM_INT),
+            'hashcode' => new external_value(PARAM_ALPHANUM),
+        ]);
+    }
+
+    /**
+     * Is allowed from ajax?
+     * Only present for 2.9 compatibility.
+     * @return true
+     */
+    public static function complete_trade_is_allowed_from_ajax() {
+        return true;
+    }
+
+    public static function complete_trade($tradeid, $hashcode) {
+        global $USER;
+        $params = self::validate_parameters(self::complete_trade_parameters(), compact('tradeid', 'hashcode'));
+        extract($params);
+
+        $manager = manager::get_by_tradeid($tradeid);
+        self::validate_context($manager->get_context());
+
+        $trade = $manager->get_trade($tradeid);
+        if ($trade->get_hashcode() != $hashcode) {
+            throw new coding_exception('Unexpected hash code.');
+        }
+
+        $manager->do_trade($tradeid, $USER->id);
+    }
+
+    public static function complete_trade_returns() {
+        return null;
+    }
+
 }

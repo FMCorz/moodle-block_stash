@@ -197,7 +197,7 @@ function xmldb_block_stash_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2016082600, 'stash');
     }
 
-     if ($oldversion < 2017013004) {
+     if ($oldversion < 2017013007) {
 
         // Define table block_stash_trade to be created.
         $table = new xmldb_table('block_stash_trade');
@@ -222,10 +222,10 @@ function xmldb_block_stash_upgrade($oldversion) {
         }
 
         // Stash savepoint reached.
-        upgrade_block_savepoint(true, 2017013004, 'stash');
+        upgrade_block_savepoint(true, 2017013007, 'stash');
     }
 
-    if ($oldversion < 2017013005) {
+    if ($oldversion < 2017013008) {
 
         // Define table block_stash_trade_items to be created.
         $table = new xmldb_table('block_stash_trade_items');
@@ -249,7 +249,7 @@ function xmldb_block_stash_upgrade($oldversion) {
         }
 
         // Stash savepoint reached.
-        upgrade_block_savepoint(true, 2017013005, 'stash');
+        upgrade_block_savepoint(true, 2017013008, 'stash');
     }
 
     return true;

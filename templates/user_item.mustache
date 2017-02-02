@@ -20,9 +20,11 @@
     Displays a user item, which is effectively the item with
     the quantity owned by the user.
 }}
+{{#useritem.quantity}}
 <div class="block-stash-item item-small item-quantity-{{useritem.quantity}}" title="{{item.name}}" data-id="{{item.id}}">
     <div class="item-image" style="background-image: url({{item.imageurl}});">
         <div class="item-quantity">{{useritem.quantity}}</div>
         <div class="item-label">{{item.name}}</div>
     </div>
 </div>
+{{/useritem.quantity}}
