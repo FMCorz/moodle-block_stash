@@ -98,6 +98,8 @@
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="stashid" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false" COMMENT="Related stash ID"/>
         <FIELD NAME="name" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Name for this trade widget"/>
+        <FIELD NAME="losstitle" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="gaintitle" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="hashcode" TYPE="char" LENGTH="40" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>

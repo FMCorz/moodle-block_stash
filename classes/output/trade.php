@@ -32,6 +32,7 @@ use templatable;
 use block_stash\trade as trademodel;
 use block_stash\manager;
 use block_stash\external\trade_exporter;
+use block_stash\external\trade_items_exporter;
 
 /**
  * Trade renderable class.
@@ -48,15 +49,20 @@ class trade implements renderable, templatable {
     /** @var manager The manager. */
     protected $manager;
 
+    /** @var tradeitems items related to this trade */
+    protected $tradeitems;
+
     /**
      * Constructor.
      *
      * @param trade $trade The trade widget.
      * @param manager $manager The manager.
+     * @param array $tradeitems A list of trade items.
      */
-    public function __construct(trademodel $trade, manager $manager) {
+    public function __construct(trademodel $trade, manager $manager, $tradeitems) {
         $this->trade = $trade;
         $this->manager = $manager;
+        $this->tradeitems = $tradeitems;
     }
 
     /**
@@ -66,8 +72,17 @@ class trade implements renderable, templatable {
      * @return stdClass
      */
     public function export_for_template(renderer_base $output) {
+        $data = [];
         $exporter = new trade_exporter($this->trade, ['context' => $this->manager->get_context()]);
-        return $exporter->export($output);
+        $data['trade'] = $exporter->export($output);
+        $data['tradeitems'] = [];
+        foreach ($this->tradeitems as $tradeitem) {
+            $item = $this->manager->get_item($tradeitem->get_itemid());
+            $exporter = new trade_items_exporter($tradeitem, ['context' => $this->manager->get_context(), 'item' => $item]);
+            $data['tradeitems'][] = $exporter->export($output);
+        }
+        // print_object($data);
+        return $data;
     }
 
 }

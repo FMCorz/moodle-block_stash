@@ -17,6 +17,11 @@
 {{!
     Trade element.
 }}
-<div class="block-stash-trade" title="{{name}}" data-id="{{id}}">
-    <div class="item-label">{{name}}</div>
+<div id="{{uuid}}" style="display: inline;">
+    <div class="block-stash-trade" title="{{trade.name}}" data-id="{{trade.id}}">
+        <div class="trade-label">{{trade.name}}</div>
+        {{#tradeitems}}
+            {{>block_stash/item_xsmall}} {{itemname}} ({{quantity}})
+        {{/tradeitems}}
+    </div>
 </div>

@@ -164,3 +164,8 @@
     margin-right: 110px;
     margin-left: 0;
 }
+
+/** Trade widget box */
+.block-stash-trade {
+    border: 1px solid;
+}
