@@ -24,7 +24,8 @@
 
 $string['additem'] = 'Add an item';
 $string['addnewdrop'] = 'Add new location';
-// $string['addnewtradedrop'] = 'Add new location';
+$string['addnewtradeitem'] = 'Add new item to this trade';
+$string['addtradeitem'] = 'Add a trade item';
 $string['addtoinventory'] = 'Add an item to the inventory.';
 $string['addtrade'] = 'Add a trade widget';
 $string['aftercreatinglocationhelp'] = 'Once you have created the item and the location, you need to add a code snippet to your course for the item to be displayed. After customising how the item will be displayed to your students, copy the snippet below and paste it in your content, in the description of an assignment for instance.';
@@ -53,6 +54,7 @@ $string['edit'] = 'Edit'; // Should be replaced with the pix icon.
 $string['editdrop'] = 'Edit location \'{$a}\'';
 $string['edititem'] = 'Edit item \'{$a}\'';
 $string['edittrade'] = 'Edit trade widget \'{$a}\'';
+$string['edittradeitem'] = 'Edit trade item \'{$a}\'';
 $string['eginthecastle'] = 'E.g. In the castle';
 $string['eventitemacquired'] = 'An item was acquired.';
 $string['filterstashnotactive'] = 'The filter plugin is installed but not yet enabled for this course. Visit <a href="{$a->activeurl}" target="_blank">this page</a> to enable it for this course.';
@@ -109,9 +111,7 @@ $string['stash:addinstance'] = 'Add a the block to a page';
 $string['stash:view'] = 'View the stash and its content';
 $string['text'] = 'Text';
 $string['trade'] = 'Trade';
-$string['tradedrops'] = 'Locations';
-$string['tradedrops_help'] = '
-<p>Locations are places where your trade widgets are in the <em>virtual world</em>. Without a <em>location</em> a trade widget cannot be interacted with by a student.</p>';
+$string['tradeitem'] = 'Trade item';
 $string['tradeitems'] = 'Trade items';
 $string['tradelist'] = 'List of trade widgets';
 $string['tradename'] = 'Trade name';

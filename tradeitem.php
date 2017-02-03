@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Trade edit page.
+ * Trade item edit page.
  *
  * @package    block_stash
  * @copyright  2017 Adrian Greeve <adriangreeve.com>
@@ -25,7 +25,8 @@
 require_once(__DIR__ . '/../../config.php');
 
 $courseid = required_param('courseid', PARAM_INT);
-$id = optional_param('id', '0', PARAM_INT);
+$tradeid = required_param('tradeid', PARAM_INT);
+$id = optional_param('id', 0, PARAM_INT);
 
 require_login($courseid);
 
@@ -34,44 +35,31 @@ $manager->require_enabled();
 $manager->require_manage();
 
 $context = context_course::instance($courseid);
-$url = new moodle_url('/blocks/stash/trade_edit.php', array('courseid' => $courseid, 'id' => $id));
+$url = new moodle_url('/blocks/stash/tradeitem.php', array('courseid' => $courseid, 'id' => $id));
 
-$trade = $id ? $manager->get_trade($id) : null;
+$tradeitem = $id ? $manager->get_trade_item($id) : null;
+$tradeitemname = '';
+if ($tradeitem) {
+    $item = $manager->get_item($tradeitem->get_itemid());
+    $tradeitemname = format_string($item->get_name(), true, ['context' => $context]);
+}
 
-$tradename = $trade ? format_string($trade->get_name(), true, ['context' => $context]) : '';
-$pagetitle = $trade ? get_string('edittrade', 'block_stash', $tradename) : get_string('addtrade', 'block_stash');
-list($title, $subtitle, $returnurl) = \block_stash\page_helper::setup_for_trade($url, $manager, $trade, $pagetitle);
+$pagetitle = $tradeitem ? get_string('edittradeitem', 'block_stash', $tradeitemname) : get_string('addtradeitem', 'block_stash');
+list($title, $subtitle, $returnurl) = \block_stash\page_helper::setup_for_trade_item($url, $manager, $tradeitemname, $pagetitle);
 
 $customdata = [
-    'persistent' => $trade,
-    'stash' => $manager->get_stash(),
+    'persistent' => $tradeitem,
     'manager' => $manager,
+    'tradeid' => $tradeid
 ];
 
 $renderer = $PAGE->get_renderer('block_stash');
-$form = new \block_stash\form\trade($url->out(false), $customdata);
+$form = new \block_stash\form\tradeitem($url->out(false), $customdata);
 
 
 if ($data = $form->get_data()) {
 
-    $saveandnext = !empty($data->saveandnext);
-    unset($data->saveandnext);
-
-    // $tradeitemdata = new stdClass();
-    // $tradeitemdata->itemid = $data->itemid;
-    // $tradeitemdata->quantity = $data->quantity;
-    // $tradeitemdata->gainloss = $data->gainloss;
-    // unset($data->itemid);
-    // unset($data->quantity);
-    // unset($data->gainloss);
-
-    $savedtrade = $manager->create_or_update_trade($data);
-    // $tradeitemdata->tradeid = $savedtrade->get_id();
-    // $manager->create_or_update_tradeitem($tradeitemdata);
-
-    if ($saveandnext) {
-        redirect(new moodle_url('/blocks/stash/tradeitem.php', ['tradeid' => $savedtrade->get_id(), 'courseid' => $manager->get_courseid()]));
-    }
+    $manager->create_or_update_tradeitem($data);
     redirect($returnurl);
 
 } else if ($form->is_cancelled()) {

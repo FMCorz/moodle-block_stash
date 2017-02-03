@@ -820,7 +820,7 @@ class manager {
         $this->require_enabled();
         $this->require_manage();
 
-        if (!isset($data->id)) {
+        if (empty($data->id)) {
             $tradeitem = new tradeitems(null, $data);
             $tradeitem->create();
         } else {
@@ -831,6 +831,12 @@ class manager {
             $tradeitem->from_record($data);
             $tradeitem->update();
         }
+    }
+
+    public function get_trade_item($id) {
+        $this->require_enabled();
+
+        return tradeitems::get_record(['id' => $id]);
     }
 
     public function get_trade_items($tradeid) {

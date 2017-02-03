@@ -18,26 +18,41 @@
     Drop snippet dialogue.
 }}
 <div class="block-stash-trade-snippet-dialogue">
-    <div>{{uniqid}}</div>
-    <div>{{trade.name}}</div>
-    <div class="block-stash-trade-items">
-        <div>Item</div>
-        {{#tradeitems}}
-            <div class="item">
-            {{#gainloss}}
-            {{>block_stash/item_xsmall}} {{itemname}} ({{quantity}})
-            {{/gainloss}}
+    <div id="{{uuid}}" style="display: inline;">
+        <div class="block-stash-trade" title="{{trade.name}}" data-id="{{trade.id}}">
+            <div class="trade-label text-center p-y-1">{{trade.name}}</div>
+                <div class="container-fluid">
+                    <div class="row-fluid">
+                        <div class="span6">
+                            <div class="block-stash-column-title"><strong>{{trade.gaintitle}}</strong></div>
+                            {{#tradeitems}}
+                                {{#gainloss}}
+                                <div class="block-stash-trade-item">
+                                {{>block_stash/item_xsmall}} {{itemname}} ({{quantity}})
+                                <a title="" href="{{editurl}}">{{#pix}}t/edit, core{{/pix}}</a>
+                                <a title="" href="{{editurl}}">{{#pix}}t/delete, core{{/pix}}</a>
+                                </div>
+                                {{/gainloss}}
+                            {{/tradeitems}}
+                        </div>
+                        <div class="span6">
+                            <div class="block-stash-column-title"><strong>{{trade.losstitle}}</strong></div>
+                            {{#tradeitems}}
+                                {{^gainloss}}
+                                <div class="block-stash-trade-item">
+                                {{>block_stash/item_xsmall}} {{itemname}} ({{quantity}})
+                                <a title="" href="{{editurl}}">{{#pix}}t/edit, core{{/pix}}</a>
+                                <a title="" href="{{editurl}}">{{#pix}}t/delete, core{{/pix}}</a>
+                                </div>
+                                {{/gainloss}}
+                            {{/tradeitems}}
+                        </div>
+                    </div>
+                </div>
             </div>
-        {{/tradeitems}}
-        <div>Cost</div>
-        {{#tradeitems}}
-            <div class="item">
-            {{^gainloss}}
-            {{>block_stash/item_xsmall}} {{itemname}} ({{quantity}})
-            {{/gainloss}}
-            </div>
-        {{/tradeitems}}
+        </div>
     </div>
+</div>
     <div>
         <p><strong>{{#str}}snippet, block_stash{{/str}}</strong></p>
         <textarea id="supertmep" name="snippet" onclick="this.select();" readonly></textarea>
