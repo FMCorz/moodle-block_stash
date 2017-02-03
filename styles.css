@@ -169,4 +169,9 @@
 .block-stash-trade {
     border: 1px solid;
     max-width: 400px;
+    border-radius: 0.3em;
+}
+
+.trade-label {
+    border-bottom: 1px solid;
 }

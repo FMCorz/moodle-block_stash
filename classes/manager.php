@@ -879,6 +879,10 @@ class manager {
             $this->pickup_item($items->get_itemid(), $items->get_quantity(), $userid);
         }
         // Send back summary information.
+        return [
+            'acquireditems' => $itemstoacquire,
+            'removeditems' => $requireditems
+        ];
     }
 
     public function user_has_item_to_trade($itemid, $quantity, $userid) {

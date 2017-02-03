@@ -27,7 +27,10 @@ define([
     'core/log',
     'block_stash/base',
     'block_stash/counselor',
-], function($, Ajax, Log, Base, Counselor) {
+    'block_stash/trade-dialogue',
+    'block_stash/item',
+    'block_stash/user-item'
+], function($, Ajax, Log, Base, Counselor, Dialogue, Item, UserItem) {
 
     /**
      * Trade class.
@@ -38,6 +41,8 @@ define([
         Base.prototype.constructor.apply(this, [tradedata]);
     }
     Trade.prototype = Object.create(Base.prototype);
+
+    Trade.prototype.EVENT_PICKEDUP = 'drop:pickedup';
 
 
     Trade.prototype.do = function() {
@@ -56,15 +61,40 @@ define([
 
         }).then(function(data) {
 
+            // window.console.log(data);
             // Notify other areas about item removal and acquirement.
+            if (data) {
+                window.console.log(data);
+                for (index in data.gaineditems) {
+                    // window.console.log(data.gaineditems[index]);
+                    var userItem = new UserItem(data.gaineditems[index].useritem, new Item(data.gaineditems[index].item));
+                    // window.console.log(userItem);
+                    Counselor.trigger(this.EVENT_PICKEDUP, {
+                        id: this.get('id'),
+                        hashcode: this.get('hashcode'),
+                        useritem: userItem
+                    });
+                }
 
-            // Do not change this._item as it's not a predictable behaviour.
-            // var userItem = new UserItem(data.useritem, new Item(data.item));
-            // Counselor.trigger(this.EVENT_PICKEDUP, {
-            //     id: this.get('id'),
-            //     hashcode: this.get('hashcode'),
-            //     useritem: userItem
-            // });
+                for (index in data.removeditems) {
+                    // window.console.log(data.removeditems[index]);
+                    var userItem = new UserItem(data.removeditems[index].useritem, new Item(data.removeditems[index].item));
+                    // window.console.log(userItem);
+                    Counselor.trigger(this.EVENT_PICKEDUP, {
+                        id: this.get('id'),
+                        hashcode: this.get('hashcode'),
+                        useritem: userItem
+                    });
+                }
+
+                // This is super ugly.
+                // dialogue = new Dialogue();
+                // dialogue.show([]);
+                // alert('Trade done');
+            }
+
+
+
         }.bind(this));
     }
 
