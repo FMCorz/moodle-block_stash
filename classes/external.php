@@ -43,6 +43,7 @@ use block_stash\external\item_exporter;
 use block_stash\manager;
 use block_stash\external\user_item_summary_exporter;
 use block_stash\external\trade_items_exporter;
+use block_stash\external\trade_summary_exporter;
 
 /**
  * External API class.
@@ -288,7 +289,7 @@ class external extends external_api {
     }
 
     public static function complete_trade($tradeid, $hashcode) {
-        global $USER;
+        global $USER, $PAGE;
         $params = self::validate_parameters(self::complete_trade_parameters(), compact('tradeid', 'hashcode'));
         extract($params);
 
@@ -300,11 +301,32 @@ class external extends external_api {
             throw new coding_exception('Unexpected hash code.');
         }
 
-        $manager->do_trade($tradeid, $USER->id);
+        $summarydata = $manager->do_trade($tradeid, $USER->id);
+
+        // Need to take this data and turn it into items and user items.
+        $removeditems = [];
+        $gaineditems = [];
+        foreach ($summarydata['acquireditems'] as $gaineditem) {
+            $gaineditems[$gaineditem->get_itemid()]->item = $manager->get_item($gaineditem->get_itemid());
+            $gaineditems[$gaineditem->get_itemid()]->useritem = $manager->get_user_item($USER->id, $gaineditem->get_itemid());
+        }
+        foreach ($summarydata['removeditems'] as $removeditem) {
+            $removeditems[$removeditem->get_itemid()]->item = $manager->get_item($removeditem->get_itemid());
+            $removeditems[$removeditem->get_itemid()]->useritem = $manager->get_user_item($USER->id, $removeditem->get_itemid());
+        }
+
+        $exporter = new trade_summary_exporter([], ['context' => $manager->get_context(),
+                                                    'gaineditems' => $gaineditems,
+                                                    'removeditems' => $removeditems]);
+        $output = $PAGE->get_renderer('block_stash');
+        $records = $exporter->export($output);
+
+        return $records;
+
     }
 
     public static function complete_trade_returns() {
-        return null;
+        return trade_summary_exporter::get_read_structure();
     }
 
 }
