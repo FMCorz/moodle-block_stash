@@ -66,6 +66,7 @@ define([
             }}
         ])[0].then(function(stuff) {
             context.tradeitems = stuff;
+            window.console.log(context);
             Templates.render('block_stash/trade_snippet_dialogue', context)
             .then(function(html, js) {
                 // window.console.log(context);

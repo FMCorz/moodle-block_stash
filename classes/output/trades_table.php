@@ -74,7 +74,7 @@ class trades_table extends table_sql {
         ));
         $this->define_headers(array(
             get_string('tradename', 'block_stash'),
-            get_string('locations', 'block_stash'),
+            // get_string('locations', 'block_stash'),
             // get_string('maxnumber', 'block_stash'),
             get_string('actions')
         ));
@@ -115,11 +115,11 @@ class trades_table extends table_sql {
             get_string('edititem', 'block_stash', $row->name)));
         $actions[] = $actionlink;
 
-        // $url = new moodle_url('/blocks/stash/tradedrop.php');
-        // $url->params(['tradeid' => $row->id, 'courseid' => $this->manager->get_courseid()]);
-        // $actionlink = $OUTPUT->action_link($url, '', null, null, new pix_icon('t/add',
-        //     get_string('addnewdrop', 'block_stash', $row->name)));
-        // $actions[] = $actionlink;
+        $url = new moodle_url('/blocks/stash/tradeitem.php');
+        $url->params(['tradeid' => $row->id, 'courseid' => $this->manager->get_courseid()]);
+        $actionlink = $OUTPUT->action_link($url, '', null, null, new pix_icon('t/add',
+            get_string('addnewtradeitem', 'block_stash', $row->name)));
+        $actions[] = $actionlink;
 
         $action = new confirm_action(get_string('reallydeleteitem', 'block_stash'));
         $url = new moodle_url($this->baseurl);

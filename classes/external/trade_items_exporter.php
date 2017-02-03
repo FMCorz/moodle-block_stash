@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 use moodle_url;
 use renderer_base;
 use stdClass;
+use block_stash\manager;
 
 /**
  * Persistent exporter class.
@@ -56,16 +57,23 @@ class trade_items_exporter extends persistent_exporter {
             ],
             'imageurl' => [
                 'type' => PARAM_URL
+            ],
+            'editurl' => [
+                'type' => PARAM_URL
             ]
         ];
     }
 
     protected function get_other_values(renderer_base $output) {
         $item = $this->related['item'];
+        error_log($item->get_id());
+        $manager = manager::get_by_itemid($item->get_id());
         $imageurl = moodle_url::make_pluginfile_url($this->related['context']->id, 'block_stash', 'item', $item->get_id(), '/', 'image');
+        $editurl = new moodle_url('/blocks/stash/tradeitem.php', ['id' => $this->persistent->get_id(), 'courseid' => $manager->get_courseid(), 'tradeid' => $this->persistent->get_tradeid()]);
         return [
             'itemname' => $item->get_name(),
-            'imageurl' => $imageurl->out(false)
+            'imageurl' => $imageurl->out(false),
+            'editurl' => $editurl->out(false)
         ];
     }
 
