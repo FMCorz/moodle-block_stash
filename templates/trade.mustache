@@ -27,7 +27,7 @@
                         {{#tradeitems}}
                             {{#gainloss}}
                             <div class="block-stash-trade-item">
-                            {{>block_stash/item_xsmall}} {{itemname}} ({{quantity}})
+                            {{>block_stash/item_xsmall}} <span>{{itemname}}</span>
                             </div>
                             {{/gainloss}}
                         {{/tradeitems}}
@@ -37,16 +37,18 @@
                         {{#tradeitems}}
                             {{^gainloss}}
                             <div class="block-stash-trade-item">
-                            {{>block_stash/item_xsmall}} {{itemname}} ({{quantity}})
+                            {{>block_stash/item_xsmall}} <span class="gained-items {{^userquantity}}dimmed{{/userquantity}}">{{itemname}} ({{userquantity}} / {{quantity}})</span>
                             </div>
                             {{/gainloss}}
                         {{/tradeitems}}
                     </div>
                 </div>
             </div>
+        {{#cantrade}}
         <div class="accept-trade text-xs-center p-y-1">
             <center><button>Accept</button></center>
         </div>
+        {{/cantrade}}
     </div>
 </div>
 

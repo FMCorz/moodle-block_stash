@@ -175,3 +175,7 @@
 .trade-label {
     border-bottom: 1px solid;
 }
+
+.dimmed {
+    color: #999;
+}
