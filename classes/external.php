@@ -242,7 +242,7 @@ class external extends external_api {
     }
 
     public static function get_trade_items($tradeid) {
-        global $PAGE;
+        global $PAGE, $USER;
 
         $params = self::validate_parameters(self::get_trade_items_parameters(), compact('tradeid'));
         extract($params);
@@ -256,7 +256,9 @@ class external extends external_api {
         $output = $PAGE->get_renderer('block_stash');
         foreach ($tradeitems as $tradeitem) {
             $item = $manager->get_item($tradeitem->get_itemid());
-            $exporter = new trade_items_exporter($tradeitem, array('context' => $manager->get_context(), 'item' => $item));
+            $useritem = $manager->get_user_item($USER->id, $item->get_id());
+            $exporter = new trade_items_exporter($tradeitem, array('context' => $manager->get_context(), 'item' => $item,
+                    'useritem' => $useritem));
             $records[] = $exporter->export($output);
         }
         return $records;
@@ -306,13 +308,15 @@ class external extends external_api {
         // Need to take this data and turn it into items and user items.
         $removeditems = [];
         $gaineditems = [];
-        foreach ($summarydata['acquireditems'] as $gaineditem) {
-            $gaineditems[$gaineditem->get_itemid()]->item = $manager->get_item($gaineditem->get_itemid());
-            $gaineditems[$gaineditem->get_itemid()]->useritem = $manager->get_user_item($USER->id, $gaineditem->get_itemid());
-        }
-        foreach ($summarydata['removeditems'] as $removeditem) {
-            $removeditems[$removeditem->get_itemid()]->item = $manager->get_item($removeditem->get_itemid());
-            $removeditems[$removeditem->get_itemid()]->useritem = $manager->get_user_item($USER->id, $removeditem->get_itemid());
+        if ($summarydata) {
+            foreach ($summarydata['acquireditems'] as $gaineditem) {
+                $gaineditems[$gaineditem->get_itemid()]->item = $manager->get_item($gaineditem->get_itemid());
+                $gaineditems[$gaineditem->get_itemid()]->useritem = $manager->get_user_item($USER->id, $gaineditem->get_itemid());
+            }
+            foreach ($summarydata['removeditems'] as $removeditem) {
+                $removeditems[$removeditem->get_itemid()]->item = $manager->get_item($removeditem->get_itemid());
+                $removeditems[$removeditem->get_itemid()]->useritem = $manager->get_user_item($USER->id, $removeditem->get_itemid());
+            }
         }
 
         $exporter = new trade_summary_exporter([], ['context' => $manager->get_context(),

@@ -47,9 +47,6 @@ define([
 
     Trade.prototype.do = function() {
 
-        window.console.log(this.get('id'));
-        window.console.log(this.get('hashcode'));
-
         return Ajax.call([{
             methodname: 'block_stash_complete_trade',
             args: {
@@ -61,6 +58,7 @@ define([
 
         }).then(function(data) {
 
+            // window.console.log('Blah');
             // window.console.log(data);
             // Notify other areas about item removal and acquirement.
             if (data) {

@@ -845,17 +845,12 @@ class manager {
         return tradeitems::get_records(['tradeid' => $tradeid]);
     }
 
-    public function do_trade($tradeid, $userid = null) {
+    public function do_trade($tradeid, $userid = null, $checkifcantrade = false) {
         global $USER;
         $this->require_enabled();
 
-        if ($userid == $USER->id) {
-            $this->require_acquire_items();
-        } else {
-            // The current user needs to be able to manage, and the target user
-            // must have the permission to acquire items.
-            $this->require_manage();
-            $this->require_acquire_items($userid);
+        if (!$this->can_manage() && !$this->can_acquire_items()) {
+            return false;
         }
 
         $tradeitems = $this->get_trade_items($tradeid);
@@ -872,6 +867,9 @@ class manager {
             } else {
                 $itemstoacquire[] = $tradeitem;
             }
+        }
+        if ($checkifcantrade) {
+            return true;
         }
         // If we get this far, then follow through with the trade.
         $this->remove_user_items($requireditems, $userid);

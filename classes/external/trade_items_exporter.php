@@ -46,7 +46,8 @@ class trade_items_exporter extends persistent_exporter {
     protected static function define_related() {
         return [
             'context' => 'context',
-            'item' => 'block_stash\\item'
+            'item' => 'block_stash\\item',
+            'useritem' => 'block_stash\\user_item'
         ];
     }
 
@@ -60,20 +61,27 @@ class trade_items_exporter extends persistent_exporter {
             ],
             'editurl' => [
                 'type' => PARAM_URL
+            ],
+            'userquantity' => [
+                'type' => PARAM_INT
             ]
         ];
     }
 
     protected function get_other_values(renderer_base $output) {
         $item = $this->related['item'];
-        error_log($item->get_id());
         $manager = manager::get_by_itemid($item->get_id());
         $imageurl = moodle_url::make_pluginfile_url($this->related['context']->id, 'block_stash', 'item', $item->get_id(), '/', 'image');
         $editurl = new moodle_url('/blocks/stash/tradeitem.php', ['id' => $this->persistent->get_id(), 'courseid' => $manager->get_courseid(), 'tradeid' => $this->persistent->get_tradeid()]);
+        $quantity = 0;
+        if (!empty($this->related['useritem']->get_quantity())) {
+            $quantity = $this->related['useritem']->get_quantity();
+        }
         return [
             'itemname' => $item->get_name(),
             'imageurl' => $imageurl->out(false),
-            'editurl' => $editurl->out(false)
+            'editurl' => $editurl->out(false),
+            'userquantity' => $quantity
         ];
     }
 

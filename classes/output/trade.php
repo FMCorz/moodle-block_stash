@@ -72,17 +72,20 @@ class trade implements renderable, templatable {
      * @return stdClass
      */
     public function export_for_template(renderer_base $output) {
+        global $USER;
         $data = [];
         $exporter = new trade_exporter($this->trade, ['context' => $this->manager->get_context()]);
         $data['trade'] = $exporter->export($output);
         $data['tradeitems'] = [];
         $data['uuid'] = uniqid();
+        $data['cantrade'] = $this->manager->do_trade($this->trade->get_id(), $USER->id, true);
         foreach ($this->tradeitems as $tradeitem) {
             $item = $this->manager->get_item($tradeitem->get_itemid());
-            $exporter = new trade_items_exporter($tradeitem, ['context' => $this->manager->get_context(), 'item' => $item]);
+            $useritem = $this->manager->get_user_item($USER->id, $item->get_id());
+            $exporter = new trade_items_exporter($tradeitem, ['context' => $this->manager->get_context(), 'item' => $item,
+                    'useritem' => $useritem]);
             $data['tradeitems'][] = $exporter->export($output);
         }
-        // print_object($data);
         return $data;
     }
 
