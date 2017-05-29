@@ -85,6 +85,25 @@ define([
                     });
                 }
 
+                var lostitems = $('.gained-items');
+                
+                lostitems.each(function() {
+
+                    var lostitemdata = this.innerHTML;
+                    var pattern = /(.+)\((\d+)\s*\/\s*(\d+)\)/g;
+                    var result = pattern.exec(lostitemdata);
+                    var itemname = result[1];
+                    var available = result[2];
+                    var required = result[3];
+                    if (available > required) {
+                        var newavailable = available - required;
+                        this.val(itemname + '(' + newavailable + ' \\ ' + required + ')');
+                    }
+                    // window.console.log(result[1]);
+                    // window.console.log(result[2]);
+                });
+            
+
                 // This is super ugly.
                 // dialogue = new Dialogue();
                 // dialogue.show([]);
