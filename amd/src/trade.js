@@ -29,7 +29,7 @@ define([
     'block_stash/counselor',
     'block_stash/trade-dialogue',
     'block_stash/item',
-    'block_stash/user-item'
+    'block_stash/user-item',
 ], function($, Ajax, Log, Base, Counselor, Dialogue, Item, UserItem) {
 
     /**
@@ -42,7 +42,7 @@ define([
     }
     Trade.prototype = Object.create(Base.prototype);
 
-    Trade.prototype.EVENT_PICKEDUP = 'drop:pickedup';
+    Trade.prototype.EVENT_TRADE = 'trade:pickedup';
 
 
     Trade.prototype.do = function() {
@@ -58,62 +58,30 @@ define([
 
         }).then(function(data) {
 
-            // window.console.log('Blah');
-            // window.console.log(data);
             // Notify other areas about item removal and acquirement.
             if (data) {
-                window.console.log(data);
-                for (index in data.gaineditems) {
-                    // window.console.log(data.gaineditems[index]);
+                for (var index in data.gaineditems) {
+
                     var userItem = new UserItem(data.gaineditems[index].useritem, new Item(data.gaineditems[index].item));
-                    // window.console.log(userItem);
-                    Counselor.trigger(this.EVENT_PICKEDUP, {
+                    Counselor.trigger(this.EVENT_TRADE, {
                         id: this.get('id'),
                         hashcode: this.get('hashcode'),
                         useritem: userItem
                     });
                 }
 
-                for (index in data.removeditems) {
-                    // window.console.log(data.removeditems[index]);
+                for (var index in data.removeditems) {
                     var userItem = new UserItem(data.removeditems[index].useritem, new Item(data.removeditems[index].item));
-                    // window.console.log(userItem);
-                    Counselor.trigger(this.EVENT_PICKEDUP, {
+                    Counselor.trigger(this.EVENT_TRADE, {
                         id: this.get('id'),
                         hashcode: this.get('hashcode'),
                         useritem: userItem
                     });
                 }
-
-                var lostitems = $('.gained-items');
-                
-                lostitems.each(function() {
-
-                    var lostitemdata = this.innerHTML;
-                    var pattern = /(.+)\((\d+)\s*\/\s*(\d+)\)/g;
-                    var result = pattern.exec(lostitemdata);
-                    var itemname = result[1];
-                    var available = result[2];
-                    var required = result[3];
-                    if (available > required) {
-                        var newavailable = available - required;
-                        this.val(itemname + '(' + newavailable + ' \\ ' + required + ')');
-                    }
-                    // window.console.log(result[1]);
-                    // window.console.log(result[2]);
-                });
-            
-
-                // This is super ugly.
-                // dialogue = new Dialogue();
-                // dialogue.show([]);
-                // alert('Trade done');
             }
 
-
-
         }.bind(this));
-    }
+    };
 
 
     return /** @alias module:block_stash/trade */ Trade;

@@ -65,7 +65,9 @@ abstract class restore_decode_rule extends \restore_decode_rule {
      * @param string $content The content.
      * @return string
      */
-    abstract public static function encode_content($content);
+    public static function encode_content($content) {
+        // Nothing.
+    }
 
     /**
      * Classes which we must use to encode/decode content.
@@ -81,15 +83,12 @@ abstract class restore_decode_rule extends \restore_decode_rule {
             'block_stash\\drop_snippet_restore_decode_rule'
         ];
 
-        if (class_exists('filter_stash\\drop_snippet_restore_decode_rule')) {
-            $rules[] = 'filter_stash\drop_snippet_restore_decode_rule';
-        }
         if (class_exists('filter_stash\\trade_snippet_restore_decode_rule')) {
             $rules[] = 'filter_stash\trade_snippet_restore_decode_rule';
         }
-
-        // var_dump($rules);
-        // die();
+        if (class_exists('filter_stash\\drop_snippet_restore_decode_rule')) {
+            $rules[] = 'filter_stash\drop_snippet_restore_decode_rule';
+        }
 
         return $rules;
     }

@@ -18,7 +18,7 @@
     Trade element.
 }}
 <div id="{{uuid}}" style="display: inline;">
-    <div class="block-stash-trade" title="{{trade.name}}" data-id="{{trade.id}}">
+    <div class="block-stash-trade" title="{{trade.name}}" id="block-stash-trade-id-{{trade.id}}" data-id="{{trade.id}}">
         <div class="trade-label text-center p-y-1">{{trade.name}}</div>
             <div class="container-fluid">
                 <div class="row-fluid">
@@ -27,7 +27,7 @@
                         {{#tradeitems}}
                             {{#gainloss}}
                             <div class="block-stash-trade-item">
-                            {{>block_stash/item_xsmall}} <span>{{itemname}}</span>
+                            {{>block_stash/item_xsmall}} <span>{{name}} ({{quantity}})</span>
                             </div>
                             {{/gainloss}}
                         {{/tradeitems}}
@@ -37,24 +37,25 @@
                         {{#tradeitems}}
                             {{^gainloss}}
                             <div class="block-stash-trade-item">
-                            {{>block_stash/item_xsmall}} <span class="gained-items {{^userquantity}}dimmed{{/userquantity}}">{{itemname}} ({{userquantity}} / {{quantity}})</span>
+                            {{>block_stash/item_xsmall}} <span class="block-stash-trade-item-{{itemid}}" data-tradeid="{{trade.id}}">{{>block_stash/tradeitem_detail}}</span>
                             </div>
                             {{/gainloss}}
                         {{/tradeitems}}
                     </div>
                 </div>
             </div>
-        {{#cantrade}}
+
         <div class="accept-trade text-xs-center p-y-1">
             <center><button>{{#str}}accept, block_stash{{/str}}</button></center>
         </div>
-        {{/cantrade}}
+
     </div>
 </div>
 
 {{#js}}
-require(["jquery", "block_stash/trade"], function($, Trade) {
-    var trade = new Trade({id: {{trade.id}}, hashcode: '{{trade.hashcode}}'}),
+require(["jquery", "block_stash/trade", "block_stash/trade-area"], function($, Trade, TradeArea) {
+    var tradeArea = new TradeArea('#block-stash-trade-id-{{trade.id}}'),
+        trade = new Trade({id: {{trade.id}}, hashcode: '{{trade.hashcode}}'}),
         node = $("#{{uuid}}");
 
     if (!node.length) return;

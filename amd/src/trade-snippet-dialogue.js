@@ -25,8 +25,7 @@ define([
     'core/templates',
     'block_stash/dialogue-base',
     'core/ajax',
-    'core/notification'
-], function(Templates, DialogueBase, ajax, Notification) {
+], function(Templates, DialogueBase, ajax) {
 
     /**
      * Snippet dialogue class.
