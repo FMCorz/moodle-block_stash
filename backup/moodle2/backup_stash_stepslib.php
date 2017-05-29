@@ -29,6 +29,8 @@ use block_stash\drop;
 use block_stash\drop_pickup;
 use block_stash\stash;
 use block_stash\user_item;
+use block_stash\trade;
+use block_stash\tradeitems;
 
 /**
  * Block backup structure step class.
@@ -58,6 +60,12 @@ class backup_stash_block_structure_step extends backup_block_structure_step {
         $useritems = new backup_nested_element('useritems');
         $useritem = new backup_nested_element('useritem', ['id'], ['userid', 'quantity']);
 
+        // Here we go.
+        $trades = new backup_nested_element('trades');
+        $trade = new backup_nested_element('trade', ['id'], ['name', 'losstitle', 'gaintitle', 'hashcode']);
+        $tradeitems = new backup_nested_element('tradeitems');
+        $tradeitem = new backup_nested_element('tradeitem', ['id'], ['itemid', 'quantity', 'gainloss']);
+
         // Prepare the structure.
         $wrapper = $this->prepare_block_structure($stash);
 
@@ -67,11 +75,17 @@ class backup_stash_block_structure_step extends backup_block_structure_step {
         $drops->add_child($drop);
         $pickups->add_child($pickup);
         $useritems->add_child($useritem);
+        $stash->add_child($trades);
+        $trades->add_child($trade);
+        $trade->add_child($tradeitems);
+        $tradeitems->add_child($tradeitem);
 
         // Define sources.
         $stash->set_source_table(stash::TABLE, array('courseid' => backup::VAR_COURSEID));
         $item->set_source_table(item::TABLE, array('stashid' => backup::VAR_PARENTID));
         $drop->set_source_table(drop::TABLE, array('itemid' => backup::VAR_PARENTID));
+        $trade->set_source_table(trade::TABLE, array('stashid' => backup::VAR_PARENTID));
+        $tradeitem->set_source_table(tradeitems::TABLE, array('tradeid' => backup::VAR_PARENTID));
 
         // Define user data.
         if ($userinfo) {

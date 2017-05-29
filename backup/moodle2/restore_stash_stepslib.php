@@ -29,6 +29,8 @@ use block_stash\item;
 use block_stash\drop;
 use block_stash\drop_pickup;
 use block_stash\user_item;
+use block_stash\trade;
+use block_stash\tradeitems;
 
 /**
  * Block restore structure step class.
@@ -69,6 +71,8 @@ class restore_stash_block_structure_step extends restore_structure_step {
         $paths[] = new restore_path_element('block_stash', '/block/stash');
         $paths[] = new restore_path_element('block_stash_item', '/block/stash/items/item');
         $paths[] = new restore_path_element('block_stash_drop', '/block/stash/items/item/drops/drop');
+        $paths[] = new restore_path_element('block_stash_trade', '/block/stash/trades/trade');
+        $paths[] = new restore_path_element('block_stash_tradeitems', '/block/stash/trades/trade/tradeitems/tradeitem');
 
         if ($userinfo) {
             $paths[] = new restore_path_element('pickup', '/block/stash/items/item/drops/drop/pickups/pickup');
@@ -151,6 +155,32 @@ class restore_stash_block_structure_step extends restore_structure_step {
         unset($data->id);
         $ui = new user_item(null, $data);
         $ui->create();
+    }
+
+    /**
+     * Process trade.
+     */
+    protected function process_block_stash_trade($data) {
+        $data = (object) $data;
+        $data->stashid = $this->get_new_parentid('block_stash');
+        $oldid = $data->id;
+        unset($data->id);
+        $trade = new trade(null, $data);
+        $trade->create();
+        $this->set_mapping('block_stash_trade', $oldid, $trade->get_id());
+    }
+
+    /**
+     * Process_trade_items.
+     */
+    protected function process_block_stash_tradeitems($data) {
+        $data = (object) $data;
+        $data->tradeid = $this->get_new_parentid('block_stash_trade');
+        $data->itemid = $this->get_mappingid('block_stash_item', $data->itemid);
+        $oldid = $data->id;
+        unset($data->id);
+        $tradeitem = new tradeitems(null, $data);
+        $tradeitem->create();
     }
 
     /**
