@@ -84,6 +84,12 @@ abstract class restore_decode_rule extends \restore_decode_rule {
         if (class_exists('filter_stash\\drop_snippet_restore_decode_rule')) {
             $rules[] = 'filter_stash\drop_snippet_restore_decode_rule';
         }
+        if (class_exists('filter_stash\\trade_snippet_restore_decode_rule')) {
+            $rules[] = 'filter_stash\trade_snippet_restore_decode_rule';
+        }
+
+        // var_dump($rules);
+        // die();
 
         return $rules;
     }
