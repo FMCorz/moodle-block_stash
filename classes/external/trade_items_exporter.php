@@ -53,7 +53,7 @@ class trade_items_exporter extends persistent_exporter {
 
     protected static function define_other_properties() {
         return [
-            'itemname' => [
+            'name' => [
                 'type' => PARAM_TEXT
             ],
             'imageurl' => [
@@ -64,6 +64,9 @@ class trade_items_exporter extends persistent_exporter {
             ],
             'userquantity' => [
                 'type' => PARAM_INT
+            ],
+            'enoughitems' => [
+                'type' => PARAM_BOOL
             ]
         ];
     }
@@ -77,11 +80,14 @@ class trade_items_exporter extends persistent_exporter {
         if (!empty($this->related['useritem']->get_quantity())) {
             $quantity = $this->related['useritem']->get_quantity();
         }
+        $enoughitems = ($quantity >= $this->persistent->get_quantity()) ? true : false;
+        
         return [
-            'itemname' => $item->get_name(),
+            'name' => $item->get_name(),
             'imageurl' => $imageurl->out(false),
             'editurl' => $editurl->out(false),
-            'userquantity' => $quantity
+            'userquantity' => $quantity,
+            'enoughitems' => $enoughitems
         ];
     }
 

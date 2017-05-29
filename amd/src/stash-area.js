@@ -26,8 +26,9 @@ define([
     'core/templates',
     'block_stash/counselor',
     'block_stash/item-dialogue',
-    'block_stash/drop'
-], function($, Templates, Counselor, ItemDialogue, Drop) {
+    'block_stash/drop',
+    'block_stash/trade'
+], function($, Templates, Counselor, ItemDialogue, Drop, Trade) {
 
     /**
      * Stash class.
@@ -44,6 +45,7 @@ define([
 
     StashArea.prototype._setUp = function() {
         Counselor.on(Drop.prototype.EVENT_PICKEDUP, this._dropPickedUpListener.bind(this));
+        Counselor.on(Trade.prototype.EVENT_TRADE, this._dropPickedUpListener.bind(this));
 
         this._setUpUserItemAreClickable();
     };
