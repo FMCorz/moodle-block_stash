@@ -22,6 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['accept'] = 'Accept';
 $string['additem'] = 'Add an item';
 $string['addnewdrop'] = 'Add new location';
 $string['addnewtradeitem'] = 'Add new item to this trade';
