@@ -37,6 +37,23 @@ $manager->require_manage();
 $url = new moodle_url('/blocks/stash/trade.php', array('courseid' => $courseid));
 list($title, $subtitle, $returnurl) = \block_stash\page_helper::setup_for_trade($url, $manager);
 
+// Check for filter version 1.0.2 is enabled, otherwise show a message asking for it to be upgraded or installed.
+list($altsnippetmaker, $warning, $release) = \block_stash\helper::get_alternate_amd_snippet_maker($manager->get_context());
+$cantrade = false;
+if (isset($release)) {
+    $releaseinfo = explode('.', $release);
+    if ((int)$releaseinfo[0] > 1) {
+        $cantrade = true;
+    } else if ((int)$releaseinfo[1] > 0) {
+        $cantrade = true;
+    } else if ((int)$releaseinfo[2] > 1) {
+        $cantrade = true;
+    } else {
+        $a = new moodle_url('https://moodle.org/plugins/filter_stash');
+        $warning = get_string('filterstashwrongversion', 'block_stash', $a->out());
+    }
+}
+
 switch ($action) {
     case 'delete':
         require_sesskey();
@@ -47,6 +64,16 @@ switch ($action) {
 }
 
 $renderer = $PAGE->get_renderer('block_stash');
+if (!$cantrade) {
+    echo $OUTPUT->header();
+
+    echo $OUTPUT->heading($title);
+    echo $renderer->navigation($manager, 'trade');
+    echo $OUTPUT->notification($warning, 'warning');
+    echo $OUTPUT->footer();
+    exit();
+}
+
 echo $OUTPUT->header();
 
 echo $OUTPUT->heading($title);
@@ -61,7 +88,7 @@ $table = new \block_stash\output\trades_table('tradestable', $manager, $renderer
 $table->define_baseurl($url);
 echo $table->out(50, false);
 
-list($altsnippetmaker, $warning) = \block_stash\helper::get_alternate_amd_snippet_maker($manager->get_context());
+
 $altsnippetmaker = json_encode($altsnippetmaker);
 $warnings = json_encode($warning ? [$warning] : null);
 

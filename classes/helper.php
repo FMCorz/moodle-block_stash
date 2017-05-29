@@ -71,8 +71,11 @@ class helper {
 
         // Note, the order of the checks is important!
         $warning = null;
+        $release = null;
         if ($isfilteractive) {
             // All good.
+            // Record the release information to see if trading is possible (1.0.2 onwards).
+            $release = $filters['stash']->release;
         } else if (!$hasfilter) {
             // It is not installed.
             $warning = get_string('filterstashnotinstalled', 'block_stash', $a);
@@ -84,7 +87,7 @@ class helper {
             $warning = get_string('filterstashnotactive', 'block_stash', $a);
         }
 
-        return [$alternatemodule, $warning];
+        return [$alternatemodule, $warning, $release];
     }
 
 }
