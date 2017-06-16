@@ -29,8 +29,8 @@
                                 {{#gainloss}}
                                 <div class="block-stash-trade-item">
                                 {{>block_stash/item_xsmall}} {{name}} ({{quantity}})
-                                <a title="" href="{{editurl}}">{{#pix}}t/edit, core{{/pix}}</a>
-                                <a title="" href="{{deleteurl}}">{{#pix}}t/delete, core{{/pix}}</a>
+                                <a title="" href="{{editurl}}">{{#pix}}t/edit, core, {{#str}}edittradeitem, block_stash, {{name}}{{/str}}{{/pix}}</a>
+                                <a title="" href="{{deleteurl}}">{{#pix}}t/delete, core, {{#str}}deleteitem, block_stash, {{name}}{{/str}}{{/pix}}</a>
                                 </div>
                                 {{/gainloss}}
                             {{/tradeitems}}
@@ -41,8 +41,8 @@
                                 {{^gainloss}}
                                 <div class="block-stash-trade-item">
                                 {{>block_stash/item_xsmall}} {{name}} ({{quantity}})
-                                <a title="" href="{{editurl}}">{{#pix}}t/edit, core{{/pix}}</a>
-                                <a title="" href="{{deleteurl}}">{{#pix}}t/delete, core{{/pix}}</a>
+                                <a title="" href="{{editurl}}">{{#pix}}t/edit, core, {{#str}}edittradeitem, block_stash, {{name}}{{/str}}{{/pix}}</a>
+                                <a title="" href="{{deleteurl}}">{{#pix}}t/delete, core, {{#str}}deleteitem, block_stash, {{name}}{{/str}}{{/pix}}</a>
                                 </div>
                                 {{/gainloss}}
                             {{/tradeitems}}
@@ -55,7 +55,12 @@
 </div>
     <div>
         <p><strong>{{#str}}snippet, block_stash{{/str}}</strong></p>
-        <textarea id="supertmep" name="snippet" onclick="this.select();" readonly></textarea>
+        <div class="row-fluid">
+            <div class="span12 col-sm-12">
+                <textarea id="supertmep" name="snippet" onclick="this.select();" readonly></textarea>
+                <button class="block-stash-copy btn btn-secondary" data-action="copy" title="{{#str}}copytoclipboard, block_stash{{/str}}">{{#pix}}t/copy, core{{/pix}}</button>
+            </div>
+        </div>
         <p><small>{{#str}}copypaste, block_stash{{/str}}</small></p>
     </div>
 </div>
@@ -70,5 +75,11 @@ require([
     var tsm = new TradeSnippetMaker(trade);
     var snippetbox = $('#supertmep');
     snippetbox.html(tsm.getSnippet());
+
+    $('button[data-action="copy"]').click(function(){
+        $('#supertmep').select();
+        document.execCommand("copy");
+    });
+
 });
 {{/js}}

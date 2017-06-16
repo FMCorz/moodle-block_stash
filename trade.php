@@ -86,7 +86,7 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading($title);
 echo $renderer->navigation($manager, 'trade');
 
-$addurl = new moodle_url('/blocks/stash/trade_edit.php', ['courseid' => $courseid]);
+$addurl = new moodle_url('/blocks/stash/trade_edit_new.php', ['courseid' => $courseid]);
 $addbtn = $OUTPUT->single_button($addurl, get_string('addtrade', 'block_stash'), 'get', ['class' => 'singlebutton heading-button']);
 $heading = get_string('tradelist', 'block_stash') . $addbtn;
 echo $OUTPUT->heading($heading, 3);

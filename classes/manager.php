@@ -865,6 +865,35 @@ class manager {
         return tradeitems::get_records(['tradeid' => $tradeid]);
     }
 
+    public function get_full_trade_items_data($tradeid) {
+        $this->require_enabled();
+
+        $tradedata = [];
+
+        $tradeitems = $this->get_trade_items($tradeid);
+
+        foreach ($tradeitems as $tradeitem) {
+            $item = $this->get_item($tradeitem->get_itemid());
+            if ($tradeitem->get_gainloss()) {
+                $tradedata['add'][] = ['id' => $tradeitem->get_id(),
+                                       'itemid' => $tradeitem->get_itemid(),
+                                       'name' => $item->get_name(),
+                                       'quantity' => $tradeitem->get_quantity(),
+                                       'imageurl' => \moodle_url::make_pluginfile_url($this->context->id, 'block_stash', 'item', $tradeitem->get_itemid(), '/', 'image')
+                                       ];
+            } else {
+                $tradedata['loss'][] = ['id' => $tradeitem->get_id(),
+                                       'itemid' => $tradeitem->get_itemid(),
+                                       'name' => $item->get_name(),
+                                       'quantity' => $tradeitem->get_quantity(),
+                                       'imageurl' => \moodle_url::make_pluginfile_url($this->context->id, 'block_stash', 'item', $tradeitem->get_itemid(), '/', 'image')
+                                       ];
+            }
+        }
+
+        return $tradedata;
+    }
+
     public function do_trade($tradeid, $userid = null, $checkifcantrade = false) {
         global $USER;
         $this->require_enabled();

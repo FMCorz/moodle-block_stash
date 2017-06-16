@@ -179,3 +179,40 @@
 .dimmed {
     color: #999;
 }
+
+/** Trade form */
+#block_stash_full_trade_form {
+    border: 1px solid;
+    border-color: #eeeeee;
+    /*max-width: 600px;*/
+    padding: 5px;
+}
+
+.block_stash_item_box {
+    border-bottom: 1px solid;
+    border-color: #eeeeee;
+}
+
+.block-stash-will-do-for-now {
+    border: 1px solid;
+    border-color: #eeeeee;
+    height: 300px;
+    overflow-y: auto;
+}
+
+.block-stash-quantity {
+    width: 75px !important;
+    margin-bottom: 0px !important;
+}
+
+.block-stash-copy {
+    position: fixed;
+}
+
+.block-stash-filler {
+    height: 30px;
+}
+
+.block-stash-title-text {
+    padding-right: 15px;
+}

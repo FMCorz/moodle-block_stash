@@ -1,0 +1,87 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    Trade item picker.
+}}
+
+<div class="main-window container" data-type="{{type}}">
+    <div class="row">
+        <label class="span2 col-sm-2">{{#str}}item, block_stash{{/str}}</label>
+        <div class="span5 col-sm-5">
+            <select id="block-stash-item-select" class="form-control">
+            {{#items}}
+                <option value="{{id}}" data-imgurl="{{imageurl}}">{{name}}</option>
+            {{/items}}
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <label class="span2 col-sm-2 p-y-1">{{#str}}quantity, block_stash{{/str}}</label>
+        <div class="span3 col-sm-3 p-y-1">
+            <input type="number" class="block-stash-quantity form-control" id="amount" min="1" size="5" value="1" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="span2 col-sm-2 p-y-1">
+            <div class="btn btn-primary" id="submit" role="button" tabindex="0">{{#str}}additem, block_stash{{/str}}</div>
+        </div>
+    </div>
+</div>
+
+{{#js}}
+require([
+    'jquery',
+    'block_stash/counselor',
+    'core/templates'
+], function($, Counselor, Templates) {
+    $('#submit').click(function(e) {
+        var type = $('.main-window').data('type');
+        var itemname = $('#block-stash-item-select option:selected').text();
+        var itemimageurl = $('#block-stash-item-select option:selected').data('imgurl');
+        var itemid = $('#block-stash-item-select').val();
+        var itemamount = $('#amount').val();
+        var templatename;
+
+        itemamount = parseInt(itemamount);
+
+        if (!Number.isInteger(itemamount) || itemamount <= 0) {
+            itemamount = 1;
+        }
+
+        var data = {
+            itemid: itemid,
+            imageurl: itemimageurl,
+            name: itemname,
+            quantity: itemamount,
+        };
+
+        if (type === 'gain') {
+            templatename = 'block_stash/trade_add_item_detail';
+        } else {
+            templatename = 'block_stash/trade_loss_item_detail';
+        }
+
+        Templates.render(templatename, data).then(function(html, js) {
+            var placeholder = $('.block_stash_item_box[data-type="' + type + '"').find('.block-stash-placeholder');
+            $('.block_stash_item_box[data-type="' + type + '"]').append(html);
+            placeholder.remove();
+            Counselor.trigger('item-save', []);
+            e.preventDefault();
+        });
+    });
+});
+{{/js}}

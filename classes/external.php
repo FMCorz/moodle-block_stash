@@ -44,6 +44,7 @@ use block_stash\manager;
 use block_stash\external\user_item_summary_exporter;
 use block_stash\external\trade_items_exporter;
 use block_stash\external\trade_summary_exporter;
+use block_stash\external\items_exporter;
 
 /**
  * External API class.
@@ -220,6 +221,61 @@ class external extends external_api {
      */
     public static function get_item_returns() {
         return item_exporter::get_read_structure();
+    }
+
+        /**
+     * External function parameter structure.
+     * @return external_function_paramters
+     */
+    public static function get_items_parameters() {
+        return new external_function_parameters([
+            'courseid' => new external_value(PARAM_INT)
+        ]);
+    }
+
+    /**
+     * Is allowed from ajax?
+     * Only present for 2.9 compatibility.
+     * @return true
+     */
+    public static function get_items_is_allowed_from_ajax() {
+        return true;
+    }
+
+    /**
+     * Get the items for this course.
+     *
+     * @param  int $courseid The course ID
+     * @return stdClass The exported items.
+     */
+    public static function get_items($courseid) {
+        global $USER, $PAGE;
+        $params = self::validate_parameters(self::get_items_parameters(), compact('courseid'));
+        extract($params);
+
+        $manager = manager::get($courseid);
+        self::validate_context($manager->get_context());
+
+        if (!$manager->can_manage()) {
+            throw new coding_exception('Unauthorised call.');
+        }
+
+        $items = $manager->get_items();
+
+        $output = $PAGE->get_renderer('block_stash');
+        $exporter = new items_exporter($items, ['context' => $manager->get_context()]);
+        $record = $exporter->export($output);
+
+        return $record;
+    }
+
+    /**
+     * External function return structure.
+     *
+     * @return external_value
+     */
+    public static function get_items_returns() {
+        return items_exporter::get_read_structure();
     }
 
     /**

@@ -1,0 +1,172 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    Trade form.
+}}
+
+<div class="container-fluid">
+    <form id="full-trade-form" action="trade_edit_new.php" method="POST">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="span2 col-sm-2">
+                <label class="col-form-label">{{#str}}tradename, block_stash{{/str}}{{#titleicon}}{{>core/help_icon}}{{/titleicon}}</label>
+            </div>
+            <div class="span4 col-sm-4">
+                <input type="text" class="form-control" name="title" value="{{#title}}{{title}}{{/title}}"         {{^title}}placeholder="{{#str}}tradename, block_stash{{/str}}"{{/title}}" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="span6 col-md-6">
+                <div class="container-fluid">
+                    <div class="row">
+                        <legend>{{#str}}gain, block_stash{{/str}}</legend>
+                    </div>
+                    <div class="row">
+                        <div class="span4 col-sm-4">
+                            <label class="col-form-label">{{#str}}title, block_stash{{/str}}{{#gainicon}}{{>core/help_icon}}{{/gainicon}}</label>
+                        </div>
+                        <div class="block-stash-title-text span8 col-sm-8">
+                        <input type="text" class="form-control" name="gain" value="{{#gain}}{{gain}}{{/gain}}" {{^gain}}placeholder="{{#str}}gain, block_stash{{/str}}"{{/gain}} style="width: 100%;" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span2 col-sm-2">
+                            <label >{{#str}}items, block_stash{{/str}}</label>
+                        </div>
+                    </div>
+
+                    <div class="block-stash-will-do-for-now">
+                        <table class="block_stash_item_box table table-hover" data-type="gain">
+                            <tbody>
+                            {{#additems}}
+                                {{>block_stash/trade_add_item_detail}}
+                            {{/additems}}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="span12 col-sm-12" style="text-align: right;">
+                            <div class='additem btn btn-secondary' data-type="gain" title="{{#str}}addnewtradeitem, block_stash{{/str}}" role="button" tabindex="0">{{#pix}}t/add, core{{/pix}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="span6 col-md-6">
+                <div class="container-fluid">
+                    <div class="row">
+                        <legend>{{#str}}loss, block_stash{{/str}}</legend>
+                    </div>
+                    <div class="row">
+                        <div class="span4 col-sm-4">
+                            <label class="col-form-label">{{#str}}title, block_stash{{/str}}{{#lossicon}}{{>core/help_icon}}{{/lossicon}}</label>
+                        </div>
+                        <div class="block-stash-title-text span8 col-sm-8">
+                        <input type="text" class="form-control" name="loss" value="{{#loss}}{{loss}}{{/loss}}" {{^loss}}placeholder="{{#str}}loss, block_stash{{/str}}"{{/loss}} style="width: 100%;" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span2 col-sm-2">
+                            <label >{{#str}}items, block_stash{{/str}}</label>
+                        </div>
+                    </div>
+                    <div class="block-stash-will-do-for-now">
+                        <table class="block_stash_item_box table table-hover" data-type="loss">
+                            <tbody>
+                            {{#lossitems}}
+                                {{>block_stash/trade_loss_item_detail}}
+                            {{/lossitems}}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="span12 col-sm-12" style="text-align: right;">
+                            <div class='additem btn btn-secondary' data-type="loss" title="{{#str}}addnewtradeitem, block_stash{{/str}}" role="button" tabindex="0">{{#pix}}t/add, core{{/pix}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <input type="hidden" name="courseid" value="{{courseid}}" />
+            {{#tradeid}}
+            <input type="hidden" name="id" value="{{tradeid}}" />
+            {{/tradeid}}
+            <input type="hidden" name="stashid" value="{{stashid}}" />
+            <input type="hidden" name="hashcode" value="{{hashcode}}" />
+            <input type="hidden" name="sesskey" value="{{sesskey}}" />
+            <input type="submit" value="{{#str}}savechanges, block_stash{{/str}}" class="btn btn-primary" />
+        </div>
+    </div>
+    </form>
+</div>
+
+{{#js}}
+require([
+    'jquery',
+    'block_stash/trade-item-dialogue',
+    'block_stash/counselor'
+], function($, Dialogue, Counselor) {
+    register_actions();
+    var warnings = '';
+    var courseid = {{{courseid}}};
+    var title = $('.additem[data-type="gain"]').attr('title');
+    $('.additem').click(function(e) {
+        var node = $(e.currentTarget),
+            dialogue = new Dialogue(courseid, node.data('type'), title, warnings);
+
+        e.preventDefault();
+        dialogue.show(e);
+        Counselor.on('item-save', function() {
+            dialogue.close();
+            register_actions();
+        });
+    });
+
+    function register_actions() {
+        $('.block-stash-delete-item').each(function() {
+            this.addEventListener("click", deleteitem);
+        });
+
+
+
+        $('.block-stash-less').each(function() {
+            $(this).off("click");
+            $(this).on("click", function(e) {
+                var itemid = $(this).data("id");
+                change_quantity(itemid, false);
+                e.preventDefault();
+            });
+        });
+        $('.block-stash-more').each(function() {
+            $(this).off("click");
+            $(this).on("click", function(e) {
+                var itemid = $(this).data("id");
+                change_quantity(itemid, true);
+                e.preventDefault();
+            });
+        });
+    };
+
+    function deleteitem(e) {
+
+        var itemnode = $(this).parents('.block-stash-trade-item');
+        itemnode.remove();
+        e.preventDefault();
+    }
+});
+{{/js}}

@@ -211,4 +211,9 @@ class renderer extends plugin_renderer_base {
         return parent::render_from_template('block_stash/user_inventory', $data);
     }
 
+    public function render_trade_form(renderable $page) {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('block_stash/trade_form', $data);
+    }
+
 }

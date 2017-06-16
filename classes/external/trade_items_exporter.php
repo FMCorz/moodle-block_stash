@@ -78,7 +78,8 @@ class trade_items_exporter extends persistent_exporter {
         $item = $this->related['item'];
         $manager = manager::get_by_itemid($item->get_id());
         $imageurl = moodle_url::make_pluginfile_url($this->related['context']->id, 'block_stash', 'item', $item->get_id(), '/', 'image');
-        $editurl = new moodle_url('/blocks/stash/tradeitem.php', ['id' => $this->persistent->get_id(), 'courseid' => $manager->get_courseid(), 'tradeid' => $this->persistent->get_tradeid()]);
+        $editurl = new moodle_url('/blocks/stash/trade_edit_new.php', ['id' => $this->persistent->get_tradeid(),
+                'courseid' => $manager->get_courseid()]);
         $deleteurl = new moodle_url('/blocks/stash/trade.php', ['tradeitemid' => $this->persistent->get_id(), 'courseid' => $manager->get_courseid(),
                 'action' => 'deletetradeitem', 'sesskey' => sesskey()]);
         $quantity = 0;

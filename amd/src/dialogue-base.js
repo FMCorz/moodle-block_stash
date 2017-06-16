@@ -102,6 +102,10 @@ define([
         return deferred.promise();
     };
 
+    DialogueBase.prototype.close = function() {
+        this._dialogue.destroy();
+    };
+
     /**
      * Find a node in this Dialog.
      *

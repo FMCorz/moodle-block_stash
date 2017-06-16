@@ -52,6 +52,15 @@ $functions = [
         'capabilities'  => '',
         'ajax'          => true
     ],
+    'block_stash_get_items' => [
+        'classname'     => 'block_stash\\external',
+        'methodname'    => 'get_items',
+        'description'   => 'Get all items.',
+        'type'          => 'read',
+        // TODO Add capability name here.
+        'capabilities'  => '',
+        'ajax'          => true
+    ],
     'block_stash_get_trade_items' => [
         'classname'    => 'block_stash\\external',
         'methodname'   => 'get_trade_items',

@@ -34,6 +34,7 @@ define(['jquery'], function($) {
         this._node = $('<div>');
     }
     Counselor.prototype._node = null;
+    Counselor.prototype.ITEM_SAVE = 'item-save';
 
     /**
      * Register an event listener.
