@@ -25,8 +25,7 @@ define([
     'jquery',
     'core/yui',
     'core/str',
-    'core/templates',
-], function($, Y, Str, Templates) {
+], function($, Y, Str) {
 
     /**
      * Constructor.

@@ -21,27 +21,24 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define([
-    'jquery',
-], function($) {
+define([], function() {
 
-    var ILLEGALCHARS = /]/g;
     var START_TAG = '[trade:';
     var END_TAG = ']';
 
-/**
+    /**
      * Trade snippet maker class.
      *
-     * @param {Drop} drop The drop.
+     * @param {Trade} trade The trade.
      */
     function TradeMaker(trade) {
         this._trade = trade;
     }
 
     /**
-     * Get the drop.
+     * Get the trade.
      *
-     * @return {Drop}
+     * @return {Trade}
      */
     TradeMaker.prototype.getTrade = function() {
         return this._trade;
@@ -53,35 +50,21 @@ define([
      * @return {String}
      */
     TradeMaker.prototype.getSnippet = function() {
-        var snippet = START_TAG,
-            trade = this.getTrade();
+        var preHash = START_TAG,
+            postHash = '',
+            trade = this.getTrade(),
+            hashLength = 3;
 
-        snippet += trade.get('id') + ':' + trade.get('hashcode').substring(0, 3);
-        snippet += END_TAG;
-        return snippet;
+        preHash += trade.get('id') + ':';
+        postHash += END_TAG;
+        hashLength = Math.max(3, 32 - (preHash.length + postHash.length));
+
+        // Backup will only encode 32 characters long texts, so we ensure
+        // that the recommended snippet has the required length, in case it's
+        // the only thing in the textarea.
+        return preHash + trade.get('hashcode').substring(0, hashLength) + postHash;
     };
 
-
-
-    /**
-     * Get a unique ID.
-     *
-     * @return {String}
-     */
-    // TradeMaker.prototype.uuid = function() {
-    //     return (Math.random().toString(36).substring(2, 7)) + (((new Date()).getTime()).toString(36));
-    // };
-
-    /**
-     * Wrap some script in a function waiting for the document to be ready.
-     *
-     * @param {String} code The script.
-     * @return {String} The new script.
-     */
-    // TradeMaker.prototype._wrapForOnReady = function(code) {
-    //     return 'document.addEventListener("DOMContentLoaded", function(e) {' + code + '});';
-    // };
-
-    return /** @alias module:block_stash/drop-snippet-maker */ TradeMaker;
+    return /** @alias module:block_stash/trade-snippet-maker */ TradeMaker;
 
 });
