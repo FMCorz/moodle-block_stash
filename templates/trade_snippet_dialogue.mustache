@@ -20,27 +20,27 @@
 <div class="block-stash-trade-snippet-dialogue">
     <div id="{{uuid}}" style="display: inline;">
         <div class="block-stash-trade" title="{{trade.name}}" data-id="{{trade.id}}">
-            <div class="trade-label text-center p-y-1">{{trade.name}}</div>
-                <div class="container-fluid">
+            <div class="trade-label text-center p-y-1 p-x-1">{{trade.name}}</div>
+                <div class="container-fluid p-y-1">
                     <div class="row-fluid">
-                        <div class="span6">
+                        <div class="span6 col-sm-6">
                             <div class="block-stash-column-title"><strong>{{trade.gaintitle}}</strong></div>
                             {{#tradeitems}}
                                 {{#gainloss}}
                                 <div class="block-stash-trade-item">
-                                {{>block_stash/item_xsmall}} {{itemname}} ({{quantity}})
+                                {{>block_stash/item_xsmall}} {{name}} ({{quantity}})
                                 <a title="" href="{{editurl}}">{{#pix}}t/edit, core{{/pix}}</a>
                                 <a title="" href="{{editurl}}">{{#pix}}t/delete, core{{/pix}}</a>
                                 </div>
                                 {{/gainloss}}
                             {{/tradeitems}}
                         </div>
-                        <div class="span6">
+                        <div class="span6 col-sm-6">
                             <div class="block-stash-column-title"><strong>{{trade.losstitle}}</strong></div>
                             {{#tradeitems}}
                                 {{^gainloss}}
                                 <div class="block-stash-trade-item">
-                                {{>block_stash/item_xsmall}} {{itemname}} ({{quantity}})
+                                {{>block_stash/item_xsmall}} {{name}} ({{quantity}})
                                 <a title="" href="{{editurl}}">{{#pix}}t/edit, core{{/pix}}</a>
                                 <a title="" href="{{editurl}}">{{#pix}}t/delete, core{{/pix}}</a>
                                 </div>
