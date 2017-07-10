@@ -62,6 +62,9 @@ class trade_items_exporter extends persistent_exporter {
             'editurl' => [
                 'type' => PARAM_URL
             ],
+            'deleteurl' => [
+                'type' => PARAM_URL
+            ],
             'userquantity' => [
                 'type' => PARAM_INT
             ],
@@ -76,6 +79,8 @@ class trade_items_exporter extends persistent_exporter {
         $manager = manager::get_by_itemid($item->get_id());
         $imageurl = moodle_url::make_pluginfile_url($this->related['context']->id, 'block_stash', 'item', $item->get_id(), '/', 'image');
         $editurl = new moodle_url('/blocks/stash/tradeitem.php', ['id' => $this->persistent->get_id(), 'courseid' => $manager->get_courseid(), 'tradeid' => $this->persistent->get_tradeid()]);
+        $deleteurl = new moodle_url('/blocks/stash/trade.php', ['tradeitemid' => $this->persistent->get_id(), 'courseid' => $manager->get_courseid(),
+                'action' => 'deletetradeitem', 'sesskey' => sesskey()]);
         $quantity = 0;
         if (!empty($this->related['useritem']->get_quantity())) {
             $quantity = $this->related['useritem']->get_quantity();
@@ -86,6 +91,7 @@ class trade_items_exporter extends persistent_exporter {
             'name' => $item->get_name(),
             'imageurl' => $imageurl->out(false),
             'editurl' => $editurl->out(false),
+            'deleteurl' => $deleteurl->out(false),
             'userquantity' => $quantity,
             'enoughitems' => $enoughitems
         ];

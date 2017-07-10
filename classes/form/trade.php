@@ -62,14 +62,16 @@ class trade extends persistent {
         $mform->addHelpButton('name', 'tradename', 'block_stash');
 
         // Loss title.
-        $mform->addElement('text', 'losstitle', get_string('losstitle', 'block_stash'), 'maxlength="255"');
+        $mform->addElement('text', 'losstitle', get_string('losstitle', 'block_stash'), 'maxlength="255",
+                placeholder="' . s(get_string('cost', 'block_stash')) . '"');
         $mform->setType('losstitle', PARAM_TEXT);
         $mform->setDefault('losstitle', get_string('cost', 'block_stash'));
         $mform->addRule('losstitle', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
         $mform->addHelpButton('losstitle', 'losstitle', 'block_stash');
 
         // Gain title.
-        $mform->addElement('text', 'gaintitle', get_string('gaintitle', 'block_stash'), 'maxlength="255"');
+        $mform->addElement('text', 'gaintitle', get_string('gaintitle', 'block_stash'), 'maxlength="255",
+                placeholder="' . s(get_string('item', 'block_stash')) . '"');
         $mform->setType('gaintitle', PARAM_TEXT);
         $mform->setDefault('gaintitle', get_string('item', 'block_stash'));
         $mform->addRule('gaintitle', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');

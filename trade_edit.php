@@ -57,17 +57,7 @@ if ($data = $form->get_data()) {
     $saveandnext = !empty($data->saveandnext);
     unset($data->saveandnext);
 
-    // $tradeitemdata = new stdClass();
-    // $tradeitemdata->itemid = $data->itemid;
-    // $tradeitemdata->quantity = $data->quantity;
-    // $tradeitemdata->gainloss = $data->gainloss;
-    // unset($data->itemid);
-    // unset($data->quantity);
-    // unset($data->gainloss);
-
     $savedtrade = $manager->create_or_update_trade($data);
-    // $tradeitemdata->tradeid = $savedtrade->get_id();
-    // $manager->create_or_update_tradeitem($tradeitemdata);
 
     if ($saveandnext) {
         redirect(new moodle_url('/blocks/stash/tradeitem.php', ['tradeid' => $savedtrade->get_id(), 'courseid' => $manager->get_courseid()]));
@@ -85,12 +75,5 @@ if (!empty($subtitle)) {
     echo $OUTPUT->heading($subtitle, 3);
 }
 $form->display();
-
-// Just for now I'm going to put the trade items here.
-// if ($trade) {
-//     $tradeitems = $trade->get_full_trade_items_list($trade->get_id());
-//     print_object($tradeitems);
-// }
-
 
 echo $OUTPUT->footer();

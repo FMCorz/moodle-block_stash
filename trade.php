@@ -27,6 +27,7 @@ require_once(__DIR__ . '/../../config.php');
 $courseid = required_param('courseid', PARAM_INT);
 $action = optional_param('action', '', PARAM_ALPHA);
 $tradeid = optional_param('tradeid', 0, PARAM_INT);
+$tradeitemid = optional_param('tradeitemid', 0, PARAM_INT);
 
 require_login($courseid);
 
@@ -60,6 +61,12 @@ switch ($action) {
         $trade = $manager->get_trade($tradeid);
         $manager->delete_trade($trade);
         redirect($url, get_string('thetradehasbeendeleted', 'block_stash', $trade->get_name()));
+        break;
+    case 'deletetradeitem':
+        require_sesskey();
+        $tradeitem = $manager->get_trade_item($tradeitemid);
+        $manager->delete_trade_item($tradeitem);
+        redirect($url, get_string('thetradeitemhasbeendeleted', 'block_stash'));
         break;
 }
 

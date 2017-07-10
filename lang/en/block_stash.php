@@ -122,6 +122,7 @@ $string['thedrophasbeendeleted'] = 'The location \'{$a}\' has been deleted';
 $string['theitemhasbeendeleted'] = 'The item \'{$a}\' has been deleted';
 $string['thestashofhasbeenreset'] = 'The stash of {$a} has been reset';
 $string['thetradehasbeendeleted'] = 'The trade widget \'{$a}\' has been deleted';
+$string['thetradeitemhasbeendeleted'] = 'The trade item has been deleted';
 $string['unlimited'] = 'Unlimited';
 $string['whataredrops'] = 'What are locations?';
 $string['whatisadrophelp'] = 'A location is a place where you intend to display your item.';
