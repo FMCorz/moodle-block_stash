@@ -375,16 +375,33 @@ class manager {
         $this->require_enabled();
         $this->require_manage();
 
-        // Delete drops.
-        $tradedrops = $this->get_tradedrops($trade->get_id());
+        // Delete trade items.
+        $tradeitems = $this->get_trade_items($trade->get_id());
         $transaction = $DB->start_delegated_transaction();
 
-        foreach ($tradedrops as $drop) {
-            $this->delete_tradedrop($drop);
+        foreach ($tradeitems as $tradeitem) {
+            $this->delete_trade_item($tradeitem);
         }
 
         // Delete the trade.
         $DB->delete_records(\block_stash\trade::TABLE, ['id' => $trade->get_id()]);
+
+        $transaction->allow_commit();
+    }
+
+    /**
+     * Delete a trade item from a trade.
+     *
+     * @param  object $tradeitem A trade item object
+     */
+    public function delete_trade_item($tradeitem) {
+        global $DB;
+        $this->require_enabled();
+        $this->require_manage();
+
+        $transaction = $DB->start_delegated_transaction();
+        // Delete the trade item.
+        $DB->delete_records(\block_stash\tradeitems::TABLE, ['id' => $tradeitem->get_id()]);
 
         $transaction->allow_commit();
     }
