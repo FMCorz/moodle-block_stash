@@ -68,6 +68,12 @@ class backup_stash_block_task extends backup_block_task {
      * @return string
      */
     public static function encode_content_links($content) {
+        // We abuse the encode_content_links because it is the only way we can transform
+        // the text prior to backing it up, however there is a catch here! The class
+        // responsible for applying these transformations is expecting that we will only
+        // transform links, and thus skips any length that isn't 32 characters long. To
+        // remedy this we recommend longer snippets, but just so you know why it would
+        // not always work.
         foreach (\block_stash\restore_decode_rule::get_decode_rules_classes() as $class) {
             $content = $class::encode_content($content);
         }
