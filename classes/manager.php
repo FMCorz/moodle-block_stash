@@ -353,6 +353,9 @@ class manager {
             $this->delete_drop($drop);
         }
 
+        // Delete items from trades.
+        $DB->delete_records(\block_stash\tradeitems::TABLE, ['itemid' => $item->get_id()]);
+
         // Delete items from users stashes.
         $DB->delete_records(\block_stash\user_item::TABLE, ['itemid' => $item->get_id()]);
         // Delete the item.
