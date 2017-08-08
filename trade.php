@@ -38,7 +38,7 @@ $manager->require_manage();
 $url = new moodle_url('/blocks/stash/trade.php', array('courseid' => $courseid));
 list($title, $subtitle, $returnurl) = \block_stash\page_helper::setup_for_trade($url, $manager);
 
-// Check for filter version 1.0.2 is enabled, otherwise show a message asking for it to be upgraded or installed.
+// Check for filter version 1.1.0 or above is enabled, otherwise show a message asking for it to be upgraded or installed.
 list($altsnippetmaker, $warning, $release) = \block_stash\helper::get_alternate_amd_snippet_maker($manager->get_context());
 $cantrade = false;
 if (isset($release)) {
