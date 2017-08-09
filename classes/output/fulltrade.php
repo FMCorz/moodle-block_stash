@@ -99,16 +99,27 @@ class fulltrade implements renderable, templatable {
             $hashcode = $peristent->get_hashcode();
         }
 
+        $titleicon = '';
+        $gainicon = '';
+        $lossicon = '';
+
+        // Need to accommodate for stuff that I didn't realise was new.
+        if (method_exists($this->titlehelp, 'export_for_template')) {
+            $titleicon = $this->titlehelp->export_for_template($output);
+            $gainicon = $this->gainhelp->export_for_template($output);
+            $lossicon = $this->losshelp->export_for_template($output);
+        }
+
         return (object) [ 
                 'stashid' => $this->stashid,
                 'courseid' => $this->courseid,
                 'tradeid' => $tradeid,
                 'title' => $tradetitle,
-                'titleicon' => $this->titlehelp->export_for_template($output),
+                'titleicon' => $titleicon,
                 'gain' => $gain,
-                'gainicon' => $this->gainhelp->export_for_template($output),
+                'gainicon' => $gainicon,
                 'loss' => $loss,
-                'lossicon' => $this->losshelp->export_for_template($output),
+                'lossicon' => $lossicon,
                 'hashcode' => $hashcode,
                 'sesskey' => sesskey(),
                 'additems' => (isset($this->tradeitems['add'])) ? $this->tradeitems['add'] : [],
