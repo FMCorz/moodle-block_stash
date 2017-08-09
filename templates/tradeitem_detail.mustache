@@ -17,4 +17,4 @@
 {{!
     Trade item detail element.
 }}
-<span class="removed-items {{^enoughitems}}dimmed{{/enoughitems}}" data-itemid="{{itemid}}" data-tradeid="{{trade.id}}" data-quantity="{{quantity}}">{{name}} ({{userquantity}} / {{quantity}})</span>
+<span class="removed-items {{^enoughitems}}dimmed{{/enoughitems}}" data-hasenough="{{#enoughitems}}true{{/enoughitems}}" data-itemid="{{itemid}}" data-tradeid="{{trade.id}}" data-quantity="{{quantity}}">{{name}} ({{userquantity}} / {{quantity}})</span>

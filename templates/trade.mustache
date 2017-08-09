@@ -46,7 +46,7 @@
             </div>
 
         <div class="accept-trade text-xs-center p-y-1">
-            <center><button>{{#str}}accept, block_stash{{/str}}</button></center>
+            <center><button disabled>{{#str}}accept, block_stash{{/str}}</button></center>
         </div>
 
     </div>
@@ -59,12 +59,6 @@ require(["jquery", "block_stash/trade", "block_stash/trade-area"], function($, T
         node = $("#{{uuid}}");
 
     if (!node.length) return;
-
-    {{#checkvisibility}}
-    trade.isVisible().then(function() {
-        node.css('display', 'inline');
-    });
-    {{/checkvisibility}}
 
     node.find("button").click(function(e) {
         e.preventDefault();

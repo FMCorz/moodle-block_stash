@@ -25,11 +25,10 @@ define([
     'jquery',
     'core/templates',
     'block_stash/counselor',
-    'block_stash/item-dialogue',
     'block_stash/drop',
     'core/notification',
     'block_stash/trade',
-], function($, Templates, Counselor, ItemDialogue, Drop, notification, Trade) {
+], function($, Templates, Counselor, Drop, notification, Trade) {
 
     /**
      * Trade class.
@@ -40,15 +39,16 @@ define([
     function TradeArea(node) {
         this._node = $(node);
         this._setUp();
+        this._update();
     }
     TradeArea.prototype._node = null;
-    // TradeArea.prototype._userItemTemplate = 'block_stash/user_item';
 
+    /**
+     * Setup.
+     */
     TradeArea.prototype._setUp = function() {
         Counselor.on(Drop.prototype.EVENT_PICKEDUP, this._dropPickedUpListener.bind(this));
         Counselor.on(Trade.prototype.EVENT_TRADE, this._dropPickedUpListener.bind(this));
-
-        // this._setUpUserItemAreClickable();
     };
 
     /**
@@ -59,7 +59,6 @@ define([
      */
     TradeArea.prototype.containsItem = function(id) {
         return this.getTradeItemNode(id).length > 0;
-        // return this.getUserItemNode(id).length > 0;
     };
 
     /**
@@ -72,30 +71,24 @@ define([
         var userItem = data.useritem;
         if (this.containsItem(userItem.getItem().get('id'))) {
             this.updateTradeItemUserQuantity(userItem);
-
         }
     };
 
     /**
-     * Not used at the moment.
+     * Can the user perform the trade?
+     *
+     * @return {Bool}
      */
-    // TradeArea.prototype.canTradeItems = function() {
-    //     var tradeid = this._node.attr('data-id');
-    //     var removeditemnodes = this._node.find('.removed-items');
-    //     var cantrade = removeditemnodes.attr('class').indexOf("dimmed") >= 0 ? false : true;
+    TradeArea.prototype.canTradeItems = function() {
+        var removeditemnodes = this._node.find('.removed-items');
 
-    //     if (cantrade) {
-    //         // Check if button is present.
-    //         // Add button.
-    //         window.console.log('can trade!');
-    //         // Templates.render('block_stash/trade_button', {}).done(function(html, js) {
-    //         //     Templates.appendNodeContents($('#block-stash-trade-id-' + tradeid), html, js);
-    //         // }).fail(notification.exception);
-    //     } else {
-    //         // Remove button if it hasn't been removed already.
-    //         window.console.log('No trade!');
-    //     }
-    // }
+        var hasenough = true;
+        removeditemnodes.each(function(i, node) {
+            hasenough = hasenough && $(node).data('hasenough');
+        });
+
+        return hasenough;
+    };
 
     /**
      * Get the trade item node.
@@ -132,11 +125,28 @@ define([
         // I want to switch the template to show the new values.
         Templates.render('block_stash/tradeitem_detail', context).done(function(html, js) {
             Templates.replaceNodeContents($('.block-stash-trade-item-' + itemid + '[data-tradeid="' + tradeid + '"]'), html, js);
-            // Check to see if we should add or remove the accept button.
-            // this.canTradeItems();
+            this._update();
         }.bind(this)).fail(notification.exception);
     };
 
-    return /** @alias module:block_stash/stash */ TradeArea;
+    /**
+     * Update the widget.
+     *
+     * @return {Void}
+     */
+    TradeArea.prototype._update = function() {
+        var btn = this._node.find('.accept-trade button').first();
+        if (!btn) {
+            return;
+        }
+
+        if (!this.canTradeItems()) {
+            btn.prop('disabled', true);
+        } else {
+            btn.prop('disabled', false);
+        }
+    };
+
+    return /** @alias module:block_stash/trade-area */ TradeArea;
 
 });
