@@ -1,6 +1,10 @@
 Block Stash
 ===========
 
+Version 1.2.2 (10th August 2017)
+--------------------------------
+* Issues with the persistence in Moodle 3.2 fixed.
+
 Version 1.2.1 (9th August 2017)
 -------------------------------
 * Fixed the error on the trade creation form. We can't export for template the help icon in earlier versions.

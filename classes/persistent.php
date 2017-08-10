@@ -878,24 +878,7 @@ if (!class_exists('core\\persistent')) {
          * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
          */
         abstract class persistent extends \core_competency\persistent {
-            // Setters and getters have been changed. Override them here so that it's backwards compatible with our
-            // other plugins.
-            /**
-             * Magic method to capture getters and setters.
-             *
-             * @param  string $method Callee.
-             * @param  array $arguments List of arguments.
-             * @return mixed
-             */
-            final public function __call($method, $arguments) {
-                if (strpos($method, 'get_') === 0) {
-                    return $this->get(substr($method, 4));
-                } else if (strpos($method, 'set_') === 0) {
-                    return $this->set(substr($method, 4), $arguments[0]);
-                }
-                throw new coding_exception('Unexpected method call: ' . $method);
-            }
-
+            // Just use this version of the persistent. It's all good.
         }
 
     }
