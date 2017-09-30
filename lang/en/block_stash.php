@@ -33,6 +33,7 @@ $string['aftercreatinglocationhelp'] = 'Once you have created the item and the l
 $string['appearance'] = 'Appearance';
 $string['backtostart'] = 'Back to the main screen';
 $string['buttontext'] = 'Button text';
+$string['configurationtitle'] = 'Stash title';
 $string['copypaste'] = 'Copy and paste this into an editor in different activities around your course.';
 $string['copytoclipboard'] = 'Copy to clipboard';
 $string['cost'] = 'Cost';

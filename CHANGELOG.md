@@ -1,6 +1,10 @@
 Block Stash
 ===========
 
+Version 1.2.3 (30th August 2017)
+--------------------------------
+* Added the ability to edit the block title.
+
 Version 1.2.2 (10th August 2017)
 --------------------------------
 * Issues with the persistence in Moodle 3.2 fixed.

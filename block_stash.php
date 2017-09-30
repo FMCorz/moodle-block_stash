@@ -75,6 +75,10 @@ class block_stash extends block_base {
 
     }
 
+    public function specialization() {
+        $this->title = isset($this->config->title) ? format_string($this->config->title) : format_string(get_string('pluginname', 'block_stash'));
+    }
+
     /**
      * Callback when a block is created.
      *
