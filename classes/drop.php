@@ -109,7 +109,7 @@ class drop extends persistent {
 
         $sql = "
             SELECT d.*
-              FROM {" . drop::TABLE . "} d
+              FROM {" . self::TABLE . "} d
               JOIN {" . item::TABLE . "} i
                 ON i.id = d.itemid
               JOIN {" . stash::TABLE . "} s
@@ -155,7 +155,7 @@ class drop extends persistent {
         global $DB;
         $sql = "
             SELECT 'x'
-              FROM {" . drop::TABLE . "} d
+              FROM {" . self::TABLE . "} d
               JOIN {" . item::TABLE . "} i
                 ON i.id = d.itemid
               JOIN {" . stash::TABLE . "} s
