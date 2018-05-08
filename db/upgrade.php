@@ -252,5 +252,110 @@ function xmldb_block_stash_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2017013008, 'stash');
     }
 
+    if ($oldversion < 2018050800) {
+
+        // Define field usermodified to be dropped from block_stash.
+        $table = new xmldb_table('block_stash');
+        $field = new xmldb_field('usermodified');
+
+        // Conditionally launch drop field usermodified.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        // Stash savepoint reached.
+        upgrade_block_savepoint(true, 2018050800, 'stash');
+    }
+
+    if ($oldversion < 2018050801) {
+
+        // Define field usermodified to be dropped from block_stash_items.
+        $table = new xmldb_table('block_stash_items');
+        $field = new xmldb_field('usermodified');
+
+        // Conditionally launch drop field usermodified.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        // Stash savepoint reached.
+        upgrade_block_savepoint(true, 2018050801, 'stash');
+    }
+
+    if ($oldversion < 2018050802) {
+
+        // Define field usermodified to be dropped from block_stash_user_items.
+        $table = new xmldb_table('block_stash_user_items');
+        $field = new xmldb_field('usermodified');
+
+        // Conditionally launch drop field usermodified.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        // Stash savepoint reached.
+        upgrade_block_savepoint(true, 2018050802, 'stash');
+    }
+
+    if ($oldversion < 2018050803) {
+
+        // Define field usermodified to be dropped from block_stash_drops.
+        $table = new xmldb_table('block_stash_drops');
+        $field = new xmldb_field('usermodified');
+
+        // Conditionally launch drop field usermodified.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        // Stash savepoint reached.
+        upgrade_block_savepoint(true, 2018050803, 'stash');
+    }
+
+    if ($oldversion < 2018050804) {
+
+        // Define field usermodified to be dropped from block_stash_drop_pickups.
+        $table = new xmldb_table('block_stash_drop_pickups');
+        $field = new xmldb_field('usermodified');
+
+        // Conditionally launch drop field usermodified.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        // Stash savepoint reached.
+        upgrade_block_savepoint(true, 2018050804, 'stash');
+    }
+
+    if ($oldversion < 2018050805) {
+
+        // Define field usermodified to be dropped from block_stash_trade.
+        $table = new xmldb_table('block_stash_trade');
+        $field = new xmldb_field('usermodified');
+
+        // Conditionally launch drop field usermodified.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        // Stash savepoint reached.
+        upgrade_block_savepoint(true, 2018050805, 'stash');
+    }
+
+    if ($oldversion < 2018050806) {
+
+        // Define field usermodified to be dropped from block_stash_trade_items.
+        $table = new xmldb_table('block_stash_trade_items');
+        $field = new xmldb_field('usermodified');
+
+        // Conditionally launch drop field usermodified.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        // Stash savepoint reached.
+        upgrade_block_savepoint(true, 2018050806, 'stash');
+    }
+
     return true;
 }
