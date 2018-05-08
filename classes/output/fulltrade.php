@@ -46,7 +46,7 @@ class fulltrade implements renderable, templatable {
 
     /** @var trade The trade object. */
     protected $trade;
-    
+
     protected $tradeitems;
 
     protected $courseid;
@@ -58,7 +58,6 @@ class fulltrade implements renderable, templatable {
     protected $losshelp;
 
     protected $titlehelp;
-    
 
     /**
      * Full trade constructor.
@@ -110,20 +109,20 @@ class fulltrade implements renderable, templatable {
             $lossicon = $this->losshelp->export_for_template($output);
         }
 
-        return (object) [ 
-                'stashid' => $this->stashid,
-                'courseid' => $this->courseid,
-                'tradeid' => $tradeid,
-                'title' => $tradetitle,
-                'titleicon' => $titleicon,
-                'gain' => $gain,
-                'gainicon' => $gainicon,
-                'loss' => $loss,
-                'lossicon' => $lossicon,
-                'hashcode' => $hashcode,
-                'sesskey' => sesskey(),
-                'additems' => (isset($this->tradeitems['add'])) ? $this->tradeitems['add'] : [],
-                'lossitems' => (isset($this->tradeitems['loss'])) ? $this->tradeitems['loss'] : []
+        return (object) [
+            'stashid' => $this->stashid,
+            'courseid' => $this->courseid,
+            'tradeid' => $tradeid,
+            'title' => $tradetitle,
+            'titleicon' => $titleicon,
+            'gain' => $gain,
+            'gainicon' => $gainicon,
+            'loss' => $loss,
+            'lossicon' => $lossicon,
+            'hashcode' => $hashcode,
+            'sesskey' => sesskey(),
+            'additems' => (isset($this->tradeitems['add'])) ? $this->tradeitems['add'] : [],
+            'lossitems' => (isset($this->tradeitems['loss'])) ? $this->tradeitems['loss'] : []
         ];
     }
 

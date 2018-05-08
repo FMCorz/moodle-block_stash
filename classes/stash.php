@@ -97,7 +97,7 @@ class stash extends persistent {
         global $DB;
         $sql = "SELECT 'x'
                   FROM {" . item::TABLE . "} i
-                  JOIN {" . stash::TABLE . "} s
+                  JOIN {" . self::TABLE . "} s
                     ON s.id = i.stashid
                  WHERE s.courseid = ?
                    AND i.id = ?";

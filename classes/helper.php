@@ -53,8 +53,6 @@ class helper {
         $hasfilter = array_key_exists('stash', $filters);
 
         // TODO: When MDL-55663 lands everywhere we should use the core function.
-        // $enabledfilters = $pluginmanager->get_enabled_plugins('filter');
-        // $hasfilterenabled = array_key_exists('stash', $enabledfilters);
         $hasfilterenabled = $DB->record_exists_select('filter_active', 'filter = ? AND contextid = ? AND active != ?', [
             'stash', context_system::instance()->id, TEXTFILTER_DISABLED]);
 

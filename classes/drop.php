@@ -99,7 +99,7 @@ class drop extends persistent {
                   FROM {" . stash::TABLE . "} s
                   JOIN {" . item::TABLE . "} i
                     ON i.stashid = s.id
-                  JOIN {" . drop::TABLE . "} d
+                  JOIN {" . self::TABLE . "} d
                     ON d.itemid = i.id
                  WHERE d.id = ?";
         return $DB->get_field_sql($sql, [$dropid], MUST_EXIST);

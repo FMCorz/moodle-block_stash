@@ -65,7 +65,6 @@ class drops_table extends table_sql {
         $this->manager = $manager;
         $this->renderer = $renderer;
 
-
         // Define columns.
         $this->define_columns(array(
             'name',
@@ -110,13 +109,6 @@ class drops_table extends table_sql {
         global $OUTPUT;
 
         $actions = [];
-
-        // Commenting for now, it's unclear what that action represents.
-        // $url = new moodle_url('/blocks/stash/drop.php');
-        // $url->params(['courseid' => $this->manager->get_courseid(), 'itemid' => $row->itemid]);
-        // $actionlink = $OUTPUT->action_link($url, '', null, null, new pix_icon('t/add',
-        //     get_string('addnewdrop', 'block_stash')));
-        // $actions[] = $actionlink;
 
         $url = new moodle_url('/blocks/stash/drop.php');
         $url->params(['dropid' => $row->id, 'courseid' => $this->manager->get_courseid(), 'returntype' => 'drops']);

@@ -74,9 +74,9 @@
     padding: 0 5px;
     right: auto;
     left: 0;
-    left: -webkit-calc(50% - 90px / 2);
-    left:    -moz-calc(50% - 90px / 2);
-    left:         calc(50% - 90px / 2);
+    left: -webkit-calc(50% - 90px / 2); /* stylelint-disable-line */
+    left:    -moz-calc(50% - 90px / 2); /* stylelint-disable-line */
+    left:         calc(50% - 90px / 2); /* stylelint-disable-line */
     z-index: 1;
 }
 
@@ -126,11 +126,11 @@
     list-style: none;
 }
 .path-blocks-stash .block-stash-drop-snippet-dialogue .block-stash-drop-summary hr {
-    margin: 0
+    margin: 0;
 }
 .path-blocks-stash .block-stash-drop-snippet-dialogue .block-stash-drop-summary h6,
 .path-blocks-stash .block-stash-drop-snippet-dialogue .block-stash-drop-summary p {
-    margin-bottom: 0
+    margin-bottom: 0;
 }
 .path-blocks-stash .reporttable .c0 {
     width: 35px;
@@ -173,7 +173,7 @@
 
 .trade-label {
     border-bottom: 1px solid #bbb;
-    background: #f2f2f2
+    background: #f2f2f2;
 }
 
 .dimmed {
@@ -183,26 +183,26 @@
 /** Trade form */
 #block_stash_full_trade_form {
     border: 1px solid;
-    border-color: #eeeeee;
+    border-color: #eee;
     /*max-width: 600px;*/
     padding: 5px;
 }
 
 .block_stash_item_box {
     border-bottom: 1px solid;
-    border-color: #eeeeee;
+    border-color: #eee;
 }
 
 .block-stash-will-do-for-now {
     border: 1px solid;
-    border-color: #eeeeee;
+    border-color: #eee;
     height: 300px;
     overflow-y: auto;
 }
 
 .block-stash-quantity {
-    width: 75px !important;
-    margin-bottom: 0px !important;
+    width: 75px !important; /* stylelint-disable-line declaration-no-important */
+    margin-bottom: 0 !important; /* stylelint-disable-line declaration-no-important */
 }
 
 .block-stash-copy {

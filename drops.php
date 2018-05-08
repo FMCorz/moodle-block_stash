@@ -62,7 +62,9 @@ echo $renderer->navigation($manager, 'drops');
 
 $strlist = get_string('dropslist', 'block_stash');
 $helpbtn = $OUTPUT->help_icon('drops', 'block_stash');
-$addbtn = $OUTPUT->single_button($addurl, get_string('addnewdrop', 'block_stash'), 'get', ['class' => 'heading-button singlebutton']);
+$addbtn = $OUTPUT->single_button($addurl, get_string('addnewdrop', 'block_stash'), 'get', [
+    'class' => 'heading-button singlebutton'
+]);
 $heading = $strlist . $helpbtn . $addbtn;
 echo $OUTPUT->heading($heading, 3);
 

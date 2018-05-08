@@ -74,11 +74,4 @@ if (!empty($subtitle)) {
 }
 $form->display();
 
-// Just for now I'm going to put the trade items here.
-// if ($trade) {
-//     $tradeitems = $trade->get_full_trade_items_list($trade->get_id());
-//     print_object($tradeitems);
-// }
-
-
 echo $OUTPUT->footer();

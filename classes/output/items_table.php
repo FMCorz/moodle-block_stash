@@ -65,18 +65,15 @@ class items_table extends table_sql {
         $this->manager = $manager;
         $this->renderer = $renderer;
 
-
         // Define columns.
         $this->define_columns(array(
             'name',
-            // 'maxnumber',
             'drops',
             'actions'
         ));
         $this->define_headers(array(
             get_string('itemname', 'block_stash'),
             get_string('locations', 'block_stash'),
-            // get_string('maxnumber', 'block_stash'),
             get_string('actions')
         ));
         $this->define_help_for_headers([

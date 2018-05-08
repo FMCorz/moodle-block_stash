@@ -29,8 +29,6 @@ class tradeitem extends persistent {
 
     protected static $fieldstoremove = array('save', 'submitbutton');
 
-    // protected static $foreignfields = array('itemid', 'quantity', 'gainloss', 'saveandnext');
-
     /**
      * Define the form - called by parent constructor
      */
@@ -53,7 +51,7 @@ class tradeitem extends persistent {
         foreach ($items as $key => $item) {
             $options[$item->get_id()] = $item->get_name();
         }
-        
+
         $mform->addElement('select', 'itemid', get_string('item', 'block_stash'), $options);
         $mform->addElement('text', 'quantity', get_string('quantity', 'block_stash'));
         $mform->setType('quantity', PARAM_INT);

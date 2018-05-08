@@ -97,14 +97,14 @@ class report_table extends table_sql {
         // be displayed in the report for the teachers' benefit. We need to filter out the users which
         // are not a member of the group though.
         if (empty($groupid)) {
-            $sql ='SELECT ui.userid
+            $sql = 'SELECT ui.userid
                      FROM {' . user_item::TABLE . '} ui
                      JOIN {' . itemmodel::TABLE . '} i
                        ON i.id = ui.itemid
                     WHERE i.stashid = ?';
             $params = [$manager->get_stash()->get_id()];
         } else {
-            $sql ='SELECT ui.userid
+            $sql = 'SELECT ui.userid
                      FROM {' . user_item::TABLE . '} ui
                      JOIN {' . itemmodel::TABLE . '} i
                        ON i.id = ui.itemid

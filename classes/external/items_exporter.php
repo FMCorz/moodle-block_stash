@@ -59,7 +59,6 @@ class items_exporter extends exporter {
         foreach ($this->data as $item) {
             $exporter = new item_exporter($item, ['context' => $this->related['context']]);
             $data->items[] = $exporter->export($output);
-            
         }
         return (array) $data;
     }

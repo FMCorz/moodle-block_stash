@@ -110,6 +110,7 @@ class drop extends persistent {
 
         $buttonarray[] = &$mform->createElement('cancel');
         $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
-        $mform->closeHeaderBefore('buttonar');    }
+        $mform->closeHeaderBefore('buttonar');
+    }
 
 }

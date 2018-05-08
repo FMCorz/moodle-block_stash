@@ -64,7 +64,6 @@ class trades_table extends table_sql {
         $this->manager = $manager;
         $this->renderer = $renderer;
 
-
         // Define columns.
         $this->define_columns(array(
             'name',

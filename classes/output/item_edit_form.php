@@ -41,9 +41,9 @@ use moodleform;
 class item_edit_form extends moodleform {
 
     /**
-     * Form definition
+     * Form definition.
      */
-    function definition () {
+    public function definition () {
         $mform = $this->_form;
 
         $mform->addElement('text', 'itemname', get_string('itemname', 'block_stash'));
@@ -53,9 +53,5 @@ class item_edit_form extends moodleform {
         $mform->setType('id', PARAM_INT);
 
         $this->add_action_buttons();
-
-        // $editoroptions = $this->_customdata['editoroptions'];
-        print_object($this->_customdata);
-
     }
 }

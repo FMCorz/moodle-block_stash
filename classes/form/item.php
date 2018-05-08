@@ -57,18 +57,15 @@ class item extends persistent {
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
         $mform->addHelpButton('name', 'itemname', 'block_stash');
 
-        // Max number of items.
-        // $mform->addElement('block_stash_integer', 'maxnumber', get_string('maxnumber', 'block_stash'), ['style' => 'width: 3em;']);
-        // $mform->setType('maxnumber', PARAM_INT);
-
         // Image.
-        $mform->addElement('filemanager', 'image', get_string('itemimage', 'block_stash'), array(), $this->_customdata['fileareaoptions']);
+        $mform->addElement('filemanager', 'image', get_string('itemimage', 'block_stash'), array(),
+            $this->_customdata['fileareaoptions']);
         $mform->addRule('image', null, 'required', null, 'client');
         $mform->addHelpButton('image', 'itemimage', 'block_stash');
 
         // Detail.
         $mform->addElement('editor', 'detail_editor', get_string('itemdetail', 'block_stash'), array('rows' => 10),
-                $this->_customdata['editoroptions']);
+            $this->_customdata['editoroptions']);
         $mform->setType('detail_editor', PARAM_RAW);
         $mform->addHelpButton('detail_editor', 'itemdetail', 'block_stash');
 

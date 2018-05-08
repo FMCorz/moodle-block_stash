@@ -60,7 +60,8 @@ if ($data = $form->get_data()) {
     $savedtrade = $manager->create_or_update_trade($data);
 
     if ($saveandnext) {
-        redirect(new moodle_url('/blocks/stash/tradeitem.php', ['tradeid' => $savedtrade->get_id(), 'courseid' => $manager->get_courseid()]));
+        redirect(new moodle_url('/blocks/stash/tradeitem.php', ['tradeid' => $savedtrade->get_id(),
+            'courseid' => $manager->get_courseid()]));
     }
     redirect($returnurl);
 

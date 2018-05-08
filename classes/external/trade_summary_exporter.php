@@ -72,7 +72,6 @@ class trade_summary_exporter extends exporter {
                                                             'item' => $gaineditem->item,
                                                             'useritem' => $gaineditem->useritem]);
             $data->gaineditems[] = $exporter->export($output);
-            
         }
         foreach ($this->related['removeditems'] as $removeditem) {
             $exporter = new user_item_summary_exporter([], ['context' => $this->related['context'],

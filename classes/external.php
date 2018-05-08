@@ -57,7 +57,7 @@ class external extends external_api {
 
     /**
      * External function parameter structure.
-     * @return external_function_paramters
+     * @return external_function_parameters
      */
     public static function is_drop_visible_parameters() {
         return new external_function_parameters([
@@ -84,7 +84,8 @@ class external extends external_api {
      */
     public static function is_drop_visible($dropid, $hashcode) {
         $params = self::validate_parameters(self::is_drop_visible_parameters(), compact('dropid', 'hashcode'));
-        extract($params);
+        $dropid = $params['dropid'];
+        $hashcode = $params['hashcode'];
 
         $manager = manager::get_by_dropid($dropid);
         self::validate_context($manager->get_context());
@@ -107,7 +108,7 @@ class external extends external_api {
 
     /**
      * External function parameter structure.
-     * @return external_function_paramters
+     * @return external_function_parameters
      */
     public static function pickup_drop_parameters() {
         return new external_function_parameters([
@@ -135,7 +136,8 @@ class external extends external_api {
     public static function pickup_drop($dropid, $hashcode) {
         global $PAGE, $USER;
         $params = self::validate_parameters(self::pickup_drop_parameters(), compact('dropid', 'hashcode'));
-        extract($params);
+        $dropid = $params['dropid'];
+        $hashcode = $params['hashcode'];
 
         $manager = manager::get_by_dropid($dropid);
         self::validate_context($manager->get_context());
@@ -167,7 +169,7 @@ class external extends external_api {
 
     /**
      * External function parameter structure.
-     * @return external_function_paramters
+     * @return external_function_parameters
      */
     public static function get_item_parameters() {
         return new external_function_parameters([
@@ -193,7 +195,7 @@ class external extends external_api {
     public static function get_item($itemid) {
         global $USER, $PAGE;
         $params = self::validate_parameters(self::get_item_parameters(), compact('itemid'));
-        extract($params);
+        $itemid = $params['itemid'];
 
         $manager = manager::get_by_itemid($itemid);
         self::validate_context($manager->get_context());
@@ -223,9 +225,10 @@ class external extends external_api {
         return item_exporter::get_read_structure();
     }
 
-        /**
+    /**
      * External function parameter structure.
-     * @return external_function_paramters
+     *
+     * @return external_function_parameters
      */
     public static function get_items_parameters() {
         return new external_function_parameters([
@@ -235,7 +238,9 @@ class external extends external_api {
 
     /**
      * Is allowed from ajax?
+     *
      * Only present for 2.9 compatibility.
+     *
      * @return true
      */
     public static function get_items_is_allowed_from_ajax() {
@@ -251,7 +256,7 @@ class external extends external_api {
     public static function get_items($courseid) {
         global $USER, $PAGE;
         $params = self::validate_parameters(self::get_items_parameters(), compact('courseid'));
-        extract($params);
+        $courseid = $params['courseid'];
 
         $manager = manager::get($courseid);
         self::validate_context($manager->get_context());
@@ -280,7 +285,8 @@ class external extends external_api {
 
     /**
      * External function parameter structure.
-     * @return external_function_paramters
+     *
+     * @return external_function_parameters
      */
     public static function get_trade_items_parameters() {
         return new external_function_parameters([
@@ -290,18 +296,26 @@ class external extends external_api {
 
     /**
      * Is allowed from ajax?
+     *
      * Only present for 2.9 compatibility.
+     *
      * @return true
      */
     public static function get_trade_items_is_allowed_from_ajax() {
         return true;
     }
 
+    /**
+     * Get trade item.
+     *
+     * @param int $tradeid The trade ID.
+     * @return array
+     */
     public static function get_trade_items($tradeid) {
         global $PAGE, $USER;
 
         $params = self::validate_parameters(self::get_trade_items_parameters(), compact('tradeid'));
-        extract($params);
+        $tradeid = $params['tradeid'];
 
         $manager = manager::get_by_tradeid($tradeid);
         self::validate_context($manager->get_context());
@@ -320,6 +334,11 @@ class external extends external_api {
         return $records;
     }
 
+    /**
+     * External function return strcture.
+     *
+     * @return external_value
+     */
     public static function get_trade_items_returns() {
         return new external_multiple_structure(
             trade_items_exporter::get_read_structure()
@@ -328,7 +347,7 @@ class external extends external_api {
 
     /**
      * External function parameter structure.
-     * @return external_function_paramters
+     * @return external_function_parameters
      */
     public static function complete_trade_parameters() {
         return new external_function_parameters([
@@ -339,17 +358,27 @@ class external extends external_api {
 
     /**
      * Is allowed from ajax?
+     *
      * Only present for 2.9 compatibility.
+     *
      * @return true
      */
     public static function complete_trade_is_allowed_from_ajax() {
         return true;
     }
 
+    /**
+     * Complete trade.
+     *
+     * @param int $tradeid The trade ID.
+     * @param string $hashcode The hash code.
+     * @return array
+     */
     public static function complete_trade($tradeid, $hashcode) {
         global $USER, $PAGE;
         $params = self::validate_parameters(self::complete_trade_parameters(), compact('tradeid', 'hashcode'));
-        extract($params);
+        $tradeid = $params['tradeid'];
+        $hashcode = $params['hashcode'];
 
         $manager = manager::get_by_tradeid($tradeid);
         self::validate_context($manager->get_context());
@@ -371,7 +400,8 @@ class external extends external_api {
             }
             foreach ($summarydata['removeditems'] as $removeditem) {
                 $removeditems[$removeditem->get_itemid()]->item = $manager->get_item($removeditem->get_itemid());
-                $removeditems[$removeditem->get_itemid()]->useritem = $manager->get_user_item($USER->id, $removeditem->get_itemid());
+                $removeditems[$removeditem->get_itemid()]->useritem = $manager->get_user_item($USER->id,
+                    $removeditem->get_itemid());
             }
         }
 
@@ -385,6 +415,11 @@ class external extends external_api {
 
     }
 
+    /**
+     * External function return value.
+     *
+     * @return external_value
+     */
     public static function complete_trade_returns() {
         return trade_summary_exporter::get_read_structure();
     }

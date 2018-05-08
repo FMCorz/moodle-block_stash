@@ -81,7 +81,8 @@ if ($data = $form->get_data()) {
 
     $saveditem = $manager->create_or_update_item($data, $draftitemid);
     if ($saveandnext) {
-        redirect(new moodle_url('/blocks/stash/drop.php', ['itemid' => $saveditem->get_id(), 'courseid' => $manager->get_courseid()]));
+        redirect(new moodle_url('/blocks/stash/drop.php', ['itemid' => $saveditem->get_id(),
+            'courseid' => $manager->get_courseid()]));
     }
     redirect($returnurl);
 

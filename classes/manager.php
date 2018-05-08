@@ -821,9 +821,6 @@ class manager {
 
         } else {
             $trade = new trade($data->id);
-            // if ($data->itemid != $trade->get_id()) {
-            //     throw new coding_exception('The item ID of a trade cannot be changed.');
-            // }
             $trade->from_record($data);
             $trade->update();
         }
@@ -875,19 +872,23 @@ class manager {
         foreach ($tradeitems as $tradeitem) {
             $item = $this->get_item($tradeitem->get_itemid());
             if ($tradeitem->get_gainloss()) {
-                $tradedata['add'][] = ['id' => $tradeitem->get_id(),
-                                       'itemid' => $tradeitem->get_itemid(),
-                                       'name' => $item->get_name(),
-                                       'quantity' => $tradeitem->get_quantity(),
-                                       'imageurl' => \moodle_url::make_pluginfile_url($this->context->id, 'block_stash', 'item', $tradeitem->get_itemid(), '/', 'image')
-                                       ];
+                $tradedata['add'][] = [
+                    'id' => $tradeitem->get_id(),
+                    'itemid' => $tradeitem->get_itemid(),
+                    'name' => $item->get_name(),
+                    'quantity' => $tradeitem->get_quantity(),
+                    'imageurl' => \moodle_url::make_pluginfile_url($this->context->id, 'block_stash', 'item',
+                        $tradeitem->get_itemid(), '/', 'image')
+                ];
             } else {
-                $tradedata['loss'][] = ['id' => $tradeitem->get_id(),
-                                       'itemid' => $tradeitem->get_itemid(),
-                                       'name' => $item->get_name(),
-                                       'quantity' => $tradeitem->get_quantity(),
-                                       'imageurl' => \moodle_url::make_pluginfile_url($this->context->id, 'block_stash', 'item', $tradeitem->get_itemid(), '/', 'image')
-                                       ];
+                $tradedata['loss'][] = [
+                    'id' => $tradeitem->get_id(),
+                    'itemid' => $tradeitem->get_itemid(),
+                    'name' => $item->get_name(),
+                    'quantity' => $tradeitem->get_quantity(),
+                    'imageurl' => \moodle_url::make_pluginfile_url($this->context->id, 'block_stash', 'item',
+                        $tradeitem->get_itemid(), '/', 'image')
+                ];
             }
         }
 
@@ -972,17 +973,7 @@ class manager {
             // TODO Create a method that automatically pushes to the database to prevent race conditions.
             $useritem->set_quantity($currentquantity - $tradeitem->get_quantity());
             $useritem->update();
-            // TODO create this event.
-            // $event = \block_stash\event\item_removed::create(array(
-            //         'context' => $this->context,
-            //         'userid' => $USER->id,
-            //         'courseid' => $this->courseid,
-            //         'objectid' => $item->get_id(),
-            //         'relateduserid' => $userid,
-            //         'other' => array('quantity' => $quantity)
-            //     )
-            // );
-            // $event->trigger();
+            // TODO create the item removed event.
         }
     }
 }
