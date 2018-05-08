@@ -44,10 +44,16 @@ use block_stash\user_item;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_stash_privacy_testcase extends provider_testcase {
+class block_stash_privacy_testcase extends advanced_testcase {
 
     public function setUp() {
+        if (!class_exists('core_privacy\manager')) {
+            $this->markTestSkipped('Moodle versions does not support privacy subsystem.');
+        }
+
         $this->resetAfterTest();
+        writer::reset();
+        parent::setUp();
     }
 
     public function test_get_contexts_for_userid() {
