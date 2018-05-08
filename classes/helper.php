@@ -50,42 +50,63 @@ class helper {
         // Check availability of the filter.
         $pluginmanager = core_plugin_manager::instance();
         $filters = $pluginmanager->get_plugins_of_type('filter');
-        $hasfilter = array_key_exists('stash', $filters);
+        $hasfilter = array_key_exists('shortcodes', $filters);
 
-        // TODO: When MDL-55663 lands everywhere we should use the core function.
-        $hasfilterenabled = $DB->record_exists_select('filter_active', 'filter = ? AND contextid = ? AND active != ?', [
-            'stash', context_system::instance()->id, TEXTFILTER_DISABLED]);
+        // Check whether it is enabled.
+        $enabledfilters = $pluginmanager->get_enabled_plugins('filter');
+        $hasfilterenabled = array_key_exists('shortcodes', $enabledfilters);
 
+        // Check active filters.
         $activefilters = filter_get_active_in_context($context);
-        $isfilteractive = array_key_exists('stash', $activefilters);
+        $isstashactive = array_key_exists('stash', $activefilters);
+        $isshortcodeactive = array_key_exists('shortcodes', $activefilters);
 
-        $alternatemodule = $isfilteractive ? 'filter_stash/drop-snippet-maker' : null;
+        $alternatemodules = (object) [
+            'drop' => null,
+            'trade' => 'block_stash/trade-snippet-maker',
+        ];
+        if ($isshortcodeactive) {
+            $alternatemodules->drop = 'block_stash/drop-snippet-shortcode-maker';
+            $alternatemodules->trade = 'block_stash/trade-snippet-shortcode-maker';
+        } else if ($isstashactive) {
+            $alternatemodules->drop = 'filter_stash/drop-snippet-maker';
+        }
 
         $a = (object) [
-            'installurl' => (new moodle_url('https://moodle.org/plugins/filter_stash'))->out(),
+            'installurl' => (new moodle_url('https://github.com/branchup/moodle-filter_shortcodes'))->out(),
             'enableurl' => (new moodle_url('/admin/filters.php'))->out(),
             'activeurl' => (new moodle_url('/filter/manage.php', ['contextid' => $context->id]))->out(),
         ];
 
         // Note, the order of the checks is important!
         $warning = null;
-        $release = null;
-        if ($isfilteractive) {
+        $cantrade = false;
+        if ($isshortcodeactive) {
             // All good.
-            // Record the release information to see if trading is possible (1.0.2 onwards).
-            $release = $filters['stash']->release;
+            $cantrade = true;
+        } else if ($isstashactive) {
+            // Suggest to upgrade to newer version.
+            $warning = get_string('filterstashdeprecated', 'block_stash', $a);
+            $releaseinfo = explode('.', $filters['stash']->release);
+            if ((int) $releaseinfo[0] > 1) {
+                $cantrade = true;
+            } else if ((int)$releaseinfo[1] > 0) {
+                $cantrade = true;
+            } else if ((int)$releaseinfo[2] > 1) {
+                $cantrade = true;
+            }
         } else if (!$hasfilter) {
             // It is not installed.
-            $warning = get_string('filterstashnotinstalled', 'block_stash', $a);
+            $warning = get_string('filtershortcodenotinstalled', 'block_stash', $a);
         } else if (!$hasfilterenabled) {
             // It is globally disabled, it cannot be overriden in other contexts.
-            $warning = get_string('filterstashnotenabled', 'block_stash', $a);
-        } else if (!$isfilteractive) {
+            $warning = get_string('filtershortcodenotenabled', 'block_stash', $a);
+        } else if (!$isshortcodeactive) {
             // It is not enabled in the course.
-            $warning = get_string('filterstashnotactive', 'block_stash', $a);
+            $warning = get_string('filtershortcodenotactive', 'block_stash', $a);
         }
 
-        return [$alternatemodule, $warning, $release];
+        return [$alternatemodules, $warning, $cantrade];
     }
 
 }

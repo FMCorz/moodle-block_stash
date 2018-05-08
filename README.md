@@ -48,9 +48,9 @@ Note that teachers cannot pick up the objects, for them they will always re-appe
 Recommended plugins
 -------------------
 
-### Stash filter
+### Shortcodes filter
 
-This [filter plugin](https://moodle.org/plugins/filter_stash) makes it easier and more reliable to add the items to your course content. We very highly recommend you to use it. This is a requirement to use the trading feature. 
+This [filter plugin](https://github.com/branchup/moodle-filter_shortcodes) makes it easier and more reliable to add the items to your course content. We very highly recommend you to use it. This is a requirement to use the trading feature.
 
 ### Stash availability
 

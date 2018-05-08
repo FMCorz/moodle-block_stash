@@ -38,22 +38,8 @@ $manager->require_manage();
 $url = new moodle_url('/blocks/stash/trade.php', array('courseid' => $courseid));
 list($title, $subtitle, $returnurl) = \block_stash\page_helper::setup_for_trade($url, $manager);
 
-// Check for filter version 1.1.0 or above is enabled, otherwise show a message asking for it to be upgraded or installed.
-list($altsnippetmaker, $warning, $release) = \block_stash\helper::get_alternate_amd_snippet_maker($manager->get_context());
-$cantrade = false;
-if (isset($release)) {
-    $releaseinfo = explode('.', $release);
-    if ((int)$releaseinfo[0] > 1) {
-        $cantrade = true;
-    } else if ((int)$releaseinfo[1] > 0) {
-        $cantrade = true;
-    } else if ((int)$releaseinfo[2] > 1) {
-        $cantrade = true;
-    } else {
-        $a = new moodle_url('https://moodle.org/plugins/filter_stash');
-        $warning = get_string('filterstashwrongversion', 'block_stash', $a->out());
-    }
-}
+// Check for filter.
+list($altsnippetmaker, $warning, $cantrade) = \block_stash\helper::get_alternate_amd_snippet_maker($manager->get_context());
 
 switch ($action) {
     case 'delete':
@@ -95,11 +81,10 @@ $table = new \block_stash\output\trades_table('tradestable', $manager, $renderer
 $table->define_baseurl($url);
 echo $table->out(50, false);
 
-
-$altsnippetmaker = json_encode($altsnippetmaker);
+$altsnippetmaker = json_encode($altsnippetmaker->trade);
 $warnings = json_encode($warning ? [$warning] : null);
 
-$PAGE->requires->js_init_code("require([
+$PAGE->requires->js_amd_inline("require([
     'jquery',
     'block_stash/trade',
     'block_stash/trade-snippet-dialogue',
@@ -108,7 +93,7 @@ $PAGE->requires->js_init_code("require([
     $('table.tradestable [rel=block-stash-trade]').click(function(e) {
         var node = $(e.currentTarget),
             trade = new Trade(node.data('trade')),
-            dialogue = new Dialogue(trade, warnings);
+            dialogue = new Dialogue(trade, warnings, $altsnippetmaker);
 
         e.preventDefault();
         dialogue.show(e);

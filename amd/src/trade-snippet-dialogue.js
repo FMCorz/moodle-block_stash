@@ -32,10 +32,12 @@ define([
      *
      * @param {Trade} trade The trade widget.
      * @param {Array} warnings List of warnings.
+     * @param {String} altSnippetMaker The name of the alternate snippet maker module.
      */
-    function Dialog(trade, warnings) {
+    function Dialog(trade, warnings, altSnippetMaker) {
         this._trade = trade;
         this._warnings = warnings;
+        this._altSnippetMaker = altSnippetMaker;
         this.setTitle(trade.get('name'));
         DialogueBase.prototype.constructor.apply(this, []);
     }
@@ -57,6 +59,7 @@ define([
             tradejson: JSON.stringify(this._trade.getData()),
             warnings: this._warnings,
             haswarnings: this._warnings && this._warnings.length,
+            altsnippetmaker: this._altSnippetMaker
         };
 
         return ajax.call([
@@ -65,10 +68,8 @@ define([
             }}
         ])[0].then(function(stuff) {
             context.tradeitems = stuff;
-            window.console.log(context);
             Templates.render('block_stash/trade_snippet_dialogue', context)
             .then(function(html, js) {
-                // window.console.log(context);
                 this._setDialogueContent(html);
                 this.center();
                 Templates.runTemplateJS(js);

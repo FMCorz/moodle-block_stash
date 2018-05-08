@@ -63,7 +63,7 @@ class renderer extends plugin_renderer_base {
         $data->itemjson = json_encode($data->item);
 
         list($altsnippetmaker, $warning) = \block_stash\helper::get_alternate_amd_snippet_maker($context);
-        $data->altsnippetmaker = $altsnippetmaker;
+        $data->altsnippetmaker = $altsnippetmaker->drop;
         $data->warnings = [$warning];
         $data->haswarnings = !empty($warning);
 

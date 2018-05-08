@@ -63,13 +63,24 @@
         </div>
         <p><small>{{#str}}copypaste, block_stash{{/str}}</small></p>
     </div>
+
+    {{#haswarnings}}
+    <div class="row-fluid">
+        <div class="span12 col-sm-12">
+            {{#warnings}}
+                <div class="alert alert-warning"><small>{{{.}}}</small></div>
+            {{/warnings}}
+        </div>
+    </div>
+    {{/haswarnings}}
 </div>
 
 {{#js}}
 require([
     'jquery',
     'block_stash/trade',
-    'block_stash/trade-snippet-maker'
+    {{#altsnippetmaker}}'{{{.}}}'{{/altsnippetmaker}}
+    {{^altsnippetmaker}}'block_stash/trade-snippet-maker'{{/altsnippetmaker}}
 ], function($, Trade, TradeSnippetMaker) {
     var trade = new Trade({{{tradejson}}});
     var tsm = new TradeSnippetMaker(trade);

@@ -69,6 +69,26 @@ class trade extends persistent {
     }
 
     /**
+     * Get a trade by hashcode portion.
+     *
+     * This will throw an exception when there are multiple matches.
+     *
+     * @param int $stashid The stash in which the item should be.
+     * @param string $hash The hash portion.
+     * @return self
+     */
+    public static function get_by_hashcode_portion($stashid, $hash) {
+        global $DB;
+        $hashlike = $DB->sql_like('hashcode', ':hashcode');
+        $params = [
+            'stashid' => $stashid,
+            'hashcode' => $DB->sql_like_escape($hash) . '%'
+        ];
+        $record = $DB->get_record_select(self::TABLE, "stashid = :stashid AND $hashlike", $params, '*', MUST_EXIST);
+        return new self(null, $record);
+    }
+
+    /**
      * Is the hashcode unique in the stash?
      *
      * @param string $hashcode The hash code.

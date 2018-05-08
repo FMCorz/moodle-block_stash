@@ -95,6 +95,37 @@ class drop extends persistent {
     }
 
     /**
+     * Get a drop by hashcode portion.
+     *
+     * This will throw an exception when there are multiple matches.
+     *
+     * @param int $stashid The stash in which the item should be.
+     * @param string $hash The hash portion.
+     * @return self
+     */
+    public static function get_by_hashcode_portion($stashid, $hash) {
+        global $DB;
+        $hashlike = $DB->sql_like('d.hashcode', ':hashcode');
+
+        $sql = "
+            SELECT d.*
+              FROM {" . drop::TABLE . "} d
+              JOIN {" . item::TABLE . "} i
+                ON i.id = d.itemid
+              JOIN {" . stash::TABLE . "} s
+                ON s.id = i.stashid
+             WHERE s.id = :stashid
+               AND $hashlike";
+
+        $params = [
+            'stashid' => $stashid,
+            'hashcode' => $DB->sql_like_escape($hash) . '%'
+        ];
+
+        return new self(null, $DB->get_record_sql($sql, $params, MUST_EXIST));
+    }
+
+    /**
      * Get the course ID from a drop ID.
      *
      * @param int $dropid The drop ID.

@@ -60,10 +60,10 @@ $string['edittrade'] = 'Edit trade widget \'{$a}\'';
 $string['edittradeitem'] = 'Edit trade item \'{$a}\'';
 $string['eginthecastle'] = 'E.g. In the castle';
 $string['eventitemacquired'] = 'An item was acquired.';
-$string['filterstashnotactive'] = 'The filter plugin is installed but not yet enabled for this course. Visit <a href="{$a->activeurl}" target="_blank">this page</a> to enable it for this course.';
-$string['filterstashnotenabled'] = 'The filter plugin is installed but not yet <a href="{$a->enableurl}" target="_blank">enabled</a>.';
-$string['filterstashnotinstalled'] = 'We recommend that you install and enable the <a href="{$a->installurl}" target="_blank">filter plugin for Stash</a>. It makes it easier and more reliable to use the snippets. It also enables trading.';
-$string['filterstashwrongversion'] = 'The filter plugin that you have installed is an early version and does not work with trading. Please visit <a href="{$a}" target="_blank">this page</a> to get the latest version.';
+$string['filtershortcodesnotactive'] = 'The filter plugin Shortcodes is installed but not yet enabled for this course. Visit <a href="{$a->activeurl}" target="_blank">this page</a> to enable it for this course.';
+$string['filtershortcodesnotenabled'] = 'The filter plugin Shortcodes is installed but not yet <a href="{$a->enableurl}" target="_blank">enabled</a>.';
+$string['filtershortcodesnotinstalled'] = 'We recommend that you install and enable the <a href="{$a->installurl}" target="_blank">filter plugin Shortcodes</a>. It makes it easier and more reliable to use the snippets. It also enables trading.';
+$string['filterstashdeprecated'] = 'You are using the older filter plugin Stash which is no longer supported, we now recommend that you install and enable the <a href="{$a->installurl}" target="_blank">filter Shortcodes</a> instead. It also enables trading.';
 $string['gain'] = "Gain";
 $string['gainloss'] = "Gain or lose";
 $string['gaintitle'] = "Gain title";
@@ -121,6 +121,8 @@ $string['saveandnext'] = 'Save and next';
 $string['savechanges'] = 'Save changes';
 $string['settings'] = 'Settings';
 $string['setup'] = 'Setup';
+$string['shortcode:stashdrop'] = 'Displays an item for a user to pick up';
+$string['shortcode:stashtrade'] = 'Displays the trade widget';
 $string['snippet'] = 'Snippet';
 $string['stash'] = 'Stash';
 $string['stash:acquireitems'] = 'User is able to acquire items';
@@ -151,3 +153,9 @@ $string['whatisthisthing'] = 'What is this thing? I am certain you can find a us
 $string['whatsthis'] = 'What\'s this?';
 $string['whatsnext'] = 'What\'s next?';
 $string['yourinventoryisempty'] = 'Your inventory is empty.';
+
+// Deprecated.
+$string['filterstashnotactive'] = 'The filter plugin is installed but not yet enabled for this course. Visit <a href="{$a->activeurl}" target="_blank">this page</a> to enable it for this course.';
+$string['filterstashnotenabled'] = 'The filter plugin is installed but not yet <a href="{$a->enableurl}" target="_blank">enabled</a>.';
+$string['filterstashnotinstalled'] = 'We recommend that you install and enable the <a href="{$a->installurl}" target="_blank">filter plugin for Stash</a>. It makes it easier and more reliable to use the snippets. It also enables trading.';
+$string['filterstashwrongversion'] = 'The filter plugin that you have installed is an early version and does not work with trading. Please visit <a href="{$a}" target="_blank">this page</a> to get the latest version.';

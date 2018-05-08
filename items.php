@@ -62,7 +62,7 @@ $table->define_baseurl($url);
 echo $table->out(50, false);
 
 list($altsnippetmaker, $warning) = \block_stash\helper::get_alternate_amd_snippet_maker($manager->get_context());
-$altsnippetmaker = json_encode($altsnippetmaker);
+$altsnippetmaker = json_encode($altsnippetmaker->drop);
 $warnings = json_encode($warning ? [$warning] : null);
 
 $PAGE->requires->js_init_code("require([

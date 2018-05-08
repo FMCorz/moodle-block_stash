@@ -431,6 +431,19 @@ class manager {
     }
 
     /**
+     * Get a drop by hash portion.
+     *
+     * For internal use, this does not perform any capability checks.
+     *
+     * @param string $hash Hash portion.
+     * @return drop
+     */
+    public function get_drop_by_hashcode_portion($hash) {
+        $this->require_enabled();
+        return drop::get_by_hashcode_portion($this->get_stash()->get_id(), $hash);
+    }
+
+    /**
      * Get the drops for an item.
      *
      * @todo Support optional itemid.
@@ -795,6 +808,20 @@ class manager {
         }
         return $trade;
     }
+
+    /**
+     * Get a trade.
+     *
+     * For internal use, this does not perform any capability checks.
+     *
+     * @param string $hash Hash portion.
+     * @return drop
+     */
+    public function get_trade_by_hashcode_portion($hash) {
+        $this->require_enabled();
+        return trade::get_by_hashcode_portion($this->get_stash()->get_id(), $hash);
+    }
+
 
     /**
      * Get the trades defined in this course.
