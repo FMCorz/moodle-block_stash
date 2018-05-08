@@ -104,7 +104,7 @@ class restore_stash_block_structure_step extends restore_structure_step {
             $stash->create();
             $stashid = $stash->get_id();
         }
-        $this->set_mapping('block_stash', $oldid, $stash->get_id());
+        $this->set_mapping('block_stash', $oldid, $stashid);
     }
 
     /**
@@ -128,8 +128,14 @@ class restore_stash_block_structure_step extends restore_structure_step {
         $data->itemid = $this->get_new_parentid('block_stash_item');
         $oldid = $data->id;
         unset($data->id);
+
+        // When the hashcode conflicts, regenerate it.
         $drop = new drop(null, $data);
+        while (drop::hashcode_exists($drop->get_hashcode(), $this->get_new_parentid('block_stash'))) {
+            $drop->regenerate_hashcode();
+        }
         $drop->create();
+
         $this->set_mapping('block_stash_drop', $oldid, $drop->get_id());
     }
 
@@ -165,8 +171,14 @@ class restore_stash_block_structure_step extends restore_structure_step {
         $data->stashid = $this->get_new_parentid('block_stash');
         $oldid = $data->id;
         unset($data->id);
+
+        // When the hashcode conflicts, regenerate it.
         $trade = new trade(null, $data);
+        while (trade::hashcode_exists($trade->get_hashcode(), $this->get_new_parentid('block_stash'))) {
+            $trade->regenerate_hashcode();
+        }
         $trade->create();
+
         $this->set_mapping('block_stash_trade', $oldid, $trade->get_id());
     }
 

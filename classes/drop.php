@@ -30,6 +30,13 @@ use lang_string;
 /**
  * Item drop model class.
  *
+ * The hashcode was initially 40 characters long, and we were not checking that the
+ * code was unique per stash. We changed the length of the hash to be of 6
+ * characters, but then it must be unique within its stash. This allows for the
+ * snippets to contain the full hash, and no longer require the ID. If we
+ * don't require the ID, we do not have to worry about backup and restore
+ * and can pretty much always assume that the hash is unique.
+ *
  * @package    block_stash
  * @copyright  2016 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -58,7 +65,7 @@ class drop extends persistent {
             'hashcode' => [
                 'type' => PARAM_ALPHANUM,
                 'default' => function() {
-                    return random_string(40);
+                    return random_string(6);
                 }
             ]
         ];
@@ -106,6 +113,34 @@ class drop extends persistent {
     }
 
     /**
+     * Is the hashcode unique in the stash?
+     *
+     * @param string $hashcode The hash code.
+     * @param int $stashid The stash ID.
+     * @param int $ignoredropid The drop ID to ignore when checking.
+     * @return bool
+     */
+    public static function hashcode_exists($hashcode, $stashid, $ignoredropid = 0) {
+        global $DB;
+        $sql = "
+            SELECT 'x'
+              FROM {" . drop::TABLE . "} d
+              JOIN {" . item::TABLE . "} i
+                ON i.id = d.itemid
+              JOIN {" . stash::TABLE . "} s
+                ON s.id = i.stashid
+             WHERE d.hashcode = :hashcode
+               AND s.id = :stashid
+               AND d.id <> :dropid";
+        $params = [
+            'hashcode' => $hashcode,
+            'stashid' => $stashid,
+            'dropid' => $ignoredropid,
+        ];
+        return $DB->record_exists_sql($sql, $params);
+    }
+
+    /**
      * Is there a limit to how many times a user can pickup the item on this drop?
      *
      * @return bool
@@ -115,13 +150,29 @@ class drop extends persistent {
     }
 
     /**
+     * Regenerate the hash code.
+     *
+     * @return void
+     */
+    public function regenerate_hashcode() {
+        $this->set('hashcode', random_string(6));
+    }
+
+    /**
      * Validate the hash code.
      *
      * @param string $value The hash code.
      * @return true|lang_string
      */
     protected function validate_hashcode($value) {
-        if (strlen($value) != 40) {
+        if (strlen($value) != 40 && strlen($value) != 6) {
+            // There are two formats of hashes, the old one at 40 chars, and the new one at 6.
+            return new lang_string('invaliddata', 'error');
+        }
+
+        $item = new item($this->get_itemid());
+        if (static::hashcode_exists($value, $item->get_stashid(), $this->get_id())) {
+            // The hashcode is not unique within the stash.
             return new lang_string('invaliddata', 'error');
         }
         return true;
@@ -167,4 +218,5 @@ class drop extends persistent {
         }
         return true;
     }
+
 }

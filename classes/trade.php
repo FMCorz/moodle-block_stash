@@ -30,6 +30,13 @@ use lang_string;
 /**
  * Trade model class.
  *
+ * The hashcode was initially 40 characters long, and we were not checking that the
+ * code was unique per stash. We changed the length of the hash to be of 6
+ * characters, but then it must be unique within its stash. This allows for the
+ * snippets to contain the full hash, and no longer require the ID. If we
+ * don't require the ID, we do not have to worry about backup and restore
+ * and can pretty much always assume that the hash is unique.
+ *
  * @package    block_stash
  * @copyright  2017 Adrian Greeve - adriangreeve.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -55,10 +62,28 @@ class trade extends persistent {
             'hashcode' => [
                 'type' => PARAM_ALPHANUM,
                 'default' => function() {
-                    return random_string(40);
+                    return random_string(6);
                 }
             ]
         ];
+    }
+
+    /**
+     * Is the hashcode unique in the stash?
+     *
+     * @param string $hashcode The hash code.
+     * @param int $stashid The stash ID.
+     * @param int $ignoreid The ID to ignore when checking.
+     * @return bool
+     */
+    public static function hashcode_exists($hashcode, $stashid, $ignoreid = 0) {
+        $sql = 'stashid = :stashid AND hashcode = :hashcode AND id <> :id';
+        $params = [
+            'stashid' => $stashid,
+            'hashcode' => $hashcode,
+            'id' => $ignoreid,
+        ];
+        return static::record_exists_select($sql, $params);
     }
 
     /**
@@ -75,6 +100,15 @@ class trade extends persistent {
                  WHERE i.id = ?
                    AND i.stashid = ?";
         return $DB->record_exists_sql($sql, [$tradeid, $stashid]);
+    }
+
+    /**
+     * Regenerate the hash code.
+     *
+     * @return void
+     */
+    public function regenerate_hashcode() {
+        $this->set('hashcode', random_string(6));
     }
 
     /**
@@ -97,9 +131,12 @@ class trade extends persistent {
      * @return true|lang_string
      */
     protected function validate_hashcode($value) {
-        if (strlen($value) != 40) {
+        if (strlen($value) != 40 && strlen($value) != 6) {
+            return new lang_string('invaliddata', 'error');
+        } else if (static::hashcode_exists($value, $this->get_stashid(), $this->get_id())) {
             return new lang_string('invaliddata', 'error');
         }
+
         return true;
     }
 

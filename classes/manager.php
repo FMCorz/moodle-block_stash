@@ -173,6 +173,9 @@ class manager {
 
         if (!$data->id) {
             $drop = new drop(null, $data);
+            while (drop::hashcode_exists($drop->get_hashcode(), $this->get_stash()->get_id())) {
+                $drop->regenerate_hashcode();
+            }
             $drop->create();
 
         } else {
@@ -415,7 +418,7 @@ class manager {
      * For internal use, this does not perform any capability checks.
      *
      * @param int $drop The drop ID.
-     * @return item
+     * @return trop
      */
     public function get_drop($dropid) {
         $this->require_enabled();
@@ -817,6 +820,9 @@ class manager {
 
         if (!$data->id) {
             $trade = new trade(null, $data);
+            while (trade::hashcode_exists($trade->get_hashcode(), $this->get_stash()->get_id())) {
+                $trade->regenerate_hashcode();
+            }
             $trade->create();
 
         } else {
