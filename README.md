@@ -1,4 +1,4 @@
-Block Stash
+Block Stash ![GitHub tag](https://img.shields.io/github/tag/branchup/moodle-filter_shortcodesblock_stash.svg) ![Travis branch](https://img.shields.io/travis/branchup/moodle-block_stash/master.svg)
 ===========
 
 Engage your students! Gamify your courses by hiding objects for your students to find.
@@ -15,7 +15,7 @@ Features
 Requirements
 ------------
 
-Moodle 2.9 or greater.
+Moodle 3.1 or greater.
 
 Installation
 ------------
@@ -54,7 +54,7 @@ This [filter plugin](https://moodle.org/plugins/filter_stash) makes it easier an
 
 ### Stash availability
 
-This [availability plugin](https://github.com/FMCorz/moodle-availability_stash) allows to restrict the access to activity modules and resources based on the objects collected by a student.
+This [availability plugin](https://moodle.org/plugins/availability_stash) allows to restrict the access to activity modules and resources based on the objects collected by a student.
 
 License
 -------
