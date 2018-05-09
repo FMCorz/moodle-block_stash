@@ -205,10 +205,6 @@
     margin-bottom: 0 !important; /* stylelint-disable-line declaration-no-important */
 }
 
-.block-stash-copy {
-    position: fixed;
-}
-
 .block-stash-filler {
     height: 30px;
 }

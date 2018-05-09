@@ -18,13 +18,13 @@
     Drop snippet builder.
 }}
 <div id="block-stash-snippet-ui-{{uniqid}}" class="block-stash-snippet-ui">
-    <div class="row-fluid">
-        <div class="span8">
+    <div style="display: flex">
+        <div style="flex: 2">
 
             <div>
                 <label for="label-displaytype-{{uniqid}}">{{#str}}appearance, block_stash{{/str}}</label>
                 <div>
-                    <select name="displaytype" id="label-displaytype-{{uniqid}}">
+                    <select name="displaytype" id="label-displaytype-{{uniqid}}" class="form-control">
                         <option value="text">{{#str}}text, block_stash{{/str}}</option>
                         <option value="image">{{#str}}image, block_stash{{/str}}</option>
                         <option value="imageandbutton" selected>{{#str}}imageandbutton, block_stash{{/str}}</option>
@@ -35,38 +35,36 @@
             <div class="snippet-label">
                 <label for="label-label-{{uniqid}}">{{#str}}text, block_stash{{/str}}</label>
                 <div>
-                    <input type="text" name="label" id="label-label-{{uniqid}}">
+                    <input type="text" name="label" class="form-control" id="label-label-{{uniqid}}">
                 </div>
             </div>
 
             <div class="snippet-actiontext">
                 <label for="label-actiontext-{{uniqid}}">{{#str}}buttontext, block_stash{{/str}}</label>
                 <div>
-                    <input type="text" name="actiontext" id="label-actiontext-{{uniqid}}">
+                    <input type="text" name="actiontext" class="form-control" id="label-actiontext-{{uniqid}}">
                 </div>
             </div>
 
         </div>
-        <div class="span4">
-            <div>
-                <div class="preview"></div>
-            </div>
+        <div style="flex: 1; display: flex; justify-content: center;">
+            <div class="preview"></div>
         </div>
     </div>
 
-    <div class="row-fluid">
-        <div class="span12">
+    <div>
+        <div>
             <div>
                 <p><strong>{{#str}}snippet, block_stash{{/str}}</strong></p>
-                <textarea name="snippet" onclick="this.select();" readonly></textarea>
+                <textarea name="snippet" onclick="this.select();" readonly class="form-control"></textarea>
                 <p><small>{{#str}}copypaste, block_stash{{/str}}</small></p>
             </div>
         </div>
     </div>
 
     {{#haswarnings}}
-    <div class="row-fluid">
-        <div class="span12">
+    <div>
+        <div>
             {{#warnings}}
                 <div class="alert alert-warning"><small>{{{.}}}</small></div>
             {{/warnings}}

@@ -88,7 +88,7 @@ class drop extends persistent {
         $mform->addHelpButton('name', 'dropname', 'block_stash');
 
         // Max pickup.
-        $mform->addElement('block_stash_integer', 'maxpickup', get_string('maxpickup', 'block_stash'), ['style' => 'width: 3em;']);
+        $mform->addElement('block_stash_integer', 'maxpickup', get_string('maxpickup', 'block_stash'), ['style' => 'width: 4em;']);
         $mform->setType('maxpickup', PARAM_INT);
         $mform->addHelpButton('maxpickup', 'maxpickup', 'block_stash');
 

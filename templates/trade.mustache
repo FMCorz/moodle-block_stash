@@ -20,9 +20,9 @@
 <div id="{{uuid}}" style="display: inline;">
     <div class="block-stash-trade" title="{{trade.name}}" id="block-stash-trade-id-{{trade.id}}" data-id="{{trade.id}}">
         <div class="trade-label text-center p-y-1 p-x-1">{{trade.name}}</div>
-            <div class="container-fluid p-y-1">
-                <div class="row-fluid">
-                    <div class="span6 col-sm-6">
+            <div>
+                <div style="display: flex">
+                    <div style="flex: 1" class="p-a-1">
                         <div class="block-stash-column-title"><strong>{{trade.gaintitle}}</strong></div>
                         {{#tradeitems}}
                             {{#gainloss}}
@@ -32,7 +32,7 @@
                             {{/gainloss}}
                         {{/tradeitems}}
                     </div>
-                    <div class="span6 col-sm-6">
+                    <div style="flex: 1" class="p-a-1">
                         <div class="block-stash-column-title"><strong>{{trade.losstitle}}</strong></div>
                         {{#tradeitems}}
                             {{^gainloss}}
@@ -46,7 +46,7 @@
             </div>
 
         <div class="accept-trade text-xs-center p-y-1">
-            <center><button disabled>{{#str}}accept, block_stash{{/str}}</button></center>
+            <center><button disabled class="btn btn-secondary">{{#str}}accept, block_stash{{/str}}</button></center>
         </div>
 
     </div>

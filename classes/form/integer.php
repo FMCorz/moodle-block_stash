@@ -79,6 +79,11 @@ class block_stash_form_integer extends MoodleQuickForm_group {
     function _createElements() {
         $attributes = (array) $this->getAttributes();
 
+        if (!isset($attributes['class'])) {
+            $attributes['class'] = '';
+        }
+        $attributes['class'] .= ' form-control';
+
         if (method_exists($this, 'createFormElement')) {
             $element = $this->createFormElement('text', 'int', get_string('number', 'block_stash'), $attributes);
         } else {

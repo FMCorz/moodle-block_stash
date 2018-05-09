@@ -88,7 +88,7 @@ define([
      */
     Maker.prototype._getDisplayButton = function() {
         var wrap = $('<div class="item-action"></div>'),
-            btn = $('<button></button>');
+            btn = $('<button class="btn btn-secondary"></button>');
 
         btn.text(this._getActionText());
         wrap.append(btn);
