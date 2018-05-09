@@ -1,6 +1,17 @@
 Block Stash
 ===========
 
+Version 1.3.0 (9th May 2019)
+----------------------------
+
+* Implement privacy API (GDPR compliance)
+* Drop support for Moodle 2.9 and 3.0
+* Hash code size was reduced to 6 characters
+* Support snippets from [filter_shortcodes](https://github.com/branchup/moodle-filter_shortcodes)
+* Drop support and deprecate filter_stash
+* Slightly improved styling across themes and versions
+* Minor improvements and bug fixing
+
 Version 1.2.3 (30th August 2017)
 --------------------------------
 * Added the ability to edit the block title.
