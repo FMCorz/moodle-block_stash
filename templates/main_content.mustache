@@ -40,12 +40,16 @@
 {{/canacquireitems}}
 
 {{#canmanage}}
-    <div>
-        <small>
-            <a href="{{inventoryurl}}">{{#str}}setup, block_stash{{/str}}</a> -
-            <a href="{{reporturl}}">{{#str}}report, block_stash{{/str}}</a>
-        </small>
-    </div>
+    <nav>
+        <a href="{{reporturl}}" class="nav-button">
+            <div>{{#pix}}i/report{{/pix}}</div>
+            <div>{{#str}}report, block_stash{{/str}}</div>
+        </a>
+        <a href="{{inventoryurl}}" class="nav-button">
+            <div>{{#pix}}i/settings{{/pix}}</div>
+            <div>{{#str}}setup, block_stash{{/str}}</div>
+        </a>
+    </nav>
 {{/canmanage}}
 </div>
 

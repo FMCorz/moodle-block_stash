@@ -1,3 +1,38 @@
+.block_stash nav {
+    text-align: center;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-align-content: stretch;
+    -ms-flex-line-pack: stretch;
+    align-content: stretch;
+    -webkit-align-items: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+}
+.block_stash nav .nav-button {
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    -webkit-align-self: auto;
+    -ms-flex-item-align: auto;
+    align-self: auto;
+    text-decoration: none;
+    color: #333;
+    font-size: 80%;
+    padding: 5px 5px 0;
+}
+.block_stash nav .nav-button .icon {
+    margin: 0;
+    padding: 0;
+}
+.block_stash nav .nav-button:hover {
+    background: #eee;
+}
+
 /** Stash item. */
 .block-stash-item {
     display: inline-block;
