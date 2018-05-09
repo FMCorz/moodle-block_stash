@@ -84,7 +84,7 @@ class trade_items_exporter extends persistent_exporter {
         $deleteurl = new moodle_url('/blocks/stash/trade.php', ['tradeitemid' => $this->persistent->get_id(),
             'courseid' => $manager->get_courseid(), 'action' => 'deletetradeitem', 'sesskey' => sesskey()]);
         $quantity = 0;
-        if (!empty($this->related['useritem']->get_quantity())) {
+        if ($this->related['useritem']->get_quantity() !==  null) {
             $quantity = $this->related['useritem']->get_quantity();
         }
         $enoughitems = ($quantity >= $this->persistent->get_quantity()) ? true : false;
