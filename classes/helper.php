@@ -97,13 +97,13 @@ class helper {
             }
         } else if (!$hasfilter) {
             // It is not installed.
-            $warning = get_string('filtershortcodenotinstalled', 'block_stash', $a);
+            $warning = get_string('filtershortcodesnotinstalled', 'block_stash', $a);
         } else if (!$hasfilterenabled) {
             // It is globally disabled, it cannot be overriden in other contexts.
-            $warning = get_string('filtershortcodenotenabled', 'block_stash', $a);
+            $warning = get_string('filtershortcodesnotenabled', 'block_stash', $a);
         } else if (!$isshortcodeactive) {
             // It is not enabled in the course.
-            $warning = get_string('filtershortcodenotactive', 'block_stash', $a);
+            $warning = get_string('filtershortcodesnotactive', 'block_stash', $a);
         }
 
         return [$alternatemodules, $warning, $cantrade];
