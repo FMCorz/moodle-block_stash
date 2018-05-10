@@ -24,8 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2018050900;
+$plugin->version   = 2018051000;
 $plugin->requires  = 2016052300; // Moodle 3.1.0.
 $plugin->component = 'block_stash';
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = '1.3.0';
+$plugin->release   = '1.3.1';

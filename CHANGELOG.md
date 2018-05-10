@@ -1,6 +1,11 @@
 Block Stash
 ===========
 
+Version 1.3.1 (10th May 2019)
+-----------------------------
+
+* Fix typo in language string identifier
+
 Version 1.3.0 (9th May 2019)
 ----------------------------
 
