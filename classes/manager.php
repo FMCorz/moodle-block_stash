@@ -561,9 +561,20 @@ class manager {
     public function is_enabled() {
         global $DB;
         if ($this->isenabled === null) {
+            $parentcontextid = $this->context->id;
+
+            if ($this->context->contextlevel == CONTEXT_COURSE && $this->context->instanceid == SITEID) {
+                // While we do not purposely support adding the block in the context of the frontpage,
+                // it is possible when visiting the course/index.php file, as Moodle sets the page type
+                // to course when listing the courses available in a category. This leads to the parent
+                // context not being the frontpage, but its parent. A later fix should prevent the block
+                // from being added in this unexpected context rather than just having this condition here.
+                $parentcontextid = $this->context->get_parent_context()->id;
+            }
+
             $this->isenabled = $DB->record_exists('block_instances', [
                 'blockname' => 'stash',
-                'parentcontextid' => $this->context->id
+                'parentcontextid' => $parentcontextid
             ]);
         }
         return $this->isenabled;
