@@ -181,6 +181,11 @@ class renderer extends plugin_renderer_base {
         return parent::render_from_template('block_stash/main_content', $data);
     }
 
+    public function render_profile_content(renderable $page) {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('block_stash/profile_content', $data);
+    }
+
     public function render_drop_image(drop_image $renderable) {
         $data = $renderable->export_for_template($this);
         return parent::render_from_template('block_stash/drop_image', $data);

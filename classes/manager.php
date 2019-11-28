@@ -554,8 +554,6 @@ class manager {
     /**
      * Is the stash enabled in the course?
      *
-     * Not yet used, but in place in case we need it later.
-     *
      * @return boolean True if enabled.
      */
     public function is_enabled() {
@@ -1019,5 +1017,20 @@ class manager {
             $useritem->update();
             // TODO create the item removed event.
         }
+    }
+
+    /**
+     * Horrible way to retrieve the title for the block.
+     *
+     * @return string The title of this stash as shown on the block.
+     */
+    public function get_stash_title() {
+        global $DB;
+
+        $record = $DB->get_record('block_instances', ['parentcontextid' => $this->context->id, 'blockname' => 'stash'],
+                '*', MUST_EXIST);
+        $config = unserialize(base64_decode($record->configdata));
+
+        return isset($config->title) ? format_string($config->title) : format_string(get_string('pluginname', 'block_stash'));
     }
 }

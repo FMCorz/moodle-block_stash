@@ -36,15 +36,21 @@ class block_content implements renderable, templatable {
 
     protected $manager;
 
-    public function __construct($manager) {
+    protected $userid;
+
+    public function __construct($manager, $userid = null) {
         $this->manager = $manager;
+        $this->userid = $userid;
     }
 
     public function export_for_template(renderer_base $output) {
         global $USER;
         $data = array();
 
-        $useritems = $this->manager->get_all_user_items_in_stash($USER->id);
+        $userid = isset($this->userid) ? $this->userid : $USER->id;
+
+
+        $useritems = $this->manager->get_all_user_items_in_stash($userid);
         foreach ($useritems as $item) {
             $exporter = new user_item_summary_exporter([], [
                 'context' => $this->manager->get_context(),

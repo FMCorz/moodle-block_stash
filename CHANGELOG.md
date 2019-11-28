@@ -1,12 +1,18 @@
 Block Stash
 ===========
 
-Version 1.3.1 (10th May 2019)
+Version 1.3.2 (28th November 2019)
+----------------------------------
+
+* User's stash will now be displayed in the user's profile page.
+
+
+Version 1.3.1 (10th May 2018)
 -----------------------------
 
 * Fix typo in language string identifier
 
-Version 1.3.0 (9th May 2019)
+Version 1.3.0 (9th May 2018)
 ----------------------------
 
 * Implement privacy API (GDPR compliance)

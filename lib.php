@@ -63,3 +63,37 @@ function block_stash_pluginfile($course, $cm, $context, $filearea, $args, $force
 
     send_stored_file($file, null, 0, $forcedownload);
 }
+
+/**
+ * Show the user's stash on their profile.
+ *
+ * @param  \core_user\output\myprofile\tree $tree          User profile tree
+ * @param  stdClass                         $user          The user object
+ * @param  bool                             $iscurrentuser If this is the current user.
+ * @param  stdClass                         $course        Course information
+ */
+function block_stash_myprofile_navigation(\core_user\output\myprofile\tree $tree, $user, $iscurrentuser, $course) {
+    global $PAGE;
+
+    if (empty($course)) {
+        return;
+    }
+
+    $manager = block_stash\manager::get($course->id);
+
+    // Show nothing if stash is not on this course.
+    if (!$manager->is_enabled()) {
+        return;
+    }
+
+    $page = new \block_stash\output\block_content($manager, $user->id);
+    $renderer = $PAGE->get_renderer('block_stash');
+    $items = $renderer->render_profile_content($page);
+
+    $title = $manager->get_stash_title();
+    $category = new core_user\output\myprofile\category('stash', $title, 'contact');
+    $tree->add_category($category);
+    $localnode = new core_user\output\myprofile\node('stash', 'stash', '', null, null, $items);
+    $tree->add_node($localnode);
+
+}
