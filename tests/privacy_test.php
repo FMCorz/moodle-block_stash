@@ -46,7 +46,7 @@ use block_stash\user_item;
  */
 class block_stash_privacy_testcase extends advanced_testcase {
 
-    public function setUp() {
+    public function setUp(): void {
         if (!class_exists('core_privacy\manager')) {
             $this->markTestSkipped('Moodle versions does not support privacy subsystem.');
         }
